@@ -64,7 +64,7 @@ export const useUpdateCategory = () => {
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateCategoryData }) => {
       const response = await apiClient.put(`/categories/${id}`, data);
-      return response.data;
+      return response.data.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
