@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForgotPassword } from '../hooks/useAuth';
-import { DollarSign, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ function ForgotPassword() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
             <CheckCircle className="h-12 w-12 text-green-500" />
@@ -53,12 +53,15 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="flex items-center space-x-2">
-            <DollarSign className="h-10 w-10 text-indigo-600" />
-            <span className="text-2xl font-bold text-gray-900">ExpenseTrace</span>
+            <Link to="/" className="flex items-center space-x-1">
+              <span className="text-2xl font-extrabold text-indigo-600">Expense
+                <span className="text-xl font-bold text-gray-900">Trace</span>
+              </span>
+            </Link>
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
