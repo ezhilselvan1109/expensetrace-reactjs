@@ -95,18 +95,20 @@ function Transactions() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 items-start sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
           <p className="text-gray-600 mt-1">Track all your financial transactions</p>
         </div>
-        <Link
-          to="/transactions/add"
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Transaction
-        </Link>
+        <div className="sm:justify-self-end">
+          <Link
+            to="/transactions/add"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Add Transaction
+          </Link>
+        </div>
       </div>
 
       {/* Search and Filters */}
@@ -140,7 +142,7 @@ function Transactions() {
             All Transactions ({totalElements})
           </h2>
         </div>
-        
+
         {transactions.length === 0 ? (
           <div className="p-8 text-center">
             <ArrowUpDown className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -168,9 +170,9 @@ function Transactions() {
                     <div className="flex items-center space-x-4 flex-1 min-w-0">
                       <div className="flex-shrink-0">
                         {transaction.category ? (
-                          <CategoryIcon 
-                            icon={transaction.category.icon} 
-                            color={transaction.category.color} 
+                          <CategoryIcon
+                            icon={transaction.category.icon}
+                            color={transaction.category.color}
                           />
                         ) : (
                           <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
@@ -178,7 +180,7 @@ function Transactions() {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-1">
                           <p className="font-medium text-gray-900 truncate">
@@ -188,7 +190,7 @@ function Transactions() {
                             {TRANSACTION_TYPES[transaction.type]}
                           </span>
                         </div>
-                        
+
                         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-sm text-gray-500">
                           <span>{date} at {time}</span>
                           {transaction.category && (
@@ -203,7 +205,7 @@ function Transactions() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
                         <p className={`font-semibold ${getAmountColor(transaction.type)}`}>
@@ -211,7 +213,7 @@ function Transactions() {
                           {formatCurrency(transaction.amount)}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <Link
                           to={`/transactions/edit/${transaction.id}`}
@@ -234,13 +236,13 @@ function Transactions() {
             </div>
 
             {/* Pagination */}
-            { (
+            {(
               <div className="p-6 border-t border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-gray-700">
                     Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} transactions
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
@@ -249,11 +251,11 @@ function Transactions() {
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
-                    
+
                     <span className="px-3 py-2 text-sm font-medium">
                       Page {currentPage + 1} of {totalPages}
                     </span>
-                    
+
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
                       disabled={currentPage >= totalPages - 1}

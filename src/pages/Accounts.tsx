@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, CreditCard, Wallet, Building2, Banknote, Eye, EyeOff } from 'lucide-react';
-import { 
-  useAccounts, 
-  useBankAccounts, 
-  useWalletAccounts, 
-  useCreditCardAccounts, 
+import {
+  useAccounts,
+  useBankAccounts,
+  useWalletAccounts,
+  useCreditCardAccounts,
   useCashAccounts,
   useAccountSummary,
-  useDeleteAccount 
+  useDeleteAccount
 } from '../hooks/useAccounts';
 
 function Accounts() {
   const [showBalance, setShowBalance] = useState(false);
-  
+
   const { data: allAccounts = [], isLoading: allAccountsLoading } = useAccounts();
   const { data: bankAccounts = [], isLoading: bankLoading } = useBankAccounts();
   const { data: walletAccounts = [], isLoading: walletLoading } = useWalletAccounts();
@@ -88,21 +88,23 @@ function Accounts() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
-          <p className="text-gray-600 mt-1">Manage your bank accounts and credit cards</p>
-          <p className="text-sm text-yellow-600 mt-1">
+          <p className="text-gray-600">Manage your bank accounts and credit cards</p>
+          <p className="text-sm text-yellow-600">
             * Transaction-based balance, actual may vary.
           </p>
         </div>
-        <Link
-          to="/accounts/add"
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Account
-        </Link>
+        <div className="sm:mt-1">
+          <Link
+            to="/accounts/add"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Add Account
+          </Link>
+        </div>
       </div>
 
       {/* Summary Cards */}
@@ -172,7 +174,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {cashAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Banknote className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -193,7 +195,7 @@ function Accounts() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -230,7 +232,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {bankAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -256,7 +258,7 @@ function Accounts() {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -293,7 +295,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {walletAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Wallet className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -314,7 +316,7 @@ function Accounts() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -351,7 +353,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {creditCardAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <CreditCard className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -376,7 +378,7 @@ function Accounts() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
