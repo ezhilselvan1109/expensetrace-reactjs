@@ -16,6 +16,8 @@ const Analysis = lazy(() => import('./pages/Analysis'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
+const Accounts = lazy(() => import('./pages/Accounts'));
+const AccountForm = lazy(() => import('./pages/AccountForm'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,12 +64,9 @@ function App() {
             }>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="analysis" element={<Analysis />} />
-              <Route path="accounts" element={
-                <PlaceholderPage 
-                  title="Accounts" 
-                  description="Manage your bank accounts and credit cards" 
-                />
-              } />
+              <Route path="accounts" element={<Accounts />} />
+              <Route path="accounts/add" element={<AccountForm />} />
+              <Route path="accounts/edit/:id" element={<AccountForm />} />
               <Route path="transactions" element={
                 <PlaceholderPage 
                   title="Transactions" 
