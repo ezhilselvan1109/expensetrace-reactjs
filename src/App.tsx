@@ -18,6 +18,8 @@ const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
 const Accounts = lazy(() => import('./pages/Accounts'));
 const AccountForm = lazy(() => import('./pages/AccountForm'));
+const Transactions = lazy(() => import('./pages/Transactions'));
+const TransactionForm = lazy(() => import('./pages/TransactionForm'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,12 +69,9 @@ function App() {
               <Route path="accounts" element={<Accounts />} />
               <Route path="accounts/add" element={<AccountForm />} />
               <Route path="accounts/edit/:id" element={<AccountForm />} />
-              <Route path="transactions" element={
-                <PlaceholderPage 
-                  title="Transactions" 
-                  description="View and manage all your transactions" 
-                />
-              } />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="transactions/add" element={<TransactionForm />} />
+              <Route path="transactions/edit/:id" element={<TransactionForm />} />
               <Route path="tags" element={
                 <PlaceholderPage 
                   title="Tags" 
