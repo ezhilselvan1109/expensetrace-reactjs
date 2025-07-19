@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useCreateCategory, useUpdateCategory, useCategories } from '../hooks/useCategories';
+import { useCreateCategory, useUpdateCategory, useCategory } from '../hooks/useCategories';
 import { CreateCategoryData, CATEGORY_COLORS, CATEGORY_ICONS } from '../types/category';
 import CategoryIcon from '../components/CategoryIcon';
 
@@ -24,7 +24,7 @@ function CategoryForm() {
   const [selectedColor, setSelectedColor] = useState('blue');
   const [selectedIcon, setSelectedIcon] = useState('utensils');
   
-  const { data: categories } = useCategories();
+  const { data: category, isLoading: categoryLoading } = useCategory(id || '');
   const createCategory = useCreateCategory();
   const updateCategory = useUpdateCategory();
   
@@ -41,8 +41,7 @@ function CategoryForm() {
 
   // Load existing category data for editing
   useEffect(() => {
-    if (isEditing && categories) {
-      const category = categories.find(c => c.id === id);
+    if (isEditing && category) {
       if (category) {
         setValue('name', category.name);
         setValue('type', category.type);
@@ -53,7 +52,7 @@ function CategoryForm() {
         setSelectedIcon(category.icon);
       }
     }
-  }, [isEditing, categories, id, setValue]);
+  }, [isEditing, category, setValue]);
 
   // Update form type when tab changes
   useEffect(() => {
@@ -84,8 +83,26 @@ function CategoryForm() {
 
   const isPending = createCategory.isPending || updateCategory.isPending;
 
+  if (isEditing && categoryLoading) {
+    return (
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
+          <div className="space-y-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white rounded-lg shadow p-6">
+                <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
+                <div className="h-10 bg-gray-200 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="mb-8">
         <button
           onClick={() => navigate('/categories')}
@@ -104,7 +121,7 @@ function CategoryForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Category Name */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
             Category Name
           </label>
@@ -113,7 +130,7 @@ function CategoryForm() {
             type="text"
             id="name"
             placeholder="Enter category name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
           />
           {errors.name && (
             <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -121,11 +138,11 @@ function CategoryForm() {
         </div>
 
         {/* Category Type */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label className="block text-sm font-medium text-gray-700 mb-4">
             Category Type
           </label>
-          <div className="flex bg-gray-100 rounded-full p-1 max-w-xs">
+          <div className="flex bg-gray-100 rounded-lg p-1 w-full mx-auto sm:mx-0">
             {tabs.map((tab, index) => {
               const active = activeTab === index;
               return (
@@ -133,7 +150,7 @@ function CategoryForm() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(index)}
-                  className={`flex-1 text-sm font-medium rounded-full py-2 transition-all duration-200 ${
+                  className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
                     active
                       ? "bg-white shadow text-black"
                       : "text-gray-500 hover:text-black"
@@ -147,11 +164,11 @@ function CategoryForm() {
         </div>
 
         {/* Color Selection */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label className="block text-sm font-medium text-gray-700 mb-4">
             Color
           </label>
-          <div className="grid grid-cols-5 sm:grid-cols-8 gap-3">
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
             {CATEGORY_COLORS.map((color) => (
               <button
                 key={color}
@@ -159,7 +176,7 @@ function CategoryForm() {
                 onClick={() => setSelectedColor(color)}
                 className={`relative w-10 h-10 rounded-full border-2 transition-all ${
                   selectedColor === color
-                    ? 'border-gray-900 scale-110'
+                    ? 'border-gray-900 scale-105 sm:scale-110'
                     : 'border-gray-300 hover:border-gray-400'
                 }`}
               >
@@ -181,7 +198,7 @@ function CategoryForm() {
         </div>
 
         {/* Icon Selection */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label className="block text-sm font-medium text-gray-700 mb-4">
             Icon
           </label>
@@ -192,7 +209,7 @@ function CategoryForm() {
                   <span className="mr-2">{group === 'Food' ? '🍽️' : group === 'Travel' ? '✈️' : '🛒'}</span>
                   {group}
                 </h3>
-                <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2">
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
                   {icons.map((icon) => (
                     <button
                       key={icon}
@@ -219,7 +236,7 @@ function CategoryForm() {
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label className="block text-sm font-medium text-gray-700 mb-4">
             Preview
           </label>
@@ -246,18 +263,18 @@ function CategoryForm() {
         )}
 
         {/* Submit Button */}
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base font-medium"
           >
             {isPending ? 'Saving...' : isEditing ? 'Update Category' : 'Create Category'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/categories')}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium"
           >
             Cancel
           </button>

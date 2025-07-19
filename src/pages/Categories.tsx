@@ -60,14 +60,14 @@ function Categories() {
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-gray-100 rounded-full p-1 mb-6 max-w-xs mx-auto">
+      <div className="flex bg-gray-100 rounded-lg p-1 mb-6 mx-auto">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
-              className={`flex-1 text-sm font-medium rounded-full py-2 transition-all duration-200 ${
+              className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
                 active
                   ? "bg-white shadow text-black"
                   : "text-gray-500 hover:text-black"
@@ -154,14 +154,14 @@ function Categories() {
                 <div className="flex items-center space-x-2">
                   <Link
                     to={`/categories/edit/${category.id}`}
-                    className="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
+                    className="p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-md hover:bg-gray-50"
                   >
                     <Edit className="w-5 h-5" />
                   </Link>
                   <button
                     onClick={() => handleDeleteCategory(category.id)}
                     disabled={deleteCategory.isPending}
-                    className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                    className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>

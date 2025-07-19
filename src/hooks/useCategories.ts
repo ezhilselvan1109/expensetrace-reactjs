@@ -3,6 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import apiClient from '../lib/axios';
 import { Category, CreateCategoryData, UpdateCategoryData } from '../types/category';
 
+// Get category by ID
+export const useCategory = (id: string) => {
+  return useQuery<Category>({
+    queryKey: ['category', id],
+    queryFn: async () => {
+      const response = await apiClient.get(`/categories/${id}`);
+      return response.data.data;
+    },
+    enabled: !!id,
+  });
+};
+
 // Get all categories
 export const useCategories = () => {
   return useQuery<Category[]>({
