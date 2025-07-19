@@ -19,7 +19,7 @@ const categoryData = [
   { name: 'Other', value: 8, color: '#6B7280' },
 ];
 
-export default function Dashboard() {
+function Dashboard() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -184,3 +184,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

@@ -20,7 +20,7 @@ const dailySpending = [
   { day: 'Sun', amount: 150 },
 ];
 
-export default function Analysis() {
+function Analysis() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -149,3 +149,5 @@ export default function Analysis() {
     </div>
   );
 }
+
+export default Analysis;

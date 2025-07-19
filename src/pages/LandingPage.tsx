@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, BarChart3, PieChart, Target, Bell, RefreshCw, Zap, DollarSign } from 'lucide-react';
 
-export default function LandingPage() {
+function LandingPage() {
   const scrollToHowItWorks = () => {
     document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -210,3 +210,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+export default LandingPage;

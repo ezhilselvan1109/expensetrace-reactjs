@@ -3,7 +3,7 @@ interface PlaceholderPageProps {
   description: string;
 }
 
-export default function PlaceholderPage({ title, description }: PlaceholderPageProps) {
+function PlaceholderPage({ title, description }: PlaceholderPageProps) {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="text-center py-12">
@@ -17,3 +17,5 @@ export default function PlaceholderPage({ title, description }: PlaceholderPageP
     </div>
   );
 }
+
+export default PlaceholderPage;

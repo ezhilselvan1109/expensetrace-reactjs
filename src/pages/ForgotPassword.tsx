@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useForgotPassword } from '../hooks/useAuth';
 import { DollarSign, CheckCircle } from 'lucide-react';
 
-export default function ForgotPassword() {
+function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const forgotPassword = useForgotPassword();
@@ -122,3 +122,5 @@ export default function ForgotPassword() {
     </div>
   );
 }
+
+export default ForgotPassword;

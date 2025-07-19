@@ -7,7 +7,7 @@ import DefaultCategoryModal from '../components/DefaultCategoryModal';
 
 const tabs = ['Expense', 'Income'];
 
-export default function Categories() {
+function Categories() {
   const [activeTab, setActiveTab] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -183,3 +183,5 @@ export default function Categories() {
     </div>
   );
 }
+
+export default Categories;

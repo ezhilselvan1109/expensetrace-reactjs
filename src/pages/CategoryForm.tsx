@@ -15,7 +15,7 @@ interface FormData {
   icon: string;
 }
 
-export default function CategoryForm() {
+function CategoryForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
@@ -266,3 +266,5 @@ export default function CategoryForm() {
     </div>
   );
 }
+
+export default CategoryForm;

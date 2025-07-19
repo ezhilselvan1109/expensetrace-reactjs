@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import Sidebar from './Sidebar';
+import LoadingSpinner from '../LoadingSpinner';
 
 export default function PrivateLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,7 +27,13 @@ export default function PrivateLayout() {
         </div>
         
         <main className="flex-1 overflow-y-auto">
-        <Outlet />
+          <Suspense fallback={
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            </div>
+          }>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

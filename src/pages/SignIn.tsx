@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useAuth';
 import { DollarSign, Eye, EyeOff } from 'lucide-react';
 
-export default function SignIn() {
+function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -121,3 +121,5 @@ export default function SignIn() {
     </div>
   );
 }
+
+export default SignIn;
