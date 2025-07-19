@@ -16,7 +16,8 @@ import {
   CreateWalletData, 
   CreateCreditCardData,
   CreatePaymentModeData,
-  PAYMENT_MODE_TYPES
+  PAYMENT_MODE_TYPES,
+  PaymentModeType 
 } from '../types/account';
 import PaymentModeModal from '../components/PaymentModeModal';
 
@@ -48,7 +49,7 @@ function AccountForm() {
   const updateWallet = useUpdateWallet();
   const updateCreditCard = useUpdateCreditCard();
   
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       currentBalance: 0,

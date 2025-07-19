@@ -14,7 +14,7 @@ import {
 function Accounts() {
   const [showBalance, setShowBalance] = useState(false);
   
-  const { isLoading: allAccountsLoading } = useAccounts();
+  const { data: allAccounts = [], isLoading: allAccountsLoading } = useAccounts();
   const { data: bankAccounts = [], isLoading: bankLoading } = useBankAccounts();
   const { data: walletAccounts = [], isLoading: walletLoading } = useWalletAccounts();
   const { data: creditCardAccounts = [], isLoading: creditLoading } = useCreditCardAccounts();
