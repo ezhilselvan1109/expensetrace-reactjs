@@ -32,13 +32,15 @@ interface FormData {
   accountId: string;
   toAccountId?: string;
   description: string;
+  tags: string[];
 }
 
 function TransactionForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
-
+  const defaultTags = ['tag1', 'tag2', 'tag3'];
+  const [newTag, setNewTag] = useState('');
   const [activeTab, setActiveTab] = useState(0);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -65,7 +67,8 @@ function TransactionForm() {
       categoryId: '',
       accountId: '',
       toAccountId: '',
-      description: ''
+      description: '',
+      tags: []
     }
   });
 
@@ -151,6 +154,16 @@ function TransactionForm() {
     setValue('amount', amount);
   };
 
+  const toggleTag = (tag: string) => {
+    const currentTags = watch('tags');
+    if (currentTags.includes(tag)) {
+      setValue('tags', currentTags.filter(t => t !== tag));
+    } else {
+      setValue('tags', [...currentTags, tag]);
+    }
+  };
+
+
   const isPending = createTransaction.isPending || updateTransaction.isPending;
 
   if (isEditing && transactionLoading) {
@@ -205,8 +218,8 @@ function TransactionForm() {
                     type="button"
                     onClick={() => setActiveTab(index)}
                     className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
-                        ? "bg-white shadow text-black"
-                        : "text-gray-500 hover:text-black"
+                      ? "bg-white shadow text-black"
+                      : "text-gray-500 hover:text-black"
                       }`}
                   >
                     {tab}
@@ -398,6 +411,76 @@ function TransactionForm() {
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
           )}
+        </div>
+
+        {/* Tag Selector */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Tags <span className="text-xs text-gray-500">(optional)</span>
+          </label>
+          <div className="flex flex-col gap-2">
+            {/* Input to add new tag */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                placeholder="Add a new tag"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const trimmedTag = newTag.trim();
+                  if (
+                    trimmedTag &&
+                    !watch('tags').includes(trimmedTag)
+                  ) {
+                    setValue('tags', [...watch('tags'), trimmedTag]);
+                  }
+                  setNewTag('');
+                }}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          {/* Tag list */}
+          {/* Selected Tags (user-added or selected default tags) */}
+          <div className="flex flex-wrap gap-2 mt-2">
+            {watch('tags')?.map((tag) => (
+              <div className="flex flex-wrap gap-2 mt-2">
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleTag(tag)}
+                  className="px-3 py-1 rounded-lg text-sm border bg-indigo-600 text-white border-indigo-600"
+                >
+                  {tag}
+                </button>
+              </div>
+            ))}
+            {/* Default Tags (only those not already selected) */}
+            {watch('tags').length < defaultTags.length && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {defaultTags
+                  .filter(tag => !watch('tags').includes(tag))
+                  .slice(0, 3) // Only show 2 unselected default tags
+                  .map(tag => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className="px-3 py-1 rounded-lg text-sm border bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    >
+                      {tag}
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Error Messages */}
