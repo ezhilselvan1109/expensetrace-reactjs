@@ -2,21 +2,21 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit, Calculator as CalculatorIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { 
-  useCreateTransaction, 
-  useUpdateTransaction, 
-  useTransaction 
+import {
+  useCreateTransaction,
+  useUpdateTransaction,
+  useTransaction
 } from '../hooks/useTransactions';
-import { 
-  useCategoriesByType, 
-  useDefaultCategory 
+import {
+  useCategoriesByType,
+  useDefaultCategory
 } from '../hooks/useCategories';
-import { 
-  useAccounts, 
-  useDefaultPaymentMode 
+import {
+  useAccounts,
+  useDefaultPaymentMode
 } from '../hooks/useAccounts';
 import { CreateTransactionData } from '../types/transaction';
-import Calculator from '../components/Calculator';
+import CalculatorModal from '../components/CalculatorModal';
 import CategorySelectModal from '../components/CategorySelectModal';
 import AccountSelectModal from '../components/AccountSelectModal';
 import CategoryIcon from '../components/CategoryIcon';
@@ -38,24 +38,24 @@ function TransactionForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
-  
+
   const [activeTab, setActiveTab] = useState(0);
-  const [showCalculator, setShowCalculator] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isToAccountModalOpen, setIsToAccountModalOpen] = useState(false);
-  
+
   const { data: transaction, isLoading: transactionLoading } = useTransaction(id || '');
   const createTransaction = useCreateTransaction();
   const updateTransaction = useUpdateTransaction();
-  
+
   // Get categories and accounts
   const currentType = activeTab === 0 ? 1 : activeTab === 1 ? 2 : 1; // For transfer, use expense categories
   const { data: categories = [] } = useCategoriesByType(currentType);
   const { data: defaultCategory } = useDefaultCategory(currentType);
   const { data: accounts = [] } = useAccounts();
   const { data: defaultPaymentMode } = useDefaultPaymentMode();
-  
+
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       type: '1',
@@ -79,10 +79,10 @@ function TransactionForm() {
     if (isEditing && transaction) {
       const transactionType = transaction.type;
       setActiveTab(transactionType === '1' ? 0 : transactionType === '2' ? 1 : 2);
-      
+
       setValue('type', transactionType);
       setValue('date', transaction.date);
-      // setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
+      setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
       setValue('amount', transaction.amount);
       setValue('categoryId', transaction.categoryId || '');
       setValue('accountId', transaction.accountId);
@@ -97,7 +97,7 @@ function TransactionForm() {
       if (defaultCategory && activeTab !== 2) {
         setValue('categoryId', defaultCategory.id);
       }
-      
+
       if (defaultPaymentMode) {
         setValue('accountId', defaultPaymentMode.accountId);
       }
@@ -108,7 +108,7 @@ function TransactionForm() {
   useEffect(() => {
     const newType = activeTab === 0 ? '1' : activeTab === 1 ? '2' : '3';
     setValue('type', newType);
-    
+
     // Clear category for transfer
     if (activeTab === 2) {
       setValue('categoryId', '');
@@ -120,7 +120,7 @@ function TransactionForm() {
   const onSubmit = async (data: FormData) => {
     try {
       const [hours, minutes] = data.time.split(':').map(Number);
-      
+
       const transactionData: CreateTransactionData = {
         type: data.type,
         date: data.date,
@@ -189,263 +189,253 @@ function TransactionForm() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Transaction Type Tabs */}
-            {!isEditing && (
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label className="block text-sm font-medium text-gray-700 mb-4">
-                  Transaction Type
-                </label>
-                <div className="flex bg-gray-100 rounded-lg p-1">
-                  {tabs.map((tab, index) => {
-                    const active = activeTab === index;
-                    return (
-                      <button
-                        key={tab}
-                        type="button"
-                        onClick={() => setActiveTab(index)}
-                        className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                          active
-                            ? "bg-white shadow text-black"
-                            : "text-gray-500 hover:text-black"
-                        }`}
-                      >
-                        {tab}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Date and Time */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
-                  Date
-                </label>
-                <input
-                  {...register('date', { required: 'Date is required' })}
-                  type="date"
-                  id="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                {errors.date && (
-                  <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
-                )}
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
-                  Time
-                </label>
-                <input
-                  {...register('time', { required: 'Time is required' })}
-                  type="time"
-                  id="time"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                {errors.time && (
-                  <p className="mt-1 text-sm text-red-600">{errors.time.message}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Amount */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
-                  Amount
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowCalculator(!showCalculator)}
-                  className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
-                >
-                  <CalculatorIcon className="w-4 h-4 mr-1" />
-                  Calculator
-                </button>
-              </div>
-              <input
-                {...register('amount', { 
-                  required: 'Amount is required',
-                  min: { value: 0.01, message: 'Amount must be greater than 0' }
-                })}
-                type="number"
-                step="0.01"
-                id="amount"
-                placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              {errors.amount && (
-                <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
-              )}
-            </div>
-
-            {/* Category (for Expense and Income) */}
-            {activeTab !== 2 && (
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Category
-                  </label>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Transaction Type Tabs */}
+        {!isEditing && (
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-4">
+              Transaction Type
+            </label>
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              {tabs.map((tab, index) => {
+                const active = activeTab === index;
+                return (
                   <button
+                    key={tab}
                     type="button"
-                    onClick={() => setIsCategoryModalOpen(true)}
-                    className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+                    onClick={() => setActiveTab(index)}
+                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
+                        ? "bg-white shadow text-black"
+                        : "text-gray-500 hover:text-black"
+                      }`}
                   >
-                    <Edit className="w-4 h-4 mr-1" />
-                    Change
+                    {tab}
                   </button>
-                </div>
-                
-                {selectedCategory ? (
-                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <CategoryIcon icon={selectedCategory.icon} color={selectedCategory.color} />
-                    <span className="font-medium text-gray-900">{selectedCategory.name}</span>
-                  </div>
-                ) : (
-                  <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
-                    No category selected
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Account */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  {activeTab === 2 ? 'From Account' : 'Account'}
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setIsAccountModalOpen(true)}
-                  className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
-                >
-                  <Edit className="w-4 h-4 mr-1" />
-                  Change
-                </button>
-              </div>
-              
-              {selectedAccount ? (
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 font-medium">
-                      {selectedAccount.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{selectedAccount.name}</p>
-                    {/* <p className="text-sm text-gray-500 capitalize">{selectedAccount.type.replace('-', ' ')}</p> */}
-                  </div>
-                </div>
-              ) : (
-                <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
-                  No account selected
-                </div>
-              )}
+                );
+              })}
             </div>
+          </div>
+        )}
 
-            {/* To Account (for Transfer) */}
-            {activeTab === 2 && (
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    To Account
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setIsToAccountModalOpen(true)}
-                    className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
-                  >
-                    <Edit className="w-4 h-4 mr-1" />
-                    Change
-                  </button>
-                </div>
-                
-                {selectedToAccount ? (
-                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 font-medium">
-                        {selectedToAccount.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{selectedToAccount.name}</p>
-                      <p className="text-sm text-gray-500 capitalize">{selectedToAccount.type.replace('-', ' ')}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
-                    No account selected
-                  </div>
-                )}
-              </div>
+        {/* Date and Time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+              Date
+            </label>
+            <input
+              {...register('date', { required: 'Date is required' })}
+              type="date"
+              id="date"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            {errors.date && (
+              <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
             )}
+          </div>
 
-            {/* Description */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                {...register('description', { required: 'Description is required' })}
-                id="description"
-                rows={3}
-                placeholder="Enter transaction description"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              {errors.description && (
-                <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-              )}
-            </div>
-
-            {/* Error Messages */}
-            {(createTransaction.error || updateTransaction.error) && (
-              <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                <div className="text-sm text-red-600">
-                  Failed to save transaction. Please try again.
-                </div>
-              </div>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
+              Time
+            </label>
+            <input
+              {...register('time', { required: 'Time is required' })}
+              type="time"
+              id="time"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            {errors.time && (
+              <p className="mt-1 text-sm text-red-600">{errors.time.message}</p>
             )}
-
-            {/* Submit Button */}
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-              <button
-                type="submit"
-                disabled={isPending}
-                className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
-              >
-                {isPending ? 'Saving...' : isEditing ? 'Update Transaction' : 'Create Transaction'}
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate('/transactions')}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
 
-        {/* Calculator Sidebar */}
-        <div className="lg:col-span-1">
-          {showCalculator && (
-            <div className="sticky top-6">
-              <Calculator 
-                onAmountChange={handleAmountChange}
-                currentAmount={watchedValues.amount || 0}
-              />
+        {/* Amount */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-2">
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
+              Amount
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsCalculatorOpen(true)}
+              className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+            >
+              <CalculatorIcon className="w-4 h-4 mr-1" />
+              Calculator
+            </button>
+          </div>
+          <input
+            {...register('amount', {
+              required: 'Amount is required',
+              min: { value: 0.01, message: 'Amount must be greater than 0' }
+            })}
+            type="number"
+            step="0.01"
+            id="amount"
+            placeholder="0.00"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {errors.amount && (
+            <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
+          )}
+        </div>
+
+        {/* Category (for Expense and Income) */}
+        {activeTab !== 2 && (
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Category
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsCategoryModalOpen(true)}
+                className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+              >
+                <Edit className="w-4 h-4 mr-1" />
+                Change
+              </button>
+            </div>
+
+            {selectedCategory ? (
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <CategoryIcon icon={selectedCategory.icon} color={selectedCategory.color} />
+                <span className="font-medium text-gray-900">{selectedCategory.name}</span>
+              </div>
+            ) : (
+              <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
+                No category selected
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Account */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              {activeTab === 2 ? 'From Account' : 'Account'}
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsAccountModalOpen(true)}
+              className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+            >
+              <Edit className="w-4 h-4 mr-1" />
+              Change
+            </button>
+          </div>
+
+          {selectedAccount ? (
+            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-medium">
+                  {selectedAccount.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">{selectedAccount.name}</p>
+                <p className="text-sm text-gray-500 capitalize">{selectedAccount.type.replace('-', ' ')}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
+              No account selected
             </div>
           )}
         </div>
-      </div>
+
+        {/* To Account (for Transfer) */}
+        {activeTab === 2 && (
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                To Account
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsToAccountModalOpen(true)}
+                className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+              >
+                <Edit className="w-4 h-4 mr-1" />
+                Change
+              </button>
+            </div>
+
+            {selectedToAccount ? (
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <span className="text-green-600 font-medium">
+                    {selectedToAccount.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{selectedToAccount.name}</p>
+                  <p className="text-sm text-gray-500 capitalize">{selectedToAccount.type.replace('-', ' ')}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
+                No account selected
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Description */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            Description
+          </label>
+          <textarea
+            {...register('description', { required: 'Description is required' })}
+            id="description"
+            rows={3}
+            placeholder="Enter transaction description"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {errors.description && (
+            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+          )}
+        </div>
+
+        {/* Error Messages */}
+        {(createTransaction.error || updateTransaction.error) && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="text-sm text-red-600">
+              Failed to save transaction. Please try again.
+            </div>
+          </div>
+        )}
+
+        {/* Submit Button */}
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+          >
+            {isPending ? 'Saving...' : isEditing ? 'Update Transaction' : 'Create Transaction'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/transactions')}
+            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
 
       {/* Modals */}
+      <CalculatorModal
+        isOpen={isCalculatorOpen}
+        onClose={() => setIsCalculatorOpen(false)}
+        onAmountChange={handleAmountChange}
+        currentAmount={watchedValues.amount || 0}
+      />
+
       <CategorySelectModal
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}

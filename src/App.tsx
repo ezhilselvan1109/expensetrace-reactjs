@@ -13,6 +13,7 @@ const SignUp = lazy(() => import('./pages/SignUp'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analysis = lazy(() => import('./pages/Analysis'));
+const About = lazy(() => import('./pages/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
@@ -112,10 +113,7 @@ function App() {
                 />
               } />
               <Route path="about" element={
-                <PlaceholderPage 
-                  title="About" 
-                  description="Learn more about ExpenseTrace" 
-                />
+                <About />
               } />
             </Route>
 
