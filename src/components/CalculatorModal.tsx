@@ -179,7 +179,7 @@ export default function CalculatorModal({
           </button>
         </div>
 
-        <div className="flex-1 p-4 space-y-4">
+        <div className="flex-1 p-4 space-y-4 max-h-full overflow-y-auto">
           {/* History */}
           {history.length > 0 && (
             <div className="bg-gray-50 rounded-lg p-3 max-h-24 overflow-y-auto">

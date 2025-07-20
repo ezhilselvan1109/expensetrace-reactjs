@@ -16,8 +16,7 @@ import {
   CreateWalletData, 
   CreateCreditCardData,
   CreatePaymentModeData,
-  PAYMENT_MODE_TYPES,
-  PaymentModeType 
+  PAYMENT_MODE_TYPES
 } from '../types/account';
 import PaymentModeModal from '../components/PaymentModeModal';
 
@@ -49,7 +48,7 @@ function AccountForm() {
   const updateWallet = useUpdateWallet();
   const updateCreditCard = useUpdateCreditCard();
   
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       currentBalance: 0,
@@ -443,7 +442,7 @@ function AccountForm() {
       <PaymentModeModal
         isOpen={isPaymentModeModalOpen}
         onClose={() => setIsPaymentModeModalOpen(false)}
-        accountId="" // Not needed for form creation
+        accountId={isEditing ? id ?? '' : ''} // Not needed for form creation
         onPaymentModeAdded={handlePaymentModeAdded}
       />
     </div>

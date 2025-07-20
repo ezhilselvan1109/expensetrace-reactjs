@@ -107,8 +107,44 @@ function Accounts() {
         </div>
       </div>
 
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8">
+        {/* Available Balance Card */}
+        <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-medium text-gray-600">Available Balance</h3>
+            <button
+              onClick={() => setShowBalance(!showBalance)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              {showBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {formatCurrency(summary?.availableAmount || 0)}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">Total across all accounts</p>
+        </div>
+
+        {/* Available Credit Card */}
+        <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-medium text-gray-600">Available Credit</h3>
+            <button
+              onClick={() => setShowBalance(!showBalance)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              {showBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
+          <p className="text-2xl font-bold text-green-600">
+            {formatCurrency(summary?.availableCredit || 0)}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">Credit cards available limit</p>
+        </div>
+      </div>
+
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-gray-600">Available Balance</h3>
@@ -156,7 +192,7 @@ function Accounts() {
           </p>
           <p className="text-sm text-gray-500 mt-1">Total outstanding amount</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Account Sections */}
       <div className="space-y-8">
