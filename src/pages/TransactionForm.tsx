@@ -102,7 +102,7 @@ function TransactionForm() {
       }
 
       if (defaultPaymentMode) {
-        setValue('accountId', defaultPaymentMode.accountId);
+        setValue('accountId', defaultPaymentMode.id);
       }
     }
   }, [defaultCategory, defaultPaymentMode, activeTab, isEditing, setValue]);
@@ -137,7 +137,8 @@ function TransactionForm() {
         categoryId: data.type === '3' ? undefined : data.categoryId,
         accountId: data.accountId,
         toAccountId: data.type === '3' ? data.toAccountId : undefined,
-        description: data.description
+        description: data.description,
+        tagIds:[]
       };
 
       if (isEditing && id) {
@@ -349,7 +350,7 @@ function TransactionForm() {
               </div>
               <div>
                 <p className="font-medium text-gray-900">{selectedAccount.name}</p>
-                <p className="text-sm text-gray-500 capitalize">{selectedAccount.type.replace('-', ' ')}</p>
+                <p className="text-sm text-gray-500 capitalize">{selectedAccount.type}</p>
               </div>
             </div>
           ) : (

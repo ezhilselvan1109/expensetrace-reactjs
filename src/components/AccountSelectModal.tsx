@@ -36,13 +36,13 @@ export default function AccountSelectModal({
 
   const getAccountIcon = (type: string) => {
     switch (type) {
-      case 'bank':
+      case '1':
         return <Building2 className="w-5 h-5" />;
-      case 'wallet':
+      case '2':
         return <Wallet className="w-5 h-5" />;
-      case 'credit-card':
+      case '3':
         return <CreditCard className="w-5 h-5" />;
-      case 'cash':
+      case '4':
         return <Banknote className="w-5 h-5" />;
       default:
         return <Building2 className="w-5 h-5" />;
@@ -109,7 +109,7 @@ export default function AccountSelectModal({
                 </div>
                 <div className="flex-1 text-left">
                   <p className="font-medium text-gray-900">{account.name}</p>
-                  <p className="text-sm text-gray-500 capitalize">{account.type.replace('-', ' ')}</p>
+                  <p className="text-sm text-gray-500 capitalize">{account.type}</p>
                 </div>
                 {selectedAccount?.id === account.id && (
                   <span className="text-sm text-indigo-600 font-medium">Selected</span>

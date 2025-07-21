@@ -21,6 +21,10 @@ const Accounts = lazy(() => import('./pages/Accounts'));
 const AccountForm = lazy(() => import('./pages/AccountForm'));
 const Transactions = lazy(() => import('./pages/Transactions'));
 const TransactionForm = lazy(() => import('./pages/TransactionForm'));
+const Debts = lazy(() => import('./pages/Debts'));
+const DebtForm = lazy(() => import('./pages/DebtForm'));
+const DebtRecords = lazy(() => import('./pages/DebtRecords'));
+const DebtRecordForm = lazy(() => import('./pages/DebtRecordForm'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -94,12 +98,12 @@ function App() {
                   description="Set up recurring income and expenses" 
                 />
               } />
-              <Route path="debts" element={
-                <PlaceholderPage 
-                  title="Debts" 
-                  description="Track and manage your debts" 
-                />
-              } />
+              <Route path="debts" element={<Debts />} />
+              <Route path="debts/add" element={<DebtForm />} />
+              <Route path="debts/edit/:id" element={<DebtForm />} />
+              <Route path="debts/:debtId/records" element={<DebtRecords />} />
+              <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
+              <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
               <Route path="views" element={
                 <PlaceholderPage 
                   title="Views" 
