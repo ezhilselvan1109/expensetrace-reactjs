@@ -2,7 +2,6 @@ import { useState, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import Sidebar from './Sidebar';
-import LoadingSpinner from '../LoadingSpinner';
 
 export default function PrivateLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +20,11 @@ export default function PrivateLayout() {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <h1 className="text-lg font-semibold text-gray-900">ExpenseTrace</h1>
+            <div className="flex items-center space-x-1">
+              <span className="text-2xl font-extrabold text-indigo-600">Expense
+                <span className="text-xl font-bold text-gray-900">Trace</span>
+              </span>
+            </div>
             <div className="w-10"></div> {/* Spacer for centering */}
           </div>
         </div>

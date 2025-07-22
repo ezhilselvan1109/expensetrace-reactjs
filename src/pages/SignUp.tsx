@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSignup } from '../hooks/useAuth';
-import { DollarSign, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -15,7 +15,7 @@ function SignUp() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
@@ -25,12 +25,15 @@ function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="flex items-center space-x-2">
-            <DollarSign className="h-10 w-10 text-indigo-600" />
-            <span className="text-2xl font-bold text-gray-900">ExpenseTrace</span>
+            <Link to="/" className="flex items-center space-x-1">
+              <span className="text-2xl font-extrabold text-indigo-600">Expense</span>
+              <span className="text-2xl font-bold text-gray-900">Trace</span>
+            </Link>
+
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">

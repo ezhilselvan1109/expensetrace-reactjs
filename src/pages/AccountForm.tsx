@@ -442,7 +442,7 @@ function AccountForm() {
       <PaymentModeModal
         isOpen={isPaymentModeModalOpen}
         onClose={() => setIsPaymentModeModalOpen(false)}
-        accountId="" // Not needed for form creation
+        accountId={isEditing ? id ?? '' : ''} // Not needed for form creation
         onPaymentModeAdded={handlePaymentModeAdded}
       />
     </div>

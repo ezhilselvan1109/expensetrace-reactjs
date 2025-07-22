@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useCreateCategory, useUpdateCategory, useCategory } from '../hooks/useCategories';
-import { CATEGORY_COLORS, CATEGORY_ICONS } from '../types/category';
+import { CATEGORY_COLORS, CATEGORY_ICONS, colorMap, iconTitle } from '../types/category';
 import CategoryIcon from '../components/CategoryIcon';
 
 const tabs = ['Expense', 'Income'];
@@ -19,21 +19,21 @@ function CategoryForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
-  
+
   const [activeTab, setActiveTab] = useState(0);
-  const [selectedColor, setSelectedColor] = useState('blue');
-  const [selectedIcon, setSelectedIcon] = useState('utensils');
-  
+  const [selectedColor, setSelectedColor] = useState('indigo');
+  const [selectedIcon, setSelectedIcon] = useState('coffee');
+
   const { data: category, isLoading: categoryLoading } = useCategory(id || '');
   const createCategory = useCreateCategory();
   const updateCategory = useUpdateCategory();
-  
+
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       type: 1,
-      color: 'blue',
-      icon: 'utensils'
+      color: 'indigo',
+      icon: 'coffee'
     }
   });
 
@@ -150,11 +150,10 @@ function CategoryForm() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(index)}
-                  className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                    active
+                  className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
                       ? "bg-white shadow text-black"
                       : "text-gray-500 hover:text-black"
-                  }`}
+                    }`}
                 >
                   {tab}
                 </button>
@@ -174,18 +173,13 @@ function CategoryForm() {
                 key={color}
                 type="button"
                 onClick={() => setSelectedColor(color)}
-                className={`relative w-10 h-10 rounded-full border-2 transition-all ${
-                  selectedColor === color
-                    ? 'border-gray-900 scale-105 sm:scale-110'
+                className={`relative w-10 h-10 p-1 rounded-full border-2 transition-all ${selectedColor === color
+                    ? `${colorMap[selectedColor]} scale-105 sm:scale-110`
                     : 'border-gray-300 hover:border-gray-400'
-                }`}
+                  }`}
               >
-                <CategoryIcon 
-                  icon="circle" 
-                  color={color} 
-                  size="sm" 
-                  className="w-full h-full border-0" 
-                />
+                <div className={`${colorMap[color]} sm rounded-full flex items-center justify-center w-full h-full border-0`}>
+                </div>
                 {selectedColor === color && (
                   <Check className="absolute inset-0 w-4 h-4 text-white m-auto" />
                 )}
@@ -206,7 +200,7 @@ function CategoryForm() {
             {Object.entries(CATEGORY_ICONS).map(([group, icons]) => (
               <div key={group}>
                 <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
-                  <span className="mr-2">{group === 'Food' ? '🍽️' : group === 'Travel' ? '✈️' : '🛒'}</span>
+                  <span className="mr-2">{iconTitle[group]}</span>
                   {group}
                 </h3>
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
@@ -215,16 +209,15 @@ function CategoryForm() {
                       key={icon}
                       type="button"
                       onClick={() => setSelectedIcon(icon)}
-                      className={`p-2 rounded-lg border-2 transition-all ${
-                        selectedIcon === icon
-                          ? 'border-indigo-500 bg-indigo-50'
+                      className={`p-1 rounded-full mx-auto border-2 transition-all ${selectedIcon === icon
+                          ? `${colorMap[selectedColor]} bg-indigo-50`
                           : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
-                      <CategoryIcon 
-                        icon={icon} 
-                        color={selectedColor} 
-                        size="sm" 
+                      <CategoryIcon
+                        icon={icon}
+                        color={selectedColor}
+                        size="md"
                         className="mx-auto"
                       />
                     </button>

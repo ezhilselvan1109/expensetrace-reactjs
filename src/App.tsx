@@ -13,11 +13,18 @@ const SignUp = lazy(() => import('./pages/SignUp'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analysis = lazy(() => import('./pages/Analysis'));
+const About = lazy(() => import('./pages/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
 const Accounts = lazy(() => import('./pages/Accounts'));
 const AccountForm = lazy(() => import('./pages/AccountForm'));
+const Transactions = lazy(() => import('./pages/Transactions'));
+const TransactionForm = lazy(() => import('./pages/TransactionForm'));
+const Debts = lazy(() => import('./pages/Debts'));
+const DebtForm = lazy(() => import('./pages/DebtForm'));
+const DebtRecords = lazy(() => import('./pages/DebtRecords'));
+const DebtRecordForm = lazy(() => import('./pages/DebtRecordForm'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,12 +74,9 @@ function App() {
               <Route path="accounts" element={<Accounts />} />
               <Route path="accounts/add" element={<AccountForm />} />
               <Route path="accounts/edit/:id" element={<AccountForm />} />
-              <Route path="transactions" element={
-                <PlaceholderPage 
-                  title="Transactions" 
-                  description="View and manage all your transactions" 
-                />
-              } />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="transactions/add" element={<TransactionForm />} />
+              <Route path="transactions/edit/:id" element={<TransactionForm />} />
               <Route path="tags" element={
                 <PlaceholderPage 
                   title="Tags" 
@@ -94,12 +98,12 @@ function App() {
                   description="Set up recurring income and expenses" 
                 />
               } />
-              <Route path="debts" element={
-                <PlaceholderPage 
-                  title="Debts" 
-                  description="Track and manage your debts" 
-                />
-              } />
+              <Route path="debts" element={<Debts />} />
+              <Route path="debts/add" element={<DebtForm />} />
+              <Route path="debts/edit/:id" element={<DebtForm />} />
+              <Route path="debts/:debtId/records" element={<DebtRecords />} />
+              <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
+              <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
               <Route path="views" element={
                 <PlaceholderPage 
                   title="Views" 
@@ -113,10 +117,7 @@ function App() {
                 />
               } />
               <Route path="about" element={
-                <PlaceholderPage 
-                  title="About" 
-                  description="Learn more about ExpenseTrace" 
-                />
+                <About />
               } />
             </Route>
 

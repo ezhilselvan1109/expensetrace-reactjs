@@ -10,9 +10,9 @@ const tabs = ['Expense', 'Income'];
 function Categories() {
   const [activeTab, setActiveTab] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const currentType = activeTab === 0 ? 1 : 2;
-  
+
   const { data: categories = [], isLoading: categoriesLoading } = useCategoriesByType(currentType);
   const { data: defaultCategory, isLoading: defaultLoading } = useDefaultCategory(currentType);
   const deleteCategory = useDeleteCategory();
@@ -45,14 +45,14 @@ function Categories() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
-          <p className="text-gray-600 mt-1">Organize your expenses and income</p>
+          <p className="text-gray-600">Organize your expenses and income</p>
         </div>
         <Link
           to="/categories/add"
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors self-start sm:self-center"
         >
           <Plus className="w-5 h-5 mr-2" />
           Add Category
@@ -67,11 +67,10 @@ function Categories() {
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
-              className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                active
+              className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
                   ? "bg-white shadow text-black"
                   : "text-gray-500 hover:text-black"
-              }`}
+                }`}
             >
               {tab}
             </button>
@@ -113,7 +112,7 @@ function Categories() {
             All {tabs[activeTab]} Categories ({categories.length})
           </h2>
         </div>
-        
+
         {categories.length === 0 ? (
           <div className="p-8 text-center">
             <div className="text-gray-400 mb-4">
@@ -150,7 +149,7 @@ function Categories() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   <Link
                     to={`/categories/edit/${category.id}`}
