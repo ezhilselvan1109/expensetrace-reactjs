@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, CreditCard, Wallet, Building2, Banknote, Eye, EyeOff } from 'lucide-react';
-import { 
-  useAccounts, 
-  useBankAccounts, 
-  useWalletAccounts, 
-  useCreditCardAccounts, 
+import {
+  useAccounts,
+  useBankAccounts,
+  useWalletAccounts,
+  useCreditCardAccounts,
   useCashAccounts,
   useAccountSummary,
-  useDeleteAccount 
+  useDeleteAccount
 } from '../hooks/useAccounts';
 
 function Accounts() {
   const [showBalance, setShowBalance] = useState(false);
-  
-  const { isLoading: allAccountsLoading } = useAccounts();
+
+  const { data: allAccounts = [], isLoading: allAccountsLoading } = useAccounts();
   const { data: bankAccounts = [], isLoading: bankLoading } = useBankAccounts();
   const { data: walletAccounts = [], isLoading: walletLoading } = useWalletAccounts();
   const { data: creditCardAccounts = [], isLoading: creditLoading } = useCreditCardAccounts();
@@ -88,25 +88,54 @@ function Accounts() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
-          <p className="text-gray-600 mt-1">Manage your bank accounts and credit cards</p>
-          <p className="text-sm text-yellow-600 mt-1">
+          <p className="text-gray-600">Manage your bank accounts and credit cards</p>
+          <p className="text-sm text-yellow-600">
             * Transaction-based balance, actual may vary.
           </p>
         </div>
-        <Link
-          to="/accounts/add"
-          className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Account
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:mt-1">
+          <button
+            onClick={() => setShowBalance(!showBalance)}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            {showBalance ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+            {showBalance ? 'Hide Balance' : 'Show Balance'}
+          </button>
+          <Link
+            to="/accounts/add"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Add Account
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8">
+        {/* Available Balance Card */}
+        <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <h3 className="text-sm font-medium text-gray-600 mb-4">Available Balance</h3>
+          <p className="text-2xl font-bold text-gray-900">
+            {formatCurrency(summary?.availableAmount || 0)}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">Total across all accounts</p>
+        </div>
+
+        {/* Available Credit Card */}
+        <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <h3 className="text-sm font-medium text-gray-600 mb-4">Available Credit</h3>
+          <p className="text-2xl font-bold text-green-600">
+            {formatCurrency(summary?.availableCredit || 0)}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">Credit cards available limit</p>
+        </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-gray-600">Available Balance</h3>
@@ -154,7 +183,7 @@ function Accounts() {
           </p>
           <p className="text-sm text-gray-500 mt-1">Total outstanding amount</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Account Sections */}
       <div className="space-y-8">
@@ -172,7 +201,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {cashAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Banknote className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -193,7 +222,7 @@ function Accounts() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -230,7 +259,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {bankAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -256,7 +285,7 @@ function Accounts() {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -293,7 +322,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {walletAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <Wallet className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -314,7 +343,7 @@ function Accounts() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
@@ -351,7 +380,7 @@ function Accounts() {
                 </div>
               </div>
             </div>
-            
+
             {creditCardAccounts.length === 0 ? (
               <div className="p-8 text-center">
                 <CreditCard className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -376,7 +405,7 @@ function Accounts() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Link
                         to={`/accounts/edit/${account.id}`}
