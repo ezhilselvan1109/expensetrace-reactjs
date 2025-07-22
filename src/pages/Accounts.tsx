@@ -96,7 +96,14 @@ function Accounts() {
             * Transaction-based balance, actual may vary.
           </p>
         </div>
-        <div className="sm:mt-1">
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:mt-1">
+          <button
+            onClick={() => setShowBalance(!showBalance)}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            {showBalance ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+            {showBalance ? 'Hide Balance' : 'Show Balance'}
+          </button>
           <Link
             to="/accounts/add"
             className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
@@ -110,15 +117,7 @@ function Accounts() {
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8">
         {/* Available Balance Card */}
         <div className="flex-1 bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-600">Available Balance</h3>
-            <button
-              onClick={() => setShowBalance(!showBalance)}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
+          <h3 className="text-sm font-medium text-gray-600 mb-4">Available Balance</h3>
           <p className="text-2xl font-bold text-gray-900">
             {formatCurrency(summary?.availableAmount || 0)}
           </p>
@@ -127,15 +126,7 @@ function Accounts() {
 
         {/* Available Credit Card */}
         <div className="flex-1 bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-gray-600">Available Credit</h3>
-            <button
-              onClick={() => setShowBalance(!showBalance)}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
+          <h3 className="text-sm font-medium text-gray-600 mb-4">Available Credit</h3>
           <p className="text-2xl font-bold text-green-600">
             {formatCurrency(summary?.availableCredit || 0)}
           </p>
