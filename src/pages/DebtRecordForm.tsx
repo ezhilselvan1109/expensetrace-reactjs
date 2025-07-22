@@ -39,7 +39,8 @@ function DebtRecordForm() {
     }
   });
 
-  const selectedAccount = accounts.find(acc => acc.id === watch('accountId'));
+  const selectedAccount = null;
+  // accounts.find(acc => acc.id === watch('accountId'));
 
   // Load existing record data for editing
   useEffect(() => {

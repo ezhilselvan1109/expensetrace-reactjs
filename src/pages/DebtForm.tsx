@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useCreateDebt, useUpdateDebt, useDebt } from '../hooks/useDebts';
 import { useAccounts } from '../hooks/useAccounts';
@@ -47,7 +47,7 @@ function DebtForm() {
   });
 
   const watchedType = watch('type');
-
+  const selectedAccount = null;
   // Load existing debt data for editing
   useEffect(() => {
     if (isEditing && debt) {
@@ -131,10 +131,10 @@ function DebtForm() {
           {isEditing ? 'Edit Debt' : step === 1 ? 'Create Debt' : 'Add Initial Transaction'}
         </h1>
         <p className="text-gray-600 mt-1">
-          {isEditing 
-            ? 'Update debt details' 
-            : step === 1 
-              ? 'Enter debt information' 
+          {isEditing
+            ? 'Update debt details'
+            : step === 1
+              ? 'Enter debt information'
               : 'Add the initial transaction for this debt'
           }
         </p>
@@ -144,17 +144,14 @@ function DebtForm() {
       {!isEditing && (
         <div className="mb-8">
           <div className="flex items-center">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-              step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
-            }`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
+              }`}>
               1
             </div>
-            <div className={`flex-1 h-1 mx-4 ${
-              step >= 2 ? 'bg-indigo-600' : 'bg-gray-200'
-            }`}></div>
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-              step >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
-            }`}>
+            <div className={`flex-1 h-1 mx-4 ${step >= 2 ? 'bg-indigo-600' : 'bg-gray-200'
+              }`}></div>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full ${step >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
+              }`}>
               2
             </div>
           </div>
@@ -182,11 +179,10 @@ function DebtForm() {
                       setValue('type', '1');
                       setValue('recordType', '1');
                     }}
-                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                      watchedType === '1'
-                        ? "bg-white shadow text-black"
-                        : "text-gray-500 hover:text-black"
-                    }`}
+                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${watchedType === '1'
+                      ? "bg-white shadow text-black"
+                      : "text-gray-500 hover:text-black"
+                      }`}
                   >
                     Lending
                   </button>
@@ -196,11 +192,10 @@ function DebtForm() {
                       setValue('type', '2');
                       setValue('recordType', '2');
                     }}
-                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                      watchedType === '2'
-                        ? "bg-white shadow text-black"
-                        : "text-gray-500 hover:text-black"
-                    }`}
+                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${watchedType === '2'
+                      ? "bg-white shadow text-black"
+                      : "text-gray-500 hover:text-black"
+                      }`}
                   >
                     Borrowing
                   </button>
@@ -262,7 +257,7 @@ function DebtForm() {
           <>
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Add Initial Transaction</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Date */}
                 <div>
@@ -321,7 +316,44 @@ function DebtForm() {
 
               {/* Account */}
               <div className="mt-6">
-                <label htmlFor="accountId" className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="flex items-center justify-between mb-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Account
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIsAccountModalOpen(true)}
+                      className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+                    >
+                      <Edit className="w-4 h-4 mr-1" />
+                      Change
+                    </button>
+                  </div>
+
+                  {selectedAccount ? (
+                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                      {/* <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 font-medium">
+                          {selectedAccount.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{selectedAccount.name}</p>
+                        <p className="text-sm text-gray-500 capitalize">{selectedAccount.type}</p>
+                      </div> */}
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
+                      No account selected
+                    </div>
+                  )}
+
+                  {errors.accountId && (
+                    <p className="mt-1 text-sm text-red-600">{errors.accountId.message}</p>
+                  )}
+
+
+                {/* <label htmlFor="accountId" className="block text-sm font-medium text-gray-700 mb-2">
                   Account
                 </label>
                 <select
@@ -338,7 +370,7 @@ function DebtForm() {
                 </select>
                 {errors.accountId && (
                   <p className="mt-1 text-sm text-red-600">{errors.accountId.message}</p>
-                )}
+                )} */}
               </div>
             </div>
           </>

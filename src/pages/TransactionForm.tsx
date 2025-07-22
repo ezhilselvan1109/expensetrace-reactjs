@@ -126,7 +126,7 @@ function TransactionForm() {
 
       const transactionData: CreateTransactionData = {
         type: data.type,
-        date: data.date,
+        date: 10,
         time: {
           hour: hours,
           minute: minutes,

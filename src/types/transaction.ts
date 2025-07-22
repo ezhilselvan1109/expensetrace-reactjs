@@ -36,7 +36,7 @@ export interface Transaction {
 
 export interface CreateTransactionData {
   type: '1' | '2' | '3';
-  date: string;
+  date: number;
   time: {
     hour: number;
     minute: number;
