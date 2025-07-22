@@ -13,7 +13,7 @@ function Budgets() {
   console.log('Budget Summary:', summary);
 
   const formatCurrency = (amount: number) => {
-    return `$${amount.toFixed(2)}`;
+    return `$${amount}`;
   };
 
   const getProgressPercentage = (spent: number, budget: number) => {
@@ -81,11 +81,11 @@ function Budgets() {
   };
 
   const BudgetCard = ({ budget, isActive = false }: { budget: Budget; isActive?: boolean }) => {
-    const percentage = getProgressPercentage(budget.totalSpent, budget.totalLimit);
+    const percentage = getProgressPercentage(budget.totalSpent, budget.budget);
     
     return (
       <Link
-        to={`/budgets/analysis/${budget.id}?type=${budget.type}`}
+        to={`/budgets/analysis/${budget.id}?type=${activeTab === 0 ? 'monthly' : 'yearly'}`}
         className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6"
       >
         <div className="flex items-center justify-between mb-4">
@@ -95,9 +95,9 @@ function Budgets() {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">
-                {budget.type === 'monthly' 
+                {activeTab === 0 
                   ? `${MONTHS[budget.month! - 1]} ${budget.year}`
-                  : budget.year.toString()
+                  : budget.year
                 }
               </h3>
               <p className="text-sm text-gray-500 capitalize">{budget.status} Budget</p>
@@ -129,7 +129,7 @@ function Budgets() {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Budget:</span>
-            <span className="font-medium">{formatCurrency(budget.totalLimit)}</span>
+            <span className="font-medium">{formatCurrency(budget.budget)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Total Spent:</span>
@@ -139,9 +139,9 @@ function Budgets() {
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Available Balance:</span>
               <span className={`font-medium ${
-                budget.availableBalance >= 0 ? 'text-green-600' : 'text-red-600'
+                (budget.budget-budget.totalSpent) >= 0 ? 'text-green-600' : 'text-red-600'
               }`}>
-                {formatCurrency(budget.availableBalance)}
+                {formatCurrency((budget.budget-budget.totalSpent))}
               </span>
             </div>
           )}
@@ -233,7 +233,7 @@ function Budgets() {
       {currentData?.active ? (
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Active {budgetType} Budget</h2>
-          <BudgetCard budget={currentData.active} isActive={true} />
+          <BudgetCard budget={currentData.active[0]} isActive={true} />
         </div>
       ) : (
         <div className="mb-8">

@@ -19,9 +19,6 @@ export const useBudgetSummary = () => {
         apiClient.get('/budget/summary/month'),
         apiClient.get('/budget/summary/year')
       ]);
-      
-      console.log('Monthly Response:', monthlyResponse.data);
-      console.log('Yearly Response:', yearlyResponse.data);
       return {
         monthly: monthlyResponse.data || { upcoming: [], past: [] },
         yearly: yearlyResponse.data || { upcoming: [], past: [] }
@@ -37,7 +34,7 @@ export const useBudgetAnalysis = (budgetId: string, type: 'monthly' | 'yearly') 
     queryFn: async () => {
       const endpoint = type === 'monthly' ? `/budget/monthly/${budgetId}` : `/budget/yearly/${budgetId}`;
       const response = await apiClient.get(endpoint);
-      return response.data.data;
+      return response.data;
     },
     enabled: !!budgetId,
   });
