@@ -17,6 +17,9 @@ const About = lazy(() => import('./pages/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
+const Budgets = lazy(() => import('./pages/Budgets'));
+const BudgetForm = lazy(() => import('./pages/BudgetForm'));
+const BudgetAnalysis = lazy(() => import('./pages/BudgetAnalysis'));
 const Accounts = lazy(() => import('./pages/Accounts'));
 const AccountForm = lazy(() => import('./pages/AccountForm'));
 const Transactions = lazy(() => import('./pages/Transactions'));
@@ -83,12 +86,10 @@ function App() {
                   description="Organize your expenses with custom tags" 
                 />
               } />
-              <Route path="budgets" element={
-                <PlaceholderPage 
-                  title="Budgets" 
-                  description="Set and track your monthly budgets" 
-                />
-              } />
+              <Route path="budgets" element={<Budgets />} />
+              <Route path="budgets/add" element={<BudgetForm />} />
+              <Route path="budgets/edit/:id" element={<BudgetForm />} />
+              <Route path="budgets/analysis/:budgetId" element={<BudgetAnalysis />} />
               <Route path="categories" element={<Categories />} />
               <Route path="categories/add" element={<CategoryForm />} />
               <Route path="categories/edit/:id" element={<CategoryForm />} />
