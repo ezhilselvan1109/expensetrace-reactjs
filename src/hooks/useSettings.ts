@@ -6,13 +6,14 @@ import {
 } from '../types/settings';
 
 // Get user settings
-export const useSettings = () => {
+export const useSettings = (enabled = true) => {
   return useQuery<UserSettings>({
     queryKey: ['settings'],
     queryFn: async () => {
       const response = await apiClient.get('/settings');
       return response.data.data;
     },
+    enabled
   });
 };
 

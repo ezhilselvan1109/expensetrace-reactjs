@@ -85,7 +85,7 @@ function TransactionForm() {
 
       setValue('type', transactionType);
       setValue('date', transaction.date);
-      setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
+      // setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
       setValue('amount', transaction.amount);
       setValue('categoryId', transaction.categoryId || '');
       setValue('accountId', transaction.accountId);

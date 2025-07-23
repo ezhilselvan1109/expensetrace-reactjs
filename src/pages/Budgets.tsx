@@ -10,7 +10,6 @@ const tabs = ['Monthly', 'Yearly'];
 function Budgets() {
   const [activeTab, setActiveTab] = useState(0);
   const { data: summary, isLoading } = useBudgetSummary();
-  console.log('Budget Summary:', summary);
 
   const formatCurrency = (amount: number) => {
     return `$${amount}`;
@@ -230,9 +229,9 @@ function Budgets() {
       </div>
 
       {/* Active Budget */}
-      {currentData?.active ? (
+      {currentData?.active[0] ? (
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Active {budgetType} Budget</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Active {budgetType} Budget {currentData.active[0]?.month}</h2>
           <BudgetCard budget={currentData.active[0]} isActive={true} />
         </div>
       ) : (

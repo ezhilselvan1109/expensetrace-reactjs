@@ -10,7 +10,6 @@ import {
   UpdateDebtRecordData,
   PaginatedDebts,
   PaginatedDebtRecords,
-  DebtSummary,
   DebtRecordSummary
 } from '../types/debt';
 
