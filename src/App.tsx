@@ -106,10 +106,22 @@ function App() {
               <Route path="debts/:debtId/records" element={<DebtRecords />} />
               <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
               <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
-              <Route path="views" element={
+              <Route path="views/day" element={
                 <PlaceholderPage 
-                  title="Views" 
-                  description="Create custom views of your financial data" 
+                  title="Day View" 
+                  description="View your daily financial activities and transactions" 
+                />
+              } />
+              <Route path="views/calendar" element={
+                <PlaceholderPage 
+                  title="Calendar View" 
+                  description="View your financial data in a calendar format" 
+                />
+              } />
+              <Route path="views/custom" element={
+                <PlaceholderPage 
+                  title="Custom Views" 
+                  description="Create and manage custom views of your financial data" 
                 />
               } />
               <Route path="settings" element={<Settings />} />
