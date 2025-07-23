@@ -28,6 +28,7 @@ const Debts = lazy(() => import('./pages/Debts'));
 const DebtForm = lazy(() => import('./pages/DebtForm'));
 const DebtRecords = lazy(() => import('./pages/DebtRecords'));
 const DebtRecordForm = lazy(() => import('./pages/DebtRecordForm'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,12 +112,7 @@ function App() {
                   description="Create custom views of your financial data" 
                 />
               } />
-              <Route path="settings" element={
-                <PlaceholderPage 
-                  title="Settings" 
-                  description="Manage your account settings and preferences" 
-                />
-              } />
+              <Route path="settings" element={<Settings />} />
               <Route path="about" element={
                 <About />
               } />
