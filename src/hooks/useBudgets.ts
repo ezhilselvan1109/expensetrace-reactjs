@@ -29,6 +29,7 @@ export const useBudgetSummary = () => {
 
 // Get budget analysis
 export const useBudgetAnalysis = (budgetId: string, type: 'monthly' | 'yearly') => {
+  console.log('useBudgetAnalysis called with budgetId:', budgetId, 'and type:', type);
   return useQuery<BudgetAnalysis>({
     queryKey: ['budget-analysis', budgetId, type],
     queryFn: async () => {

@@ -40,7 +40,7 @@ function BudgetAnalysis() {
             cy={size / 2}
             r={radius}
             stroke="currentColor"
-            strokeWidth="16"
+            strokeWidth="8"
             fill="transparent"
             className="text-gray-200"
           />
@@ -49,7 +49,7 @@ function BudgetAnalysis() {
             cy={size / 2}
             r={radius}
             stroke="currentColor"
-            strokeWidth="16"
+            strokeWidth="8"
             fill="transparent"
             strokeDasharray={strokeDasharray}
             strokeDashoffset={strokeDashoffset}
@@ -59,7 +59,7 @@ function BudgetAnalysis() {
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <span className={`text-2xl sm:text-3xl font-bold ${getProgressColor(percentage)}`}>
+            <span className={`text-xl sm:text-2xl font-bold ${getProgressColor(percentage)}`}>
               {Math.round(percentage)}%
             </span>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">Used</p>
