@@ -9,12 +9,12 @@ export default function ToastContainer() {
   return (
     <div
       className="
-        fixed top-4 right-4
-        sm:top-6 sm:right-6
-        md:top-8 md:right-8
-        lg:top-10 lg:right-10
+        fixed top-2 right-2
+        sm:top-3 sm:right-3
+        md:top-4 md:right-4
+        lg:top-5 lg:right-5
         z-50 space-y-2
-        w-full max-w-sm sm:max-w-md md:max-w-lg
+        w-auto max-w-sm sm:max-w-md md:max-w-lg
       "
     >
       {toasts.map((toast) => (

@@ -170,9 +170,9 @@ function DebtRecords() {
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Total Receivable</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Total Received</p>
                 <p className="text-xl sm:text-2xl font-bold text-green-600">
-                  {formatCurrency(debt?.remainingAmount || 0)}
+                  {formatCurrency(summary?.totalReceived || 0)}
                 </p>
               </div>
               <div className="bg-green-100 rounded-full p-2 sm:p-3">

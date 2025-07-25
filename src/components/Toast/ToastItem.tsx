@@ -78,12 +78,12 @@ export default function ToastItem({ toast }: ToastItemProps) {
         }
       ${getBackgroundColor()}
       border rounded-lg shadow-lg
-      p-4 sm:p-5 md:p-6
+      p-1 sm:p-1 md:p-2
       w-full
     `}
     >
-      <div className="flex items-start space-x-3 sm:space-x-4">
-        <div className="flex-shrink-0">{getIcon()}</div>
+      <div className="flex items-start space-x-2 sm:space-x-2">
+        <div className="flex-shrink-0 pt-3">{getIcon()}</div>
 
         <div className="flex-1 min-w-0">
           <h4 className={`text-sm sm:text-base font-medium ${getTextColor()}`}>
@@ -110,7 +110,7 @@ export default function ToastItem({ toast }: ToastItemProps) {
           onClick={handleRemove}
           className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          <X className="w-3 h-3 sm:w-4 sm:h-4" />
         </button>
       </div>
     </div>
