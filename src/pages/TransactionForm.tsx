@@ -24,7 +24,7 @@ import CategoryIcon from '../components/CategoryIcon';
 const tabs = ['Expense', 'Income', 'Transfer'];
 
 interface FormData {
-  type: '1' | '2' | '3';
+  type: 1 | 2 | 3;
   date: string;
   time: string;
   amount: number;
@@ -60,7 +60,7 @@ function TransactionForm() {
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
-      type: '1',
+      type: 1,
       date: new Date().toISOString().split('T')[0],
       time: new Date().toTimeString().slice(0, 5),
       amount: 0,
@@ -81,10 +81,10 @@ function TransactionForm() {
   useEffect(() => {
     if (isEditing && transaction) {
       const transactionType = transaction.type;
-      setActiveTab(transactionType === '1' ? 0 : transactionType === '2' ? 1 : 2);
-
+      if(transaction.type===1)
+      setActiveTab(transactionType === 1 ? 0 : transactionType === 2 ? 1 : 2);
       setValue('type', transactionType);
-      setValue('date', transaction.date);
+      setValue('date', '' + (transaction.year.toString().padStart(2, '0') + '-' + transaction.month.toString().padStart(2, '0') + '-' + transaction.date).toString());
       // setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
       setValue('amount', transaction.amount);
       setValue('categoryId', transaction.categoryId || '');
@@ -109,7 +109,7 @@ function TransactionForm() {
 
   // Update form type when tab changes
   useEffect(() => {
-    const newType = activeTab === 0 ? '1' : activeTab === 1 ? '2' : '3';
+    const newType = activeTab === 0 ? 1 : activeTab === 1 ? 2 : 3;
     setValue('type', newType);
 
     // Clear category for transfer
@@ -122,11 +122,14 @@ function TransactionForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      const [year, month, day] = data.date.split("-").map(Number);
       const [hours, minutes] = data.time.split(':').map(Number);
 
       const transactionData: CreateTransactionData = {
         type: data.type,
-        date: 10,
+        date: day,
+        month: month,
+        year: year,
         time: {
           hour: hours,
           minute: minutes,
@@ -134,11 +137,11 @@ function TransactionForm() {
           nano: 0
         },
         amount: data.amount,
-        categoryId: data.type === '3' ? undefined : data.categoryId,
+        categoryId: data.type === 3 ? undefined : data.categoryId,
         accountId: data.accountId,
-        toAccountId: data.type === '3' ? data.toAccountId : undefined,
+        toAccountId: data.type === 3 ? data.toAccountId : undefined,
         description: data.description,
-        tagIds:[]
+        tagIds: []
       };
 
       if (isEditing && id) {
@@ -187,7 +190,7 @@ function TransactionForm() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
+      <div className="mb-4">
         <button
           onClick={() => navigate('/transactions')}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
@@ -205,7 +208,7 @@ function TransactionForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Transaction Type Tabs */}
-        {!isEditing && (
+        {/* {!isEditing && ( */}
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
             <label className="block text-sm font-medium text-gray-700 mb-4">
               Transaction Type
@@ -229,7 +232,7 @@ function TransactionForm() {
               })}
             </div>
           </div>
-        )}
+        {/* )} */}
 
         {/* Date and Time */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -397,23 +400,6 @@ function TransactionForm() {
           </div>
         )}
 
-        {/* Description */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-            Description
-          </label>
-          <textarea
-            {...register('description', { required: 'Description is required' })}
-            id="description"
-            rows={3}
-            placeholder="Enter transaction description"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-          />
-          {errors.description && (
-            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-          )}
-        </div>
-
         {/* Tag Selector */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -482,6 +468,23 @@ function TransactionForm() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Description */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            Description
+          </label>
+          <textarea
+            {...register('description', { required: 'Description is required' })}
+            id="description"
+            rows={3}
+            placeholder="Enter transaction description"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          {errors.description && (
+            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+          )}
         </div>
 
         {/* Error Messages */}

@@ -1,7 +1,9 @@
 export interface Transaction {
   id: string;
-  type: '1' | '2' | '3'; // 1 = Expense, 2 = Income, 3 = Transfer
-  date: string;
+  type: 1 | 2 | 3; // 1 = Expense, 2 = Income, 3 = Transfer
+  date: number;
+  month: number;
+  year: number;
   time: {
     hour: number;
     minute: number;
@@ -35,8 +37,10 @@ export interface Transaction {
 }
 
 export interface CreateTransactionData {
-  type: '1' | '2' | '3';
+  type: 1 | 2 | 3;
   date: number;
+  month: number;
+  year: number;
   time: {
     hour: number;
     minute: number;
@@ -52,7 +56,7 @@ export interface CreateTransactionData {
 }
 
 export interface UpdateTransactionData {
-  type?: '1' | '2' | '3';
+  type?: 1 | 2 | 3;
   date?: string;
   time?: {
     hour: number;
@@ -70,7 +74,7 @@ export interface UpdateTransactionData {
 
 export interface TransactionFilters {
   search?: string;
-  type?: '1' | '2' | '3';
+  type?: 1 | 2 | 3;
   categoryId?: string;
   accountId?: string;
   startDate?: string;
@@ -89,7 +93,7 @@ export interface PaginatedTransactions {
 
 export const TRANSACTION_TYPES = {
   '1': 'Expense',
-  '2': 'Income', 
+  '2': 'Income',
   '3': 'Transfer'
 } as const;
 
