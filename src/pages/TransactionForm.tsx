@@ -81,8 +81,8 @@ function TransactionForm() {
   useEffect(() => {
     if (isEditing && transaction) {
       const transactionType = transaction.type;
-      if(transaction.type===1)
-      setActiveTab(transactionType === 1 ? 0 : transactionType === 2 ? 1 : 2);
+      if (transaction.type === 1)
+        setActiveTab(transactionType === 1 ? 0 : transactionType === 2 ? 1 : 2);
       setValue('type', transactionType);
       setValue('date', '' + (transaction.year.toString().padStart(2, '0') + '-' + transaction.month.toString().padStart(2, '0') + '-' + transaction.date).toString());
       // setValue('time', `${transaction.time.hour.toString().padStart(2, '0')}:${transaction.time.minute.toString().padStart(2, '0')}`);
@@ -209,29 +209,29 @@ function TransactionForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Transaction Type Tabs */}
         {/* {!isEditing && ( */}
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-4">
-              Transaction Type
-            </label>
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              {tabs.map((tab, index) => {
-                const active = activeTab === index;
-                return (
-                  <button
-                    key={tab}
-                    type="button"
-                    onClick={() => setActiveTab(index)}
-                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
-                      ? "bg-white shadow text-black"
-                      : "text-gray-500 hover:text-black"
-                      }`}
-                  >
-                    {tab}
-                  </button>
-                );
-              })}
-            </div>
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label className="block text-sm font-medium text-gray-700 mb-4">
+            Transaction Type
+          </label>
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            {tabs.map((tab, index) => {
+              const active = activeTab === index;
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveTab(index)}
+                  className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
+                    ? "bg-white shadow text-black"
+                    : "text-gray-500 hover:text-black"
+                    }`}
+                >
+                  {tab}
+                </button>
+              );
+            })}
           </div>
+        </div>
         {/* )} */}
 
         {/* Date and Time */}
