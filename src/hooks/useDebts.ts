@@ -86,7 +86,6 @@ export const useDebtSummary = () => {
     queryKey: ['debts', 'summary'],
     queryFn: async () => {
       const response = await apiClient.get('/debts/summary');
-      console.log('Debt Summary Response:', response.data);
       return response.data.data;
     },
   });
