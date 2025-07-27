@@ -32,6 +32,8 @@ const DebtForm = lazy(() => import('./pages/DebtForm'));
 const DebtRecords = lazy(() => import('./pages/DebtRecords'));
 const DebtRecordForm = lazy(() => import('./pages/DebtRecordForm'));
 const Settings = lazy(() => import('./pages/Settings'));
+const CalendarView = lazy(() => import('./pages/views/CalendarView'));
+const DayView = lazy(() => import('./pages/views/DayView'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -105,18 +107,8 @@ function App() {
                 <Route path="debts/:debtId/records" element={<DebtRecords />} />
                 <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
                 <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
-                <Route path="views/day" element={
-                  <PlaceholderPage 
-                    title="Day View" 
-                    description="View your daily financial activities and transactions" 
-                  />
-                } />
-                <Route path="views/calendar" element={
-                  <PlaceholderPage 
-                    title="Calendar View" 
-                    description="View your financial data in a calendar format" 
-                  />
-                } />
+                <Route path="views/day" element={<DayView />} />
+                <Route path="views/calendar" element={<CalendarView />} />
                 <Route path="views/custom" element={
                   <PlaceholderPage 
                     title="Custom Views" 
