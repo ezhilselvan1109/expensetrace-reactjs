@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar, TrendingUp, TrendingDown, ArrowUpDown, Edit, Trash2 } from 'lucide-react';
-import { useDaySummary } from '../../hooks/useViews';
+import { useDaySummary } from '../../hooks/useSummary';
 import { useDeleteTransaction } from '../../hooks/useTransactions';
 import { useFormatters } from '../../hooks/useFormatters';
 import { TRANSACTION_TYPES } from '../../types/transaction';

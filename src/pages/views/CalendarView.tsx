@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
-import { useMonthSummary } from '../../hooks/useViews';
+import { useMonthSummary } from '../../hooks/useSummary';
 import { useFormatters } from '../../hooks/useFormatters';
 
 const MONTHS = [
