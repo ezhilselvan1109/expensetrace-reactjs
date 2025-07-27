@@ -21,7 +21,7 @@ export const useUpdateTag = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateTagData }) => {
-      const response = await apiClient.put(`/tags/tag/${id}/update`, data);
+      const response = await apiClient.put(`/tags/${id}/update`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -49,7 +49,7 @@ export const useMergeTag = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: MergeTagData }) => {
-      const response = await apiClient.put(`/tags/tag/${id}/merge?tagId=${data.tagId}`);
+      const response = await apiClient.put(`/tags/${id}/merge?tagId=${data.tagId}`);
       return response.data;
     },
     onSuccess: () => {
@@ -77,7 +77,7 @@ export const useDeleteTag = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await apiClient.delete(`/tags/tag/${id}/delete`);
+      await apiClient.delete(`/tags/${id}/delete`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tags'] });

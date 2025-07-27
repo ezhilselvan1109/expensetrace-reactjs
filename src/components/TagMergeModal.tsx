@@ -23,8 +23,13 @@ export default function TagMergeModal({
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
   const filteredTags = availableTags
-    .filter(tag => tag.id !== sourceTag.id)
-    .filter(tag => tag.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  .filter(tag => tag.id !== sourceTag.id)
+  .filter(tag =>
+    searchTerm.trim() === ''
+      ? true
+      : tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   const handleMerge = () => {
     if (selectedTag) {
