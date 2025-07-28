@@ -14,7 +14,6 @@ import { useFormatters } from '../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../hooks/useAnalysis';
 import CategoryIcon from '../components/CategoryIcon';
 import DateRangeModal from '../components/DateRangeModal';
-import { colorMap } from '../types/category';
 
 const tabs = ['Week', 'Month', 'Year', 'Custom'];
 
@@ -108,7 +107,7 @@ function Analysis() {
     setCurrentYear(currentYear + (direction === 'next' ? 1 : -1));
   };
 
-  const handleCustomDateRange = (params: any) => {
+  const handleCustomDateRange = (params: Partial<AnalysisParams>) => {
     setCustomParams(params);
   };
 
@@ -189,14 +188,18 @@ function Analysis() {
   const getDisplayText = () => {
     switch (activeTab) {
       case 0: // Week
-        const { start, end } = getWeekDates(currentWeek);
-        return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+        {
+          const { start, end } = getWeekDates(currentWeek);
+          return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+        }
       case 1: // Month
-        const monthNames = [
-          'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        return `${monthNames[currentMonth - 1]} ${currentYear}`;
+        {
+          const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+          ];
+          return `${monthNames[currentMonth - 1]} ${currentYear}`;
+        }
       case 2: // Year
         return currentYear.toString();
       case 3: // Custom
@@ -386,7 +389,7 @@ function Analysis() {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                      label={({ percent }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
                     >
                       {spendingChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
