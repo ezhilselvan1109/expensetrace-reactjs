@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  ChevronLeft, 
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  ChevronLeft,
   ChevronRight,
   DollarSign,
   ArrowUpDown,
@@ -14,6 +14,7 @@ import { useFormatters } from '../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../hooks/useAnalysis';
 import CategoryIcon from '../components/CategoryIcon';
 import DateRangeModal from '../components/DateRangeModal';
+import { colorMap } from '../types/category';
 
 const tabs = ['Week', 'Month', 'Year', 'Custom'];
 
@@ -22,10 +23,10 @@ const getWeekDates = (date: Date) => {
   const day = startOfWeek.getDay();
   const diff = startOfWeek.getDate() - day;
   startOfWeek.setDate(diff);
-  
+
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6);
-  
+
   return { start: startOfWeek, end: endOfWeek };
 };
 
@@ -33,7 +34,7 @@ function Analysis() {
   const { formatCurrency } = useFormatters();
   const [activeTab, setActiveTab] = useState(1); // Default to Month
   const [isDateRangeModalOpen, setIsDateRangeModalOpen] = useState(false);
-  
+
   // Current date state
   const currentDate = new Date();
   const [currentWeek, setCurrentWeek] = useState(currentDate);
@@ -111,6 +112,79 @@ function Analysis() {
     setCustomParams(params);
   };
 
+  // Get color hex value from category color name
+  const getCategoryColorHex = (colorName: string): string => {
+    const colorMap: Record<string, string> = {
+      'indigo': '#6366F1',
+      'teal': '#14B8A6',
+      'yellow': '#F59E0B',
+      'orange': '#F97316',
+      'maroon': '#991B1B',
+      'pink': '#EC4899',
+      'lime': '#84CC16',
+      'violet': '#8B5CF6',
+      'rose': '#F43F5E',
+      'slate': '#64748B',
+      'sky': '#0EA5E9',
+      'purple': '#A855F7',
+      'stone': '#78716C',
+      'red': '#EF4444',
+      'green': '#22C55E',
+      'blue': '#3B82F6',
+      'amber': '#F59E0B',
+      'cyan': '#06B6D4',
+      'emerald': '#10B981',
+      'fuchsia': '#D946EF',
+      'gray': '#6B7280',
+      'zinc': '#71717A',
+      'brown': '#92400E',
+      'magenta': '#BE185D',
+      'bronze': '#A16207',
+      'peach': '#FED7AA',
+      'lavender': '#DDD6FE',
+      'mint': '#BBF7D0',
+      'olive': '#365314',
+      'navy': '#1E3A8A',
+      'gold': '#FBBF24',
+      'charcoal': '#374151',
+      'coral': '#FCA5A5',
+      'aqua': '#A7F3D0',
+      'plum': '#6B21A8',
+      'mustard': '#D97706',
+      'ruby': '#B91C1C',
+      'sapphire': '#1E3A8A',
+      'topaz': '#FDE047'
+    };
+    return colorMap[colorName] || '#6B7280';
+  };
+
+  // Get account type icon
+  const getAccountIcon = (type: number) => {
+    switch (type) {
+      case 1: // Bank
+        return '🏦';
+      case 2: // Wallet  
+        return '👛';
+      case 3: // Credit Card
+        return '💳';
+      case 4: // Cash
+        return '💵';
+      default:
+        return '🏦';
+    }
+  };
+
+  // Get account type name
+  const getAccountTypeName = (type: number) => {
+    switch (type) {
+      case 1: return 'Bank Account';
+      case 2: return 'Wallet';
+      case 3: return 'Credit Card';
+      case 4: return 'Cash';
+      default: return 'Account';
+    }
+  };
+
   // Format display text
   const getDisplayText = () => {
     switch (activeTab) {
@@ -141,21 +215,13 @@ function Analysis() {
   const spendingChartData = analysisData?.spendingCategory?.map(item => ({
     name: item.category.name,
     value: item.amount,
-    color: `#${item.category.color === 'indigo' ? '6366F1' : 
-                item.category.color === 'green' ? '10B981' : 
-                item.category.color === 'red' ? 'EF4444' : 
-                item.category.color === 'blue' ? '3B82F6' : 
-                item.category.color === 'yellow' ? 'F59E0B' : '6B7280'}`,
+    color: getCategoryColorHex(item.category.color),
   })) || [];
 
   const incomeChartData = analysisData?.incomeCategory?.map(item => ({
     name: item.category.name,
     value: item.amount,
-    color: `#${item.category.color === 'indigo' ? '6366F1' : 
-                item.category.color === 'green' ? '10B981' : 
-                item.category.color === 'red' ? 'EF4444' : 
-                item.category.color === 'blue' ? '3B82F6' : 
-                item.category.color === 'yellow' ? 'F59E0B' : '6B7280'}`,
+    color: getCategoryColorHex(item.category.color),
   })) || [];
 
   const balance = (analysisData?.income || 0) - (analysisData?.spending || 0);
@@ -183,7 +249,7 @@ function Analysis() {
 
   return (
     <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto min-h-screen">
-      <div className="mb-8">
+      <div className="mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Analysis</h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">Detailed insights into your spending patterns</p>
       </div>
@@ -196,11 +262,10 @@ function Analysis() {
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
-              className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                active
-                  ? "bg-white shadow text-black"
-                  : "text-gray-500 hover:text-black"
-              }`}
+              className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
+                ? "bg-white shadow text-black"
+                : "text-gray-500 hover:text-black"
+                }`}
             >
               {tab}
             </button>
@@ -286,18 +351,15 @@ function Analysis() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs sm:text-sm font-medium text-gray-600">Balance</p>
-              <p className={`text-xl sm:text-2xl font-bold ${
-                balance >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <p className={`text-xl sm:text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
                 {balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(balance))}
               </p>
             </div>
-            <div className={`rounded-full p-2 sm:p-3 ${
-              balance >= 0 ? 'bg-green-100' : 'bg-red-100'
-            }`}>
-              <DollarSign className={`h-5 w-5 sm:h-6 sm:w-6 ${
-                balance >= 0 ? 'text-green-600' : 'text-red-600'
-              }`} />
+            <div className={`rounded-full p-2 sm:p-3 ${balance >= 0 ? 'bg-green-100' : 'bg-red-100'
+              }`}>
+              <DollarSign className={`h-5 w-5 sm:h-6 sm:w-6 ${balance >= 0 ? 'text-green-600' : 'text-red-600'
+                }`} />
             </div>
           </div>
         </div>
@@ -310,7 +372,7 @@ function Analysis() {
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
             Category-wise Spending
           </h3>
-          
+
           {spendingChartData.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Chart */}
@@ -324,7 +386,7 @@ function Analysis() {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                     >
                       {spendingChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -334,24 +396,34 @@ function Analysis() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              
+
               {/* Category List */}
-              <div className="max-h-60 overflow-y-auto space-y-3">
-                {analysisData?.spendingCategory?.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <CategoryIcon 
-                        icon={item.category.icon} 
-                        color={item.category.color} 
-                        size="sm" 
-                      />
-                      <span className="font-medium text-gray-900">{item.category.name}</span>
+              <div className="max-h-60 overflow-y-auto">
+                <div className="space-y-3">
+                  {analysisData?.spendingCategory?.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <CategoryIcon
+                          icon={item.category.icon}
+                          color={item.category.color}
+                          size="sm"
+                        />
+                        <div>
+                          <p className="font-medium text-gray-900">{item.category.name}</p>
+                          <p className="text-xs text-gray-500">Expense Category</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-red-600">
+                          {formatCurrency(item.amount)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
                     </div>
-                    <span className="font-semibold text-red-600">
-                      {formatCurrency(item.amount)}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           ) : (
@@ -366,7 +438,7 @@ function Analysis() {
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
             Category-wise Income
           </h3>
-          
+
           {incomeChartData.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Chart */}
@@ -380,7 +452,7 @@ function Analysis() {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                     >
                       {incomeChartData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -390,24 +462,34 @@ function Analysis() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              
+
               {/* Category List */}
-              <div className="space-y-3">
-                {analysisData?.incomeCategory?.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <CategoryIcon 
-                        icon={item.category.icon} 
-                        color={item.category.color} 
-                        size="sm" 
-                      />
-                      <span className="font-medium text-gray-900">{item.category.name}</span>
+              <div className="max-h-60 overflow-y-auto">
+                <div className="space-y-3">
+                  {analysisData?.incomeCategory?.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <CategoryIcon
+                          icon={item.category.icon}
+                          color={item.category.color}
+                          size="sm"
+                        />
+                        <div>
+                          <p className="font-medium text-gray-900">{item.category.name}</p>
+                          <p className="text-xs text-gray-500">Income Category</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-green-600">
+                          {formatCurrency(item.amount)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
                     </div>
-                    <span className="font-semibold text-green-600">
-                      {formatCurrency(item.amount)}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           ) : (
@@ -422,24 +504,40 @@ function Analysis() {
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
             Payment Modes
           </h3>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
             {/* Spending Accounts */}
             <div>
               <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
                 <TrendingDown className="w-4 h-4 mr-2 text-red-600" />
                 Spending Accounts
               </h4>
-              <div className="space-y-2">
-                {analysisData?.spendingAccount?.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-red-50 rounded">
-                    <span className="text-sm text-gray-900">{item.accountResponseDto.name}</span>
-                    <span className="text-sm font-medium text-red-600">
-                      {formatCurrency(item.amount)}
-                    </span>
+              <div className="space-y-3">
+                {analysisData?.spendingAccount?.length ? (
+                  analysisData.spendingAccount.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border border-red-200 rounded-lg bg-red-50 hover:bg-red-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{item.accountResponseDto.name}</p>
+                          <p className="text-xs text-gray-600">{getAccountTypeName(item.accountResponseDto.type)}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-red-600">{formatCurrency(item.amount)}</p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-sm text-gray-500">No spending accounts</p>
                   </div>
-                )) || (
-                  <p className="text-sm text-gray-500">No spending accounts</p>
                 )}
               </div>
             </div>
@@ -450,16 +548,32 @@ function Analysis() {
                 <TrendingUp className="w-4 h-4 mr-2 text-green-600" />
                 Income Accounts
               </h4>
-              <div className="space-y-2">
-                {analysisData?.incomeAccount?.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-green-50 rounded">
-                    <span className="text-sm text-gray-900">{item.accountResponseDto.name}</span>
-                    <span className="text-sm font-medium text-green-600">
-                      {formatCurrency(item.amount)}
-                    </span>
+              <div className="space-y-3">
+                {analysisData?.incomeAccount?.length ? (
+                  analysisData.incomeAccount.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border border-green-200 rounded-lg bg-green-50 hover:bg-green-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{item.accountResponseDto.name}</p>
+                          <p className="text-xs text-gray-600">{getAccountTypeName(item.accountResponseDto.type)}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-green-600">{formatCurrency(item.amount)}</p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-sm text-gray-500">No income accounts</p>
                   </div>
-                )) || (
-                  <p className="text-sm text-gray-500">No income accounts</p>
                 )}
               </div>
             </div>
@@ -470,28 +584,43 @@ function Analysis() {
                 <ArrowUpDown className="w-4 h-4 mr-2 text-blue-600" />
                 Transfer Accounts
               </h4>
-              <div className="space-y-2">
-                {analysisData?.transfersAccount?.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-blue-50 rounded">
-                    <span className="text-sm text-gray-900">{item.accountResponseDto.name}</span>
-                    <span className="text-sm font-medium text-blue-600">
-                      {formatCurrency(item.amount)}
-                    </span>
+              <div className="space-y-3">
+                {analysisData?.transfersAccount?.length ? (
+                  analysisData.transfersAccount.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{item.accountResponseDto.name}</p>
+                          <p className="text-xs text-gray-600">{getAccountTypeName(item.accountResponseDto.type)}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-blue-600">{formatCurrency(item.amount)}</p>
+                        <p className="text-xs text-gray-500">Transfer</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-sm text-gray-500">No transfer accounts</p>
                   </div>
-                )) || (
-                  <p className="text-sm text-gray-500">No transfer accounts</p>
                 )}
               </div>
             </div>
           </div>
         </div>
 
+
         {/* Statistics Section */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
             Statistics
           </h3>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Number of Transactions */}
             <div className="bg-gray-50 rounded-lg p-4">
