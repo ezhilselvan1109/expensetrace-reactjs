@@ -11,12 +11,14 @@ import {
   useDeleteAccount
 } from '../hooks/useAccounts';
 import { useFormatters } from '../hooks/useFormatters';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const creditCardtabs = ['Available', 'Outstanding'];
 
 function Accounts() {
   const [showBalance, setShowBalance] = useState(false);
   const [creditCardTab, setCreditCardTab] = useState(0);
+  const [accountToDelete, setAccountToDelete] = useState<{ id: string; name: string } | null>(null);
   const { isLoading: allAccountsLoading } = useAccounts();
   const { data: bankAccounts = [], isLoading: bankLoading } = useBankAccounts();
   const { data: walletAccounts = [], isLoading: walletLoading } = useWalletAccounts();
@@ -26,10 +28,11 @@ function Accounts() {
   const deleteAccount = useDeleteAccount();
   const { formatCurrency } = useFormatters();
 
-  const handleDeleteAccount = async (id: string, name: string) => {
-    if (window.confirm(`Are you sure you want to delete "${name}" account?`)) {
+  const handleDeleteAccount = async () => {
+    if (accountToDelete) {
       try {
-        await deleteAccount.mutateAsync(id);
+        await deleteAccount.mutateAsync(accountToDelete.id);
+        setAccountToDelete(null);
       } catch (error) {
         console.error('Failed to delete account:', error);
       }
@@ -241,7 +244,7 @@ function Accounts() {
                         <Edit className="w-5 h-5" />
                       </Link>
                       <button
-                        onClick={() => handleDeleteAccount(account.id, account.name)}
+                        onClick={() => setAccountToDelete({ id: account.id, name: account.name })}
                         disabled={deleteAccount.isPending}
                         className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
                       >
@@ -299,7 +302,7 @@ function Accounts() {
                         <Edit className="w-5 h-5" />
                       </Link>
                       <button
-                        onClick={() => handleDeleteAccount(account.id, account.name)}
+                        onClick={() => setAccountToDelete({ id: account.id, name: account.name })}
                         disabled={deleteAccount.isPending}
                         className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
                       >
@@ -378,7 +381,7 @@ function Accounts() {
                         <Edit className="w-5 h-5" />
                       </Link>
                       <button
-                        onClick={() => handleDeleteAccount(account.id, account.name)}
+                        onClick={() => setAccountToDelete({ id: account.id, name: account.name })}
                         disabled={deleteAccount.isPending}
                         className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
                       >
@@ -392,6 +395,18 @@ function Accounts() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={!!accountToDelete}
+        onClose={() => setAccountToDelete(null)}
+        onConfirm={handleDeleteAccount}
+        title="Delete Account"
+        message={`Are you sure you want to delete "${accountToDelete?.name}" account? This action cannot be undone and may affect your transaction history.`}
+        confirmText="Delete Account"
+        confirmButtonClass="bg-red-600 hover:bg-red-700"
+        isPending={deleteAccount.isPending}
+      />
     </div>
   );
 }

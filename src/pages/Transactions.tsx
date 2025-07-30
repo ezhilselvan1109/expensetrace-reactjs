@@ -5,12 +5,14 @@ import { useTransactions, useDeleteTransaction } from '../hooks/useTransactions'
 import { TransactionFilters, TRANSACTION_TYPES } from '../types/transaction';
 import { useFormatters } from '../hooks/useFormatters';
 import CategoryIcon from '../components/CategoryIcon';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 function Transactions() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize] = useState(10);
   const [filters, setFilters] = useState<TransactionFilters>({});
   const [searchTerm, setSearchTerm] = useState('');
+  const [transactionToDelete, setTransactionToDelete] = useState<{ id: string; description: string } | null>(null);
 
   const { data: transactionsData, isLoading } = useTransactions(currentPage, pageSize, {
     ...filters,
@@ -19,10 +21,11 @@ function Transactions() {
   const deleteTransaction = useDeleteTransaction();
   const { formatCurrency, formatDateTime } = useFormatters();
 
-  const handleDeleteTransaction = async (id: string, description: string) => {
-    if (window.confirm(`Are you sure you want to delete "${description}" transaction?`)) {
+  const handleDeleteTransaction = async () => {
+    if (transactionToDelete) {
       try {
-        await deleteTransaction.mutateAsync(id);
+        await deleteTransaction.mutateAsync(transactionToDelete.id);
+        setTransactionToDelete(null);
       } catch (error) {
         console.error('Failed to delete transaction:', error);
       }
@@ -203,7 +206,7 @@ function Transactions() {
                           <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
                         </Link>
                         <button
-                          onClick={() => handleDeleteTransaction(transaction.id, transaction.description)}
+                          onClick={() => setTransactionToDelete({ id: transaction.id, description: transaction.description })}
                           disabled={deleteTransaction.isPending}
                           className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
                         >
@@ -251,6 +254,18 @@ function Transactions() {
           </>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={!!transactionToDelete}
+        onClose={() => setTransactionToDelete(null)}
+        onConfirm={handleDeleteTransaction}
+        title="Delete Transaction"
+        message={`Are you sure you want to delete "${transactionToDelete?.description}" transaction? This action cannot be undone and may affect your account balances.`}
+        confirmText="Delete Transaction"
+        confirmButtonClass="bg-red-600 hover:bg-red-700"
+        isPending={deleteTransaction.isPending}
+      />
     </div>
   );
 }
