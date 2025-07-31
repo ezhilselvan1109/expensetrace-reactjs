@@ -4,6 +4,7 @@ export interface Category {
   type: number; // 1 = Expense, 2 = Income
   color: string;
   icon: string;
+  deletable: boolean;
   createdAt: string;
   updatedAt: string;
 }

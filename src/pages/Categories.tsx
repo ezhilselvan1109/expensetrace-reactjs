@@ -154,19 +154,32 @@ function Categories() {
                 </div>
 
                 <div className="flex items-center space-x-1 sm:space-x-2">
-                  <Link
-                    to={`/categories/edit/${category.id}`}
-                    className="p-1.5 sm:p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-md hover:bg-gray-50"
-                  >
-                    <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </Link>
-                  <button
-                    onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
-                    disabled={deleteCategory.isPending}
-                    className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
-                  >
-                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </button>
+                  {category.deletable ? (
+                    <>
+                      <Link
+                        to={`/categories/edit/${category.id}`}
+                        className="p-1.5 sm:p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-md hover:bg-gray-50"
+                      >
+                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </Link>
+                      <button
+                        onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
+                        disabled={deleteCategory.isPending}
+                        className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
+                      >
+                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="flex items-center space-x-1 sm:space-x-2">
+                      <span className="p-1.5 sm:p-2 text-gray-300 cursor-not-allowed rounded-md">
+                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </span>
+                      <span className="p-1.5 sm:p-2 text-gray-300 cursor-not-allowed rounded-md">
+                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

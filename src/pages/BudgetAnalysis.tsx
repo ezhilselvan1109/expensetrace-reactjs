@@ -153,17 +153,14 @@ function BudgetAnalysis() {
     name: category.name,
     value: category.spent,
     color: getCategoryColorHex(category.color),
-    icon: category.icon
   }));
 
   const barData = budget.categories.map(category => ({
     name: category.name,
     budget: category.limit,
     spent: category.spent,
-    color: getCategoryColorHex(category.color)
   }));
 
-  const COLORS = budget.categories.map(cat => getCategoryColorHex(cat.color));
 
   return (
     <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
@@ -225,20 +222,20 @@ function BudgetAnalysis() {
         {/* Spending Distribution */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Spending Distribution</h3>
-          <div className="h-48 sm:h-56 md:h-64 lg:h-72">
+          <div className="h-64 sm:h-72 md:h-80 lg:h-96">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius="70%"
+                  outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
                   label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                 >
                   {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip formatter={(value) => formatCurrency(Number(value))} />
@@ -251,7 +248,7 @@ function BudgetAnalysis() {
       {/* Category Breakdown */}
       <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6 sm:mb-8">
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Category Breakdown</h3>
-        <div className="h-48 sm:h-56 md:h-64 lg:h-72 mb-4 sm:mb-6">
+        <div className="h-64 sm:h-72 md:h-80 lg:h-96 mb-4 sm:mb-6">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -266,7 +263,15 @@ function BudgetAnalysis() {
               <YAxis />
               <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Bar dataKey="budget" fill="#E5E7EB" name="Budget" />
-              <Bar dataKey="spent" fill="#6366F1" name="Spent" radius={[2, 2, 0, 0]} />
+              <Bar 
+                dataKey="spent" 
+                name="Spent" 
+                radius={[2, 2, 0, 0]}
+              >
+                {barData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getCategoryColorHex(budget.categories[index].color)} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
