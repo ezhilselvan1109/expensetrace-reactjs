@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../contexts/ToastContext';
 import apiClient from '../lib/axios';
-import { Tag, UpdateTagData, MergeTagData } from '../types/tag';
+import { Tags, UpdateTagData, MergeTagData } from '../types/tag';
 
 // Get all tags
 export const useTags = () => {
-  return useQuery<Tag[]>({
+  return useQuery<Tags[]>({
     queryKey: ['tags'],
     queryFn: async () => {
       const response = await apiClient.get('/tags/all');

@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Tag } from '../types/tag';
 
+interface TagWithTransactions {
+  tag: Tag;
+  transactions: number;
+}
+
 interface TagUpdateModalProps {
   isOpen: boolean;
   onClose: () => void;
-  tag: Tag;
+  tag: TagWithTransactions;
   onUpdate: (name: string) => void;
   isPending?: boolean;
 }
@@ -21,14 +26,15 @@ export default function TagUpdateModal({
 
   useEffect(() => {
     if (isOpen) {
-      setName(tag.name);
+      setName(tag.tag.name);
     }
-  }, [isOpen, tag.name]);
+  }, [isOpen, tag.tag.name]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && name.trim() !== tag.name) {
-      onUpdate(name.trim());
+    const trimmed = name.trim();
+    if (trimmed && trimmed !== tag.tag.name) {
+      onUpdate(trimmed);
     }
   };
 
@@ -82,7 +88,7 @@ export default function TagUpdateModal({
             </button>
             <button
               type="submit"
-              disabled={!name.trim() || name.trim() === tag.name || isPending}
+              disabled={!name.trim() || name.trim() === tag.tag.name || isPending}
               className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? 'Updating...' : 'Update Tag'}
