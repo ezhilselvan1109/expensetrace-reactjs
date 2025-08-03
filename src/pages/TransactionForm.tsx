@@ -39,7 +39,7 @@ function TransactionForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
-  const defaultTags = ['tag1', 'tag2', 'tag3'];
+  const defaultTags = ['vacation', 'needs', 'busineess', 'food', 'shopping', 'entertainment', 'health', 'transportation'];
   const [newTag, setNewTag] = useState('');
   const [activeTab, setActiveTab] = useState(0);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
@@ -141,7 +141,7 @@ function TransactionForm() {
         accountId: data.accountId,
         toAccountId: data.type === 3 ? data.toAccountId : undefined,
         description: data.description,
-        tagIds: []
+        tags: data.tags
       };
 
       if (isEditing && id) {

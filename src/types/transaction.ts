@@ -53,6 +53,7 @@ export interface CreateTransactionData {
   toAccountId?: string;
   description: string;
   tagIds?: string[];
+  tags?: string[];
 }
 
 export interface UpdateTransactionData {
