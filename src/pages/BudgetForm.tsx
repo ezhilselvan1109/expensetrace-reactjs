@@ -14,6 +14,7 @@ import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit, MONTHS 
 import CategorySelectModal from '../components/CategorySelectModal';
 import CategoryIcon from '../components/CategoryIcon';
 import { formatCurrency } from '../utils/formatters';
+import MonthYearPicker from '../components/MonthYearPicker';
 
 const tabs = ['Monthly', 'Yearly'];
 
@@ -237,52 +238,30 @@ function BudgetForm() {
 
             {/* Budget Period */}
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Budget for
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {activeTab === 0 && (
-                  <div>
-                    <label htmlFor="month" className="block text-sm font-medium text-gray-700 mb-2">
-                      Month
-                    </label>
-                    <select
-                      {...register('month', { required: 'Month is required' })}
-                      id="month"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    >
-                      {MONTHS.map((month, index) => (
-                        <option key={month} value={index + 1}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.month && (
-                      <p className="mt-1 text-sm text-red-600">{errors.month.message}</p>
-                    )}
-                  </div>
-                )}
-                <div>
-                  <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-2">
-                    Year
-                  </label>
-                  <input
-                    {...register('year', {
-                      required: 'Year is required',
-                      min: { value: 2020, message: 'Year must be 2020 or later' },
-                      max: { value: 2030, message: 'Year must be 2030 or earlier' }
-                    })}
-                    type="number"
-                    id="year"
-                    min="2020"
-                    max="2030"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                  {errors.year && (
-                    <p className="mt-1 text-sm text-red-600">{errors.year.message}</p>
-                  )}
-                </div>
-              </div>
+              {activeTab === 0 ? (
+                <MonthYearPicker
+                  month={watchedValues.month || new Date().getMonth() + 1}
+                  year={watchedValues.year}
+                  onMonthChange={(month) => setValue('month', month)}
+                  onYearChange={(year) => setValue('year', year)}
+                  label="Budget Period"
+                  required
+                />
+              ) : (
+                <MonthYearPicker
+                  month={1}
+                  year={watchedValues.year}
+                  onMonthChange={() => {}} // Not used for yearly
+                  onYearChange={(year) => setValue('year', year)}
+                  label="Budget Year"
+                  required
+                />
+              )}
+              {(errors.month || errors.year) && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.month?.message || errors.year?.message}
+                </p>
+              )}
             </div>
 
             {/* Total Budget Limit */}

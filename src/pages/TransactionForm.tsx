@@ -20,6 +20,8 @@ import CalculatorModal from '../components/CalculatorModal';
 import CategorySelectModal from '../components/CategorySelectModal';
 import AccountSelectModal from '../components/AccountSelectModal';
 import CategoryIcon from '../components/CategoryIcon';
+import DatePicker from '../components/DatePicker';
+import TimePicker from '../components/TimePicker';
 
 const tabs = ['Expense', 'Income', 'Transfer'];
 
@@ -262,14 +264,11 @@ function TransactionForm() {
         {/* Date and Time */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
-              Date
-            </label>
-            <input
-              {...register('date', { required: 'Date is required' })}
-              type="date"
-              id="date"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            <DatePicker
+              value={watchedValues.date}
+              onChange={(date) => setValue('date', date)}
+              label="Date"
+              required
             />
             {errors.date && (
               <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
@@ -277,14 +276,11 @@ function TransactionForm() {
           </div>
 
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
-              Time
-            </label>
-            <input
-              {...register('time', { required: 'Time is required' })}
-              type="time"
-              id="time"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            <TimePicker
+              value={watchedValues.time}
+              onChange={(time) => setValue('time', time)}
+              label="Time"
+              required
             />
             {errors.time && (
               <p className="mt-1 text-sm text-red-600">{errors.time.message}</p>
