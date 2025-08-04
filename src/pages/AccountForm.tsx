@@ -151,7 +151,11 @@ function AccountForm() {
   };
 
   const handlePaymentModeAdded = (paymentMode: CreatePaymentModeData) => {
-    setPaymentModes(prev => [...prev, paymentMode]);
+    const newPaymentMode = {
+      name: paymentMode.name,
+      type: paymentMode.type
+    };
+    setPaymentModes(prev => [...prev, newPaymentMode]);
   };
 
   const removePaymentMode = (index: number) => {
@@ -442,7 +446,7 @@ function AccountForm() {
       <PaymentModeModal
         isOpen={isPaymentModeModalOpen}
         onClose={() => setIsPaymentModeModalOpen(false)}
-        accountId={isEditing ? id ?? '' : ''} // Not needed for form creation
+        accountId="" // Not needed for form creation
         onPaymentModeAdded={handlePaymentModeAdded}
       />
     </div>

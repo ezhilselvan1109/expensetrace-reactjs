@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { CreatePaymentModeData, PAYMENT_MODE_TYPES, PaymentModeType } from '../types/account';
-import { useCreatePaymentMode } from '../hooks/useAccounts';
 
 interface PaymentModeModalProps {
   isOpen: boolean;
@@ -14,30 +13,26 @@ interface PaymentModeModalProps {
 export default function PaymentModeModal({ 
   isOpen, 
   onClose, 
-  accountId,
   onPaymentModeAdded 
 }: PaymentModeModalProps) {
   const [selectedType, setSelectedType] = useState<PaymentModeType>('1');
-  const createPaymentMode = useCreatePaymentMode();
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreatePaymentModeData>({
     defaultValues: {
       name: '',
-      type: '1'
+      type: 1
     }
   });
 
-  const onSubmit = async (data: CreatePaymentModeData) => {
-    try {
-      const paymentModeData = { ...data, type: selectedType };
-      await createPaymentMode.mutateAsync({ accountId, data: paymentModeData });
-      onPaymentModeAdded(paymentModeData);
-      reset();
-      onClose();
-    } catch (error) {
-      console.error('Failed to create payment mode:', error);
-    }
+  const onSubmit = (data: CreatePaymentModeData) => {
+    const paymentModeData = {
+      ...data,
+      type: selectedType as unknown as 1 | 2 | 3 | 4
+    };
+    onPaymentModeAdded(paymentModeData);
+    handleClose();
   };
+  
 
   const handleClose = () => {
     reset();
@@ -101,13 +96,6 @@ export default function PaymentModeModal({
             </div>
           </div>
 
-          {createPaymentMode.error && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <div className="text-sm text-red-600">
-                {createPaymentMode.error.message || 'Failed to create payment mode'}
-              </div>
-            </div>
-          )}
 
           <div className="flex space-x-3">
             <button
@@ -119,17 +107,10 @@ export default function PaymentModeModal({
             </button>
             <button
               type="submit"
-              disabled={createPaymentMode.isPending}
               className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              {createPaymentMode.isPending ? (
-                'Adding...'
-              ) : (
-                <>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Payment Mode
-                </>
-              )}
+              <Plus className="w-4 h-4 mr-2" />
+              Add Payment Mode
             </button>
           </div>
         </form>

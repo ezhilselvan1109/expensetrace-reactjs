@@ -213,6 +213,7 @@ export const useUpdateBankAccount = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['account'] });
       addToast({
         type: 'success',
         title: 'Account updated',
