@@ -143,7 +143,7 @@ export default function DatePicker({
   return (
     <div className={`relative ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -151,27 +151,27 @@ export default function DatePicker({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-left flex items-center justify-between"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-left flex items-center justify-between text-sm sm:text-base"
       >
         <span className={selectedDate ? 'text-gray-900' : 'text-gray-500'}>
           {formatDisplayDate()}
         </span>
-        <Calendar className="w-5 h-5 text-gray-400" />
+        <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-4 min-w-[280px]">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[260px] sm:min-w-[280px]">
           {/* Month/Year Navigation */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <button
               type="button"
               onClick={() => navigateMonth('prev')}
               className="p-1 hover:bg-gray-100 rounded-md"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
             </button>
             
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
               {MONTHS[currentMonth]} {currentYear}
             </h3>
             
@@ -180,30 +180,30 @@ export default function DatePicker({
               onClick={() => navigateMonth('next')}
               className="p-1 hover:bg-gray-100 rounded-md"
             >
-              <ChevronRight className="w-5 h-5 text-gray-600" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
             </button>
           </div>
 
           {/* Weekday Headers */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2">
             {WEEKDAYS.map((day) => (
-              <div key={day} className="h-8 flex items-center justify-center">
-                <span className="text-xs font-medium text-gray-500">{day}</span>
+              <div key={day} className="h-6 sm:h-8 flex items-center justify-center">
+                <span className="text-xs font-medium text-gray-500">{day.slice(0, 2)}</span>
               </div>
             ))}
           </div>
 
           {/* Calendar Days */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
             {renderCalendarDays()}
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end mt-4 pt-3 border-t border-gray-200">
+          <div className="flex justify-end mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-200">
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-gray-600 hover:text-gray-800"
             >
               Close
             </button>

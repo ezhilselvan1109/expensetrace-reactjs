@@ -84,14 +84,14 @@ function DebtRecordForm() {
 
   if (isEditing && recordLoading) {
     return (
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
-          <div className="space-y-6">
+          <div className="h-6 sm:h-8 bg-gray-200 rounded w-32 sm:w-48 mb-4 sm:mb-6"></div>
+          <div className="space-y-4 sm:space-y-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow p-6">
-                <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
-                <div className="h-10 bg-gray-200 rounded"></div>
+              <div key={i} className="bg-white rounded-lg shadow p-4 sm:p-6">
+                <div className="h-4 sm:h-6 bg-gray-200 rounded w-24 sm:w-32 mb-3 sm:mb-4"></div>
+                <div className="h-8 sm:h-10 bg-gray-200 rounded"></div>
               </div>
             ))}
           </div>
@@ -101,35 +101,35 @@ function DebtRecordForm() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
+      <div className="mb-6 sm:mb-8">
         <button
           onClick={() => navigate(`/debts/${debtId}/records`)}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base"
         >
-          <ArrowLeft className="w-5 h-5 mr-2" />
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
           Back to Records
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           {isEditing ? 'Edit Record' : 'Add Record'}
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 mt-1">
           {isEditing ? 'Update record details' : 'Add a new debt record'}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
         {/* Record Type */}
         {!isEditing && (
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-4">
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-3 sm:mb-4">
               Record Type
             </label>
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
                 type="button"
                 onClick={() => setValue('type', '1')}
-                className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${register('type').value === '1' || recordType === '1'
+                className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${register('type').value === '1' || recordType === '1'
                     ? "bg-white shadow text-black"
                     : "text-gray-500 hover:text-black"
                   }`}
@@ -139,7 +139,7 @@ function DebtRecordForm() {
               <button
                 type="button"
                 onClick={() => setValue('type', '2')}
-                className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${register('type').value === '2' || recordType === '2'
+                className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${register('type').value === '2' || recordType === '2'
                     ? "bg-white shadow text-black"
                     : "text-gray-500 hover:text-black"
                   }`}
@@ -151,7 +151,7 @@ function DebtRecordForm() {
         )}
 
         {/* Date and Amount */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
             <DatePicker
               value={watchedValues.date}
@@ -160,12 +160,12 @@ function DebtRecordForm() {
               required
             />
             {errors.date && (
-              <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.date.message}</p>
             )}
           </div>
 
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="amount" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
               Amount
             </label>
             <input
@@ -177,17 +177,17 @@ function DebtRecordForm() {
               step="0.01"
               id="amount"
               placeholder="0.00"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
             />
             {errors.amount && (
-              <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.amount.message}</p>
             )}
           </div>
         </div>
 
         {/* Description */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
             Description
           </label>
           <textarea
@@ -195,57 +195,57 @@ function DebtRecordForm() {
             id="description"
             rows={3}
             placeholder="Enter record description"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
           />
           {errors.description && (
-            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.description.message}</p>
           )}
         </div>
 
         {/* Account */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm sm:text-base font-medium text-gray-700">
               Account
             </label>
             <button
               type="button"
               onClick={() => setIsAccountModalOpen(true)}
-              className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+              className="text-indigo-600 hover:text-indigo-700 text-xs sm:text-sm flex items-center"
             >
-              <Edit className="w-4 h-4 mr-1" />
+              <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
               Change
             </button>
           </div>
 
           {selectedAccount ? (
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-medium">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 text-sm sm:text-base font-medium">
                     {selectedAccount.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{selectedAccount.name}</p>
-                  <p className="text-sm text-gray-500 capitalize">{selectedAccount.type}</p>
+                  <p className="text-sm sm:text-base font-medium text-gray-900">{selectedAccount.name}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 capitalize">{selectedAccount.type}</p>
                 </div>
               </div>
               
               {/* Payment Mode Selection */}
               {selectedAccount.linkedPaymentModes && selectedAccount.linkedPaymentModes.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                     Payment Mode (Optional)
                   </label>
                   {selectedPaymentMode ? (
-                    <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
-                      <div className="p-2 rounded-lg bg-blue-100">
-                        <span className="text-blue-600 text-sm font-medium">PM</span>
+                    <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-blue-50 rounded-lg">
+                      <div className="p-1.5 sm:p-2 rounded-lg bg-blue-100">
+                        <span className="text-blue-600 text-xs sm:text-sm font-medium">PM</span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{selectedPaymentMode.name}</p>
-                        <p className="text-sm text-gray-500">{selectedPaymentMode.type}</p>
+                        <p className="text-sm sm:text-base font-medium text-gray-900">{selectedPaymentMode.name}</p>
+                        <p className="text-xs sm:text-sm text-gray-500">{selectedPaymentMode.type}</p>
                       </div>
                     </div>
                   ) : (
@@ -257,7 +257,7 @@ function DebtRecordForm() {
                           onClick={() => setValue('paymentModeId', paymentMode.id)}
                           className="p-2 text-left border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors"
                         >
-                          <p className="text-sm font-medium text-gray-900">{paymentMode.name}</p>
+                          <p className="text-xs sm:text-sm font-medium text-gray-900">{paymentMode.name}</p>
                           <p className="text-xs text-gray-500">{paymentMode.type}</p>
                         </button>
                       ))}
@@ -267,38 +267,38 @@ function DebtRecordForm() {
               )}
               </div>
           ) : (
-            <div className="p-3 bg-gray-50 rounded-lg text-gray-500">
+            <div className="p-2 sm:p-3 bg-gray-50 rounded-lg text-xs sm:text-sm text-gray-500">
               No account selected
             </div>
           )}
 
           {errors.accountId && (
-            <p className="mt-1 text-sm text-red-600">{errors.accountId.message}</p>
+            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.accountId.message}</p>
           )}
         </div>
 
         {/* Error Messages */}
         {(createRecord.error || updateRecord.error) && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="text-sm text-red-600">
+          <div className="bg-red-50 border border-red-200 rounded-md p-3 sm:p-4">
+            <div className="text-xs sm:text-sm text-red-600">
               Failed to save record. Please try again.
             </div>
           </div>
         )}
 
         {/* Submit Button */}
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            className="flex-1 bg-indigo-600 text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base font-medium"
           >
             {isPending ? 'Saving...' : isEditing ? 'Update Record' : 'Create Record'}
           </button>
           <button
             type="button"
             onClick={() => navigate(`/debts/${debtId}/records`)}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
+            className="px-4 sm:px-6 py-2.5 sm:py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium"
           >
             Cancel
           </button>

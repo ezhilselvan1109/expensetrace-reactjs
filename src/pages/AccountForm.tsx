@@ -167,14 +167,14 @@ function AccountForm() {
 
   if (isEditing && accountLoading) {
     return (
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
-          <div className="space-y-6">
+          <div className="h-6 sm:h-8 bg-gray-200 rounded w-32 sm:w-48 mb-4 sm:mb-6"></div>
+          <div className="space-y-4 sm:space-y-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow p-6">
-                <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
-                <div className="h-10 bg-gray-200 rounded"></div>
+              <div key={i} className="bg-white rounded-lg shadow p-4 sm:p-6">
+                <div className="h-4 sm:h-6 bg-gray-200 rounded w-24 sm:w-32 mb-3 sm:mb-4"></div>
+                <div className="h-8 sm:h-10 bg-gray-200 rounded"></div>
               </div>
             ))}
           </div>
@@ -184,28 +184,28 @@ function AccountForm() {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
+      <div className="mb-6 sm:mb-8">
         <button
           onClick={() => navigate('/accounts')}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base"
         >
-          <ArrowLeft className="w-5 h-5 mr-2" />
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
           Back to Accounts
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           {isEditing ? 'Edit Account' : 'Add Account'}
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 mt-1">
           {isEditing ? 'Update account details' : 'Create a new account for tracking your finances'}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6 lg:space-y-8">
         {/* Account Type Tabs */}
         {!isEditing && (
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-4">
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-3 sm:mb-4">
               Account Type
             </label>
             <div className="flex bg-gray-100 rounded-lg p-1">
@@ -216,7 +216,7 @@ function AccountForm() {
                     key={tab}
                     type="button"
                     onClick={() => setActiveTab(index)}
-                    className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
+                    className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
                       active
                         ? "bg-white shadow text-black"
                         : "text-gray-500 hover:text-black"
@@ -232,7 +232,7 @@ function AccountForm() {
 
         {/* Account Name */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
             Account Name
           </label>
           <input
@@ -240,10 +240,10 @@ function AccountForm() {
             type="text"
             id="name"
             placeholder="Enter account name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
           />
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.name.message}</p>
           )}
         </div>
 
@@ -251,7 +251,7 @@ function AccountForm() {
         {activeTab === 0 && (
           <>
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <label htmlFor="currentBalance" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="currentBalance" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                 Current Balance
               </label>
               <input
@@ -263,45 +263,45 @@ function AccountForm() {
                 step="0.01"
                 id="currentBalance"
                 placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
               />
               {errors.currentBalance && (
-                <p className="mt-1 text-sm text-red-600">{errors.currentBalance.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.currentBalance.message}</p>
               )}
             </div>
 
             {/* Linked Payment Modes */}
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm sm:text-base font-medium text-gray-700">
                   Linked Payment Modes (Optional)
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsPaymentModeModalOpen(true)}
-                  className="inline-flex items-center px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                  className="inline-flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
                 >
-                  <Plus className="w-4 h-4 mr-1" />
+                  <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   Add
                 </button>
               </div>
 
               {paymentModes.length === 0 ? (
-                <p className="text-gray-500 text-sm">No payment modes added yet</p>
+                <p className="text-gray-500 text-xs sm:text-sm">No payment modes added yet</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-2 sm:space-y-3">
                   {paymentModes.map((mode, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">{mode.name}</p>
-                        <p className="text-sm text-gray-500">{PAYMENT_MODE_TYPES[mode.type]}</p>
+                        <p className="text-sm sm:text-base font-medium text-gray-900">{mode.name}</p>
+                        <p className="text-xs sm:text-sm text-gray-500">{PAYMENT_MODE_TYPES[mode.type]}</p>
                       </div>
                       <button
                         type="button"
                         onClick={() => removePaymentMode(index)}
-                        className="text-red-500 hover:text-red-700 transition-colors"
+                        className="text-red-500 hover:text-red-700 transition-colors p-1"
                       >
-                        <X className="w-5 h-5" />
+                        <X className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   ))}
@@ -314,7 +314,7 @@ function AccountForm() {
         {/* Wallet Fields */}
         {activeTab === 1 && (
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label htmlFor="currentBalance" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="currentBalance" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
               Current Balance
             </label>
             <input
@@ -326,10 +326,10 @@ function AccountForm() {
               step="0.01"
               id="currentBalance"
               placeholder="0.00"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
             />
             {errors.currentBalance && (
-              <p className="mt-1 text-sm text-red-600">{errors.currentBalance.message}</p>
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.currentBalance.message}</p>
             )}
           </div>
         )}
@@ -337,9 +337,9 @@ function AccountForm() {
         {/* Credit Card Fields */}
         {activeTab === 2 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="currentAvailableLimit" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="currentAvailableLimit" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Current Available Limit
                 </label>
                 <input
@@ -351,15 +351,15 @@ function AccountForm() {
                   step="0.01"
                   id="currentAvailableLimit"
                   placeholder="0.00"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 />
                 {errors.currentAvailableLimit && (
-                  <p className="mt-1 text-sm text-red-600">{errors.currentAvailableLimit.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.currentAvailableLimit.message}</p>
                 )}
               </div>
 
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="totalCreditLimit" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="totalCreditLimit" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Total Credit Limit
                 </label>
                 <input
@@ -371,42 +371,42 @@ function AccountForm() {
                   step="0.01"
                   id="totalCreditLimit"
                   placeholder="0.00"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 />
                 {errors.totalCreditLimit && (
-                  <p className="mt-1 text-sm text-red-600">{errors.totalCreditLimit.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.totalCreditLimit.message}</p>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="billingCycleStartDate" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="billingCycleStartDate" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Billing Cycle Start Date
                 </label>
                 <input
                   {...register('billingCycleStartDate', { required: 'Billing cycle start date is required' })}
                   type="date"
                   id="billingCycleStartDate"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 />
                 {errors.billingCycleStartDate && (
-                  <p className="mt-1 text-sm text-red-600">{errors.billingCycleStartDate.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.billingCycleStartDate.message}</p>
                 )}
               </div>
 
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label htmlFor="paymentDueDate" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="paymentDueDate" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Payment Due Date
                 </label>
                 <input
                   {...register('paymentDueDate', { required: 'Payment due date is required' })}
                   type="date"
                   id="paymentDueDate"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 />
                 {errors.paymentDueDate && (
-                  <p className="mt-1 text-sm text-red-600">{errors.paymentDueDate.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.paymentDueDate.message}</p>
                 )}
               </div>
             </div>
@@ -416,26 +416,26 @@ function AccountForm() {
         {/* Error Messages */}
         {(createBankAccount.error || createWallet.error || createCreditCard.error ||
           updateBankAccount.error || updateWallet.error || updateCreditCard.error) && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="text-sm text-red-600">
+          <div className="bg-red-50 border border-red-200 rounded-md p-3 sm:p-4">
+            <div className="text-xs sm:text-sm text-red-600">
               Failed to save account. Please try again.
             </div>
           </div>
         )}
 
         {/* Submit Button */}
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            className="flex-1 bg-indigo-600 text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base font-medium"
           >
             {isPending ? 'Saving...' : isEditing ? 'Update Account' : 'Create Account'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/accounts')}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
+            className="px-4 sm:px-6 py-2.5 sm:py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium"
           >
             Cancel
           </button>

@@ -99,7 +99,7 @@ export default function TimePicker({
   return (
     <div className={`relative ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -107,17 +107,17 @@ export default function TimePicker({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-left flex items-center justify-between"
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-left flex items-center justify-between text-sm sm:text-base"
       >
         <span className={value ? 'text-gray-900' : 'text-gray-500'}>
           {formatDisplayTime()}
         </span>
-        <Clock className="w-5 h-5 text-gray-400" />
+        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-4 min-w-[280px]">
-          <div className="flex items-center justify-center space-x-4">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[260px] sm:min-w-[280px]">
+          <div className="flex items-center justify-center space-x-3 sm:space-x-4">
             {/* Hour Selector */}
             <div className="flex flex-col items-center">
               <button
@@ -125,16 +125,16 @@ export default function TimePicker({
                 onClick={() => adjustValue('hour', 'up')}
                 className="p-1 hover:bg-gray-100 rounded-md"
               >
-                <ChevronUp className="w-4 h-4 text-gray-600" />
+                <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
               </button>
               
-              <div className="w-16 h-32 overflow-y-auto border border-gray-200 rounded-md">
+              <div className="w-12 sm:w-16 h-24 sm:h-32 overflow-y-auto border border-gray-200 rounded-md">
                 {generateHours().map((hour) => (
                   <button
                     key={hour}
                     type="button"
                     onClick={() => setSelectedHour(hour)}
-                    className={`w-full py-1 text-sm transition-colors ${
+                    className={`w-full py-0.5 sm:py-1 text-xs sm:text-sm transition-colors ${
                       selectedHour === hour
                         ? 'bg-indigo-600 text-white'
                         : 'text-gray-700 hover:bg-gray-100'
@@ -150,11 +150,11 @@ export default function TimePicker({
                 onClick={() => adjustValue('hour', 'down')}
                 className="p-1 hover:bg-gray-100 rounded-md"
               >
-                <ChevronDown className="w-4 h-4 text-gray-600" />
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
               </button>
             </div>
 
-            <div className="text-2xl font-bold text-gray-400">:</div>
+            <div className="text-lg sm:text-2xl font-bold text-gray-400">:</div>
 
             {/* Minute Selector */}
             <div className="flex flex-col items-center">
@@ -163,16 +163,16 @@ export default function TimePicker({
                 onClick={() => adjustValue('minute', 'up')}
                 className="p-1 hover:bg-gray-100 rounded-md"
               >
-                <ChevronUp className="w-4 h-4 text-gray-600" />
+                <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
               </button>
               
-              <div className="w-16 h-32 overflow-y-auto border border-gray-200 rounded-md">
+              <div className="w-12 sm:w-16 h-24 sm:h-32 overflow-y-auto border border-gray-200 rounded-md">
                 {generateMinutes().map((minute) => (
                   <button
                     key={minute}
                     type="button"
                     onClick={() => setSelectedMinute(minute)}
-                    className={`w-full py-1 text-sm transition-colors ${
+                    className={`w-full py-0.5 sm:py-1 text-xs sm:text-sm transition-colors ${
                       selectedMinute === minute
                         ? 'bg-indigo-600 text-white'
                         : 'text-gray-700 hover:bg-gray-100'
@@ -188,17 +188,17 @@ export default function TimePicker({
                 onClick={() => adjustValue('minute', 'down')}
                 className="p-1 hover:bg-gray-100 rounded-md"
               >
-                <ChevronDown className="w-4 h-4 text-gray-600" />
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
               </button>
             </div>
 
             {/* AM/PM Selector for 12-hour format */}
             {!is24Hour && (
-              <div className="flex flex-col items-center space-y-2">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <button
                   type="button"
                   onClick={() => setSelectedPeriod('AM')}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors ${
                     selectedPeriod === 'AM'
                       ? 'bg-indigo-600 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -209,7 +209,7 @@ export default function TimePicker({
                 <button
                   type="button"
                   onClick={() => setSelectedPeriod('PM')}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors ${
                     selectedPeriod === 'PM'
                       ? 'bg-indigo-600 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -222,18 +222,18 @@ export default function TimePicker({
           </div>
 
           {/* Footer */}
-          <div className="flex justify-between mt-4 pt-3 border-t border-gray-200">
+          <div className="flex justify-between mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-gray-200">
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-gray-600 hover:text-gray-800"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleTimeChange}
-              className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
             >
               Set Time
             </button>
