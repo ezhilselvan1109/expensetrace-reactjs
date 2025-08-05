@@ -59,7 +59,11 @@ export default function DatePicker({
   const handleDateSelect = (day: number) => {
     const newDate = new Date(currentYear, currentMonth, day);
     if (!isDateDisabled(newDate)) {
-      onChange(newDate.toISOString().split('T')[0]);
+      // Format as YYYY-MM-DD to ensure consistent date handling
+      const year = newDate.getFullYear();
+      const month = String(newDate.getMonth() + 1).padStart(2, '0');
+      const dayStr = String(newDate.getDate()).padStart(2, '0');
+      onChange(`${year}-${month}-${dayStr}`);
       setIsOpen(false);
     }
   };
@@ -160,7 +164,7 @@ export default function DatePicker({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[260px] sm:min-w-[280px]">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[280px] sm:min-w-[320px]">
           {/* Month/Year Navigation */}
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <button

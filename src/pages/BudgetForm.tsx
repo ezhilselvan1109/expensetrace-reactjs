@@ -161,19 +161,19 @@ function BudgetForm() {
     updateMonthlyBudget.isPending || updateYearlyBudget.isPending;
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
+      <div className="mb-6 sm:mb-8">
         <button
           onClick={handleBack}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base"
         >
-          <ArrowLeft className="w-5 h-5 mr-2" />
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
           {step === 1 ? 'Back to Budgets' : 'Back to Budget Details'}
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           {isEditing ? 'Edit Budget' : step === 1 ? 'Create Budget' : 'Set Category Limits'}
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 mt-1">
           {isEditing
             ? 'Update budget details'
             : step === 1
@@ -185,7 +185,7 @@ function BudgetForm() {
 
       {/* Progress Indicator */}
       {!isEditing && (
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex items-center">
             <div className={`flex items-center justify-center w-8 h-8 rounded-full ${step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
               }`}>
@@ -199,20 +199,20 @@ function BudgetForm() {
             </div>
           </div>
           <div className="flex justify-between mt-2">
-            <span className="text-sm text-gray-600">Budget Details</span>
-            <span className="text-sm text-gray-600">Category Limits</span>
+            <span className="text-xs sm:text-sm text-gray-600">Budget Details</span>
+            <span className="text-xs sm:text-sm text-gray-600">Category Limits</span>
           </div>
         </div>
       )}
 
-      <form className="space-y-6">
+      <form className="space-y-4 sm:space-y-6 lg:space-y-8">
         {/* Step 1: Budget Details */}
         {(step === 1 || isEditing) && (
           <>
             {/* Budget Type */}
             {!isEditing && (
               <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                <label className="block text-sm font-medium text-gray-700 mb-4">
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-3 sm:mb-4">
                   Budget Type
                 </label>
                 <div className="flex bg-gray-100 rounded-lg p-1">
@@ -223,7 +223,7 @@ function BudgetForm() {
                         key={tab}
                         type="button"
                         onClick={() => setActiveTab(index)}
-                        className={`flex-1 text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
+                        className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
                           ? "bg-white shadow text-black"
                           : "text-gray-500 hover:text-black"
                           }`}
@@ -258,7 +258,7 @@ function BudgetForm() {
                 />
               )}
               {(errors.month || errors.year) && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-xs sm:text-sm text-red-600">
                   {errors.month?.message || errors.year?.message}
                 </p>
               )}
@@ -266,7 +266,7 @@ function BudgetForm() {
 
             {/* Total Budget Limit */}
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <label htmlFor="totalLimit" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="totalLimit" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                 What is your total budget limit?
               </label>
               <input
@@ -278,21 +278,21 @@ function BudgetForm() {
                 step="0.01"
                 id="totalLimit"
                 placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
               />
               {errors.totalLimit && (
-                <p className="mt-1 text-sm text-red-600">{errors.totalLimit.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.totalLimit.message}</p>
               )}
             </div>
 
             {/* Included Categories */}
             <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm sm:text-base font-medium text-gray-700">
                     Included Categories
                   </label>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
                     {selectedCategories.length === categories.length
                       ? 'All categories'
                       : `${selectedCategories.length} categories included in your budget`
@@ -302,22 +302,22 @@ function BudgetForm() {
                 <button
                   type="button"
                   onClick={() => setIsCategoryModalOpen(true)}
-                  className="text-indigo-600 hover:text-indigo-700 text-sm flex items-center"
+                  className="text-indigo-600 hover:text-indigo-700 text-xs sm:text-sm flex items-center"
                 >
-                  <Edit className="w-4 h-4 mr-1" />
+                  <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   Change
                 </button>
               </div>
 
               {selectedCategories.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
                   {selectedCategories.map(categoryId => {
                     const category = categories.find(cat => cat.id === categoryId);
                     if (!category) return null;
                     return (
-                      <div key={categoryId} className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+                      <div key={categoryId} className="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 bg-gray-50 rounded-lg">
                         <CategoryIcon icon={category.icon} color={category.color} size="sm" />
-                        <span className="text-sm font-medium text-gray-900 truncate">
+                        <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                           {category.name}
                         </span>
                       </div>
@@ -325,7 +325,7 @@ function BudgetForm() {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-3 sm:py-4 text-xs sm:text-sm text-gray-500">
                   No categories selected
                 </div>
               )}
@@ -336,19 +336,19 @@ function BudgetForm() {
         {/* Step 2: Category Limits */}
         {(step === 2 || isEditing) && (
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
                 Set category-wise limits (Optional)
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
                 Set limits on categories within your budget, if you want
               </p>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between text-sm">
+              <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className="text-gray-600">Total Budget:</span>
                   <span className="font-medium">{formatCurrency(watchedValues.totalLimit)}</span>
                 </div>
-                <div className="flex justify-between text-sm mt-1">
+                <div className="flex justify-between text-xs sm:text-sm mt-1">
                   <span className="text-gray-600">Remaining:</span>
                   <span className={`font-medium ${remainingBudget >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                    {formatCurrency(remainingBudget)}
@@ -358,17 +358,17 @@ function BudgetForm() {
             </div>
 
             {selectedCategories.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {selectedCategories.map(categoryId => {
                   const category = categories.find(cat => cat.id === categoryId);
                   if (!category) return null;
                   return (
-                    <div key={categoryId} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                    <div key={categoryId} className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 p-3 sm:p-4 border border-gray-200 rounded-lg">
                       <CategoryIcon icon={category.icon} color={category.color} />
                       <div className="flex-1">
-                        <p className="font-medium text-gray-900">{category.name}</p>
+                        <p className="text-sm sm:text-base font-medium text-gray-900">{category.name}</p>
                       </div>
-                      <div className="w-32">
+                      <div className="w-24 sm:w-32">
                         <input
                           {...register(`categoryLimits.${categoryId}`, {
                             min: { value: 0, message: 'Limit cannot be negative' }
@@ -376,7 +376,7 @@ function BudgetForm() {
                           type="number"
                           step="0.01"
                           placeholder="0.00"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                          className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs sm:text-sm"
                         />
                       </div>
                     </div>
@@ -384,7 +384,7 @@ function BudgetForm() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-6 sm:py-8 text-xs sm:text-sm text-gray-500">
                 No categories selected for budget limits
               </div>
             )}
@@ -394,21 +394,21 @@ function BudgetForm() {
         {/* Error Messages */}
         {(createMonthlyBudget.error || createYearlyBudget.error ||
           updateMonthlyBudget.error || updateYearlyBudget.error) && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <div className="text-sm text-red-600">
+            <div className="bg-red-50 border border-red-200 rounded-md p-3 sm:p-4">
+              <div className="text-xs sm:text-sm text-red-600">
                 Failed to save budget. Please try again.
               </div>
             </div>
           )}
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           {step === 1 ? (
             <button
               type="button"
               onClick={isEditing ?handleSubmit(onSubmit):handleNext}
               disabled={isPending || selectedCategories.length === 0 || !watchedValues.totalLimit || watchedValues.totalLimit <= 0}
-              className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-indigo-600 text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? 'Saving...' : isEditing ? 'Update Budget' :'Next: Set Category Limits'}
             </button>
@@ -417,7 +417,7 @@ function BudgetForm() {
               type="button"
               onClick={handleSubmit(onSubmit)}
               disabled={isPending}
-              className="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              className="flex-1 bg-indigo-600 text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base font-medium"
             >
               {isPending ? 'Saving...' : isEditing ? 'Update Budget' : 'Create Budget'}
             </button>
@@ -425,7 +425,7 @@ function BudgetForm() {
           <button
             type="button"
             onClick={handleBack}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
+            className="px-4 sm:px-6 py-2.5 sm:py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium"
           >
             {step === 1 || isEditing ? 'Cancel' : 'Back'}
           </button>
