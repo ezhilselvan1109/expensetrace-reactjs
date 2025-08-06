@@ -248,14 +248,12 @@ function Budgets() {
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
             Upcoming {budgetType} Budgets
           </h2>
-          <div className="bg-white rounded-lg shadow">
-            <div className="divide-y divide-gray-200">
-              {currentData.upcoming.map((budget) => (
-                <div key={budget.id} className="p-4 sm:p-6">
-                  <BudgetCard budget={budget} />
-                </div>
-              ))}
-            </div>
+          <div className="grid gap-4">
+            {currentData.upcoming.map((budget) => (
+              <div key={budget.id}>
+                <BudgetCard budget={budget} />
+              </div>
+            ))}
           </div>
         </div>
       ) : (currentData?.active && currentData?.active?.length > 0 && (
@@ -276,14 +274,12 @@ function Budgets() {
       {currentData?.past && currentData.past.length > 0 && (
         <div>
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Past {budgetType} Budgets</h2>
-          <div className="bg-white rounded-lg shadow">
-            <div className="divide-y divide-gray-200">
-              {currentData.past.map((budget) => (
-                <div key={budget.id} className="p-4 sm:p-6">
-                  <BudgetCard budget={budget} />
-                </div>
-              ))}
-            </div>
+          <div className="grid gap-4">
+            {currentData.past.map((budget) => (
+              <div key={budget.id}>
+                <BudgetCard budget={budget} />
+              </div>
+            ))}
           </div>
         </div>
       )}
