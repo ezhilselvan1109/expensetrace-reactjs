@@ -155,7 +155,7 @@ function Transactions() {
             All Transactions ({totalElements})
           </h2>
         </div>
-        
+
         {transactions.length === 0 ? (
           <div className="p-6 sm:p-8 text-center">
             <ArrowUpDown className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-3 sm:mb-4" />
@@ -183,9 +183,9 @@ function Transactions() {
                     <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-1 min-w-0">
                       <div className="flex-shrink-0">
                         {transaction.category ? (
-                          <CategoryIcon 
-                            icon={transaction.category.icon} 
-                            color={transaction.category.color} 
+                          <CategoryIcon
+                            icon={transaction.category.icon}
+                            color={transaction.category.color}
                             size="sm"
                           />
                         ) : (
@@ -194,42 +194,67 @@ function Transactions() {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-1 sm:space-x-2 mb-1">
-                          <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
-                            {transaction.description}
-                          </p>
+                          {transaction.category && (
+                            <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
+                              {transaction.category.name}
+                            </p>
+                          )}
                           <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 flex-shrink-0">
                             {TRANSACTION_TYPES[transaction.type]}
                           </span>
                         </div>
-                        
+
                         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 lg:space-x-3 text-xs sm:text-sm text-gray-500">
                           <span>{date} at {time}</span>
-                          {transaction.category && (
+                          {transaction.description && (
                             <span className="hidden sm:inline truncate flex items-center">
-                              • {transaction.category.name}
+                              • {transaction.description}
                             </span>
                           )}
+
                           {transaction.account && (
-                            <span className="hidden md:inline truncate flex items-center">
-                              • {getAccountIcon(transaction.account.type)} 
-                              <span className="ml-1">{transaction.account.name}</span>
-                            </span>
+                            <div className="hidden lg:flex items-center text-xs sm:text-sm text-gray-500">
+                              <span className="mx-1"> • </span>
+                              <span className="flex items-center">
+                                {getAccountIcon(transaction.account.type)}
+                                <span className="ml-1">{transaction.account.name}</span>
+                              </span>
+                            </div>
                           )}
+                          
                           {transaction.paymentMode && (
-                            <span className="hidden lg:inline truncate flex items-center">
-                              • {getPaymentModeIcon(transaction.paymentMode.type)} 
-                              <span className="ml-1">{transaction.paymentMode.name}</span>
-                            </span>
+                            <div className="hidden lg:flex items-center text-xs sm:text-sm text-gray-500">
+                              <span className="mx-1"> • </span>
+                              <span className="flex items-center">
+                                {getPaymentModeIcon(transaction.paymentMode.type)}
+                                <span className="ml-1">{transaction.paymentMode.name}</span>
+                              </span>
+                            </div>
                           )}
+
+                          {transaction.type === 3 && transaction.fromAccount && (
+                            <div className="hidden lg:flex items-center text-xs sm:text-sm text-gray-500">
+                              <span className="mx-1"> • </span>
+                              <span className="flex items-center">
+                                {getAccountIcon(transaction.fromAccount.type)}
+                                <span className="ml-1">{transaction.fromAccount.name}</span>
+                              </span>
+                            </div>
+                          )}
+
                           {transaction.type === 3 && transaction.toAccount && (
-                            <span className="hidden lg:inline truncate flex items-center">
-                              → {getAccountIcon(transaction.toAccount.type)} 
-                              <span className="ml-1">{transaction.toAccount.name}</span>
-                            </span>
+                            <div className="hidden lg:flex items-center text-xs sm:text-sm text-gray-500">
+                              <span className="mx-1"> → </span>
+                              <span className="flex items-center">
+                                {getAccountIcon(transaction.toAccount.type)}
+                                <span className="ml-1">{transaction.toAccount.name}</span>
+                              </span>
+                            </div>
                           )}
+
                           {transaction.tags && transaction.tags.length > 0 && (
                             <span className="hidden xl:inline truncate">
                               • Tags: {transaction.tags.map(tag => tag.name).join(', ')}
@@ -238,15 +263,14 @@ function Transactions() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
                       <div className="text-right">
                         <p className={`text-sm sm:text-base font-semibold ${getAmountColor(transaction.type)}`}>
-                          {transaction.type === 1 ? '-' : transaction.type === 2 ? '+' : ''}
                           {formatCurrency(transaction.amount)}
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center space-x-1 sm:space-x-2">
                         <Link
                           to={`/transactions/edit/${transaction.id}`}
@@ -269,37 +293,35 @@ function Transactions() {
             </div>
 
             {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="p-4 sm:p-6 border-t border-gray-200">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div className="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
-                    Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} transactions
-                  </div>
-                  
-                  <div className="flex items-center justify-center space-x-1 sm:space-x-2">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
-                      disabled={currentPage === 0}
-                      className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
-                    
-                    <span className="px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium bg-gray-50 rounded-md">
-                      Page {currentPage + 1} of {totalPages}
-                    </span>
-                    
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
-                      disabled={currentPage >= totalPages - 1}
-                      className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
-                  </div>
+            <div className="p-4 sm:p-6 border-t border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
+                  Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} transactions
+                </div>
+
+                <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                    disabled={currentPage === 0}
+                    className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+
+                  <span className="px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium bg-gray-50 rounded-md">
+                    Page {currentPage + 1} of {totalPages}
+                  </span>
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                    disabled={currentPage >= totalPages - 1}
+                    className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
           </>
         )}
       </div>
