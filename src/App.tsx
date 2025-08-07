@@ -24,6 +24,8 @@ const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage')
 const Categories = lazy(() => import('./pages/Categories'));
 const CategoryForm = lazy(() => import('./pages/CategoryForm'));
 const Tags = lazy(() => import('./pages/Tags'));
+const ScheduledTransactions = lazy(() => import('./pages/ScheduledTransactions'));
+const ScheduledTransactionForm = lazy(() => import('./pages/ScheduledTransactionForm'));
 const Budgets = lazy(() => import('./pages/Budgets'));
 const BudgetForm = lazy(() => import('./pages/BudgetForm'));
 const BudgetAnalysis = lazy(() => import('./pages/BudgetAnalysis'));
@@ -112,12 +114,9 @@ function App() {
                   <Route path="categories" element={<Categories />} />
                   <Route path="categories/add" element={<CategoryForm />} />
                   <Route path="categories/edit/:id" element={<CategoryForm />} />
-                  <Route path="scheduled" element={
-                    <PlaceholderPage
-                      title="Scheduled Transactions"
-                      description="Set up recurring income and expenses"
-                    />
-                  } />
+                  <Route path="scheduled" element={<ScheduledTransactions />} />
+                  <Route path="scheduled/add" element={<ScheduledTransactionForm />} />
+                  <Route path="scheduled/edit/:id" element={<ScheduledTransactionForm />} />
                   <Route path="debts" element={<Debts />} />
                   <Route path="debts/add" element={<DebtForm />} />
                   <Route path="debts/edit/:id" element={<DebtForm />} />

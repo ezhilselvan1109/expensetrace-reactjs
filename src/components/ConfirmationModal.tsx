@@ -24,8 +24,8 @@ export default function ConfirmationModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-sm sm:max-w-md">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-3 md:p-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md">
         <div className="flex items-center justify-between p-4 sm:p-6 border-b">
           <h2 className="text-lg sm:text-xl font-semibold text-red-900 flex items-center">
             <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-red-600" />
@@ -40,7 +40,7 @@ export default function ConfirmationModal({
         </div>
 
         <div className="p-4 sm:p-6">
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{message}</p>
+          <p className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">{message}</p>
         </div>
 
         <div className="p-4 sm:p-6 border-t">
@@ -48,14 +48,14 @@ export default function ConfirmationModal({
             <button
               onClick={onClose}
               disabled={isPending}
-              className="flex-1 px-3 sm:px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm sm:text-base font-medium disabled:opacity-50"
+              className="flex-1 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-xs sm:text-sm md:text-base font-medium disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
               disabled={isPending}
-              className={`flex-1 px-3 sm:px-4 py-2 text-white rounded-md transition-colors text-sm sm:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed ${confirmButtonClass}`}
+              className={`flex-1 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-white rounded-md transition-colors text-xs sm:text-sm md:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed ${confirmButtonClass}`}
             >
               {isPending ? 'Processing...' : confirmText}
             </button>
