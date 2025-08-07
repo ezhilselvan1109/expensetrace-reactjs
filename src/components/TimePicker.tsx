@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Clock, ChevronUp, ChevronDown } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 
@@ -21,6 +21,7 @@ export default function TimePicker({
 }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: settings } = useSettings();
+  const containerRef = useRef<HTMLDivElement>(null);
   
   // Parse current time value
   const [hours, minutes] = value ? value.split(':').map(Number) : [new Date().getHours(), new Date().getMinutes()];
@@ -39,6 +40,20 @@ export default function TimePicker({
       setSelectedPeriod(h >= 12 ? 'PM' : 'AM');
     }
   }, [value]);
+
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   const formatDisplayTime = () => {
     if (!value) return placeholder;
@@ -97,7 +112,7 @@ export default function TimePicker({
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`}>
       {label && (
         <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
           {label} {required && <span className="text-red-500">*</span>}
@@ -116,7 +131,7 @@ export default function TimePicker({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[260px] sm:min-w-[280px]">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 w-full min-w-[260px] sm:min-w-[280px] max-w-[320px]">
           <div className="flex items-center justify-center space-x-3 sm:space-x-4">
             {/* Hour Selector */}
             <div className="flex flex-col items-center">

@@ -10,11 +10,12 @@ import {
   useBudgetAnalysis
 } from '../hooks/useBudgets';
 import { useCategoriesByType } from '../hooks/useCategories';
-import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit, MONTHS } from '../types/budget';
+import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from '../types/budget';
 import CategorySelectModal from '../components/CategorySelectModal';
 import CategoryIcon from '../components/CategoryIcon';
 import { formatCurrency } from '../utils/formatters';
 import MonthYearPicker from '../components/MonthYearPicker';
+import YearPicker from '../components/YearPicker';
 
 const tabs = ['Monthly', 'Yearly'];
 
@@ -248,10 +249,8 @@ function BudgetForm() {
                   required
                 />
               ) : (
-                <MonthYearPicker
-                  month={1}
+                <YearPicker
                   year={watchedValues.year}
-                  onMonthChange={() => {}} // Not used for yearly
                   onYearChange={(year) => setValue('year', year)}
                   label="Budget Year"
                   required

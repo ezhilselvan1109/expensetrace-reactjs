@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
 interface MonthYearPickerProps {
@@ -31,6 +31,22 @@ export default function MonthYearPicker({
 }: MonthYearPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'month' | 'year'>('month');
+  const [displayStartYear, setDisplayStartYear] = useState(year - (year % 12));
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   const handleMonthSelect = (selectedMonth: number) => {
     onMonthChange(selectedMonth);
@@ -49,20 +65,28 @@ export default function MonthYearPicker({
     }
   };
 
+  const navigateYearRange = (direction: 'prev' | 'next') => {
+    const newStartYear = direction === 'prev' ? displayStartYear - 12 : displayStartYear + 12;
+    if (newStartYear >= minYear && newStartYear <= maxYear) {
+      setDisplayStartYear(newStartYear);
+    }
+  };
+
   const formatDisplayValue = () => {
     return `${MONTHS[month - 1]} ${year}`;
   };
 
-  const generateYearRange = () => {
+  const generateCurrentYearRange = () => {
     const years = [];
-    for (let y = minYear; y <= maxYear; y++) {
+    const endYear = Math.min(displayStartYear + 11, maxYear);
+    for (let y = Math.max(displayStartYear, minYear); y <= endYear; y++) {
       years.push(y);
     }
     return years;
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`}>
       {label && (
         <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
           {label} {required && <span className="text-red-500">*</span>}
@@ -81,7 +105,7 @@ export default function MonthYearPicker({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 min-w-[260px] sm:min-w-[280px]">
+        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 p-3 sm:p-4 w-full min-w-[260px] sm:min-w-[280px] max-w-[320px]">
           {viewMode === 'month' ? (
             <>
               {/* Month View Header */}
@@ -135,16 +159,34 @@ export default function MonthYearPicker({
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <button
                   type="button"
+                  onClick={() => navigateYearRange('prev')}
+                  disabled={displayStartYear <= minYear}
+                  className="p-1 hover:bg-gray-100 rounded-md disabled:opacity-50"
+                >
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                </button>
+                
+                <button
+                  type="button"
                   onClick={() => setViewMode('month')}
                   className="text-base sm:text-lg font-semibold text-gray-900 hover:text-indigo-600"
                 >
-                  Select Year
+                  {displayStartYear} - {Math.min(displayStartYear + 11, maxYear)}
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => navigateYearRange('next')}
+                  disabled={displayStartYear + 11 >= maxYear}
+                  className="p-1 hover:bg-gray-100 rounded-md disabled:opacity-50"
+                >
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </button>
               </div>
 
               {/* Years Grid */}
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 max-h-40 sm:max-h-48 overflow-y-auto">
-                {generateYearRange().map((yearOption) => (
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                {generateCurrentYearRange().map((yearOption) => (
                   <button
                     key={yearOption}
                     type="button"

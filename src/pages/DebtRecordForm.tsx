@@ -3,13 +3,15 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useCreateDebtRecord, useUpdateDebtRecord, useDebtRecord } from '../hooks/useDebts';
-import { useAccounts } from '../hooks/useAccounts';
+import { useAccounts, useDefaultPaymentMode } from '../hooks/useAccounts';
 import { CreateDebtRecordData } from '../types/debt';
 import AccountSelectModal from '../components/AccountSelectModal';
 import DatePicker from '../components/DatePicker';
+import TimePicker from '../components/TimePicker';
 
 interface FormData {
   date: string;
+  time: string;
   amount: number;
   description: string;
   accountId: string;
@@ -28,11 +30,13 @@ function DebtRecordForm() {
 
   const { data: record, isLoading: recordLoading } = useDebtRecord(recordId || '');
   const { data: accounts = [] } = useAccounts();
+  const { data: defaultPaymentMode } = useDefaultPaymentMode();
   const createRecord = useCreateDebtRecord();
   const updateRecord = useUpdateDebtRecord();
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
+      time: new Date().toTimeString().slice(0, 5),
       amount: 0,
       description: '',
       accountId: '',
@@ -49,6 +53,9 @@ function DebtRecordForm() {
   useEffect(() => {
     if (isEditing && record) {
       setValue('date', record.date);
+      if (record.time) {
+        setValue('time', `${record.time.hour.toString().padStart(2, '0')}:${record.time.minute.toString().padStart(2, '0')}`);
+      }
       setValue('amount', record.amount);
       setValue('description', record.description);
       setValue('accountId', record.accountId);
@@ -57,10 +64,25 @@ function DebtRecordForm() {
     }
   }, [isEditing, record, setValue]);
 
+  // Set default account when not editing
+  useEffect(() => {
+    if (!isEditing && defaultPaymentMode) {
+      setValue('accountId', defaultPaymentMode.id);
+    }
+  }, [defaultPaymentMode, isEditing, setValue]);
+
   const onSubmit = async (data: FormData) => {
     try {
+      const [hours, minutes] = data.time.split(':').map(Number);
+      
       const recordData: CreateDebtRecordData = {
         date: data.date,
+        time: {
+          hour: hours,
+          minute: minutes,
+          second: 0,
+          nano: 0
+        },
         amount: data.amount,
         description: data.description,
         accountId: data.accountId,
@@ -165,24 +187,37 @@ function DebtRecordForm() {
           </div>
 
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label htmlFor="amount" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
-              Amount
-            </label>
-            <input
-              {...register('amount', {
-                required: 'Amount is required',
-                min: { value: 0.01, message: 'Amount must be greater than 0' }
-              })}
-              type="number"
-              step="0.01"
-              id="amount"
-              placeholder="0.00"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+            <TimePicker
+              value={watchedValues.time}
+              onChange={(time) => setValue('time', time)}
+              label="Time"
+              required
             />
-            {errors.amount && (
-              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.amount.message}</p>
+            {errors.time && (
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.time.message}</p>
             )}
           </div>
+        </div>
+
+        {/* Amount */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label htmlFor="amount" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
+            Amount
+          </label>
+          <input
+            {...register('amount', {
+              required: 'Amount is required',
+              min: { value: 0.01, message: 'Amount must be greater than 0' }
+            })}
+            type="number"
+            step="0.01"
+            id="amount"
+            placeholder="0.00"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+          />
+          {errors.amount && (
+            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.amount.message}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -255,7 +290,11 @@ function DebtRecordForm() {
                           key={paymentMode.id}
                           type="button"
                           onClick={() => setValue('paymentModeId', paymentMode.id)}
-                          className="p-2 text-left border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                          className={`p-2 text-left border rounded-lg transition-colors ${
+                            watchedValues.paymentModeId === paymentMode.id
+                              ? 'border-indigo-500 bg-indigo-50'
+                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          }`}
                         >
                           <p className="text-xs sm:text-sm font-medium text-gray-900">{paymentMode.name}</p>
                           <p className="text-xs text-gray-500">{paymentMode.type}</p>
