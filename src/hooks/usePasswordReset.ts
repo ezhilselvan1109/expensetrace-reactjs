@@ -26,7 +26,7 @@ export const useForgotPassword = () => {
 
   return useMutation({
     mutationFn: async (data: ForgotPasswordData) => {
-      const response = await apiClient.post('/auth/forgot-password', data);
+      const response = await apiClient.post(`/auth/password/forgot?email=${encodeURIComponent(data.email)}`);
       return response.data;
     },
     onSuccess: (_, variables) => {
@@ -56,7 +56,9 @@ export const useVerifyOtp = () => {
 
   return useMutation({
     mutationFn: async (data: VerifyOtpData) => {
-      const response = await apiClient.post('/auth/verify-otp', data);
+      const response = await apiClient.post(
+        `/auth/password/verify-otp?otp=${encodeURIComponent(data.otp)}`
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -86,7 +88,9 @@ export const useResetPassword = () => {
 
   return useMutation({
     mutationFn: async (data: ResetPasswordData) => {
-      const response = await apiClient.post('/auth/reset-password', data);
+      const response = await apiClient.post(
+        `/auth/password/reset?password=${encodeURIComponent(data.newPassword)}`
+      );
       return response.data;
     },
     onSuccess: () => {

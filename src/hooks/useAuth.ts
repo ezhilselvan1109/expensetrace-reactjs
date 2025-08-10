@@ -52,7 +52,7 @@ export const useSignup = () => {
 
   return useMutation({
     mutationFn: async (data: SignupData) => {
-      const response = await apiClient.post('/users/add', data);
+      const response = await apiClient.post('/users/register', data);
       return response.data;
     },
     onSuccess: () => {
@@ -91,31 +91,6 @@ export const useLogout = () => {
         message: 'You have been successfully signed out.',
       });
       navigate('/signin');
-    },
-  });
-};
-
-export const useForgotPassword = () => {
-  const { addToast } = useToast();
-
-  return useMutation({
-    mutationFn: async (data: ForgotPasswordData) => {
-      const response = await apiClient.post('/auth/forgot-password', data);
-      return response.data;
-    },
-    onSuccess: () => {
-      addToast({
-        type: 'success',
-        title: 'Reset link sent',
-        message: 'Check your email for password reset instructions.',
-      });
-    },
-    onError: (error) => {
-      addToast({
-        type: 'error',
-        title: 'Failed to send reset link',
-        message: error instanceof Error ? error.message : 'Please try again.',
-      });
     },
   });
 };
