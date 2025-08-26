@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { useLogout } from '../../hooks/useAuth';
-import { BarChart3, TrendingUp, CreditCard, ArrowUpDown, Tag, Target, FolderOpen, Calendar, Users, Eye, Settings, Info, LogOut, X, ChevronDown, ChevronRight, CalendarDays, Sliders as Sliders3, ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
+import {
+  BarChart3, TrendingUp, CreditCard, ArrowUpDown, Tag, Target,
+  FolderOpen, Calendar, Users, Eye, Settings, Info, LogOut,
+  X, ChevronDown, ChevronRight, CalendarDays,
+  Sliders as Sliders3, ChevronLeft
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const mainMenuItems = [
   { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
@@ -38,10 +43,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleLogout = () => {
-    logout.mutate();
+    logout.mutate(undefined, {
+      onError: () => alert("Logout failed, please try again."),
+    });
   };
 
   const shouldShowCondensed = isCondensed && !isHovered && !isOpen;
+
+  // auto collapse submenu if sidebar is condensed
+  useEffect(() => {
+    if (shouldShowCondensed) {
+      setIsViewsExpanded(false);
+    }
+  }, [shouldShowCondensed]);
 
   return (
     <>
@@ -54,7 +68,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
 
       {/* Sidebar */}
-      <div 
+      <div
         className={`
           fixed lg:static inset-y-0 left-0 z-50 bg-white shadow-lg h-screen flex flex-col transform transition-all duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -76,26 +90,41 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <div className={`flex items-center space-x-2 transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0' : 'opacity-100'}`}>
-              <span className="text-2xl font-extrabold text-indigo-600">Expense
+
+            {/* Logo / Brand */}
+            <div
+              className={`flex items-center space-x-2 transition-all duration-300 overflow-hidden ${shouldShowCondensed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
+                }`}
+            >
+              <span className="text-2xl font-extrabold text-indigo-600">
+                Expense
                 <span className="text-xl font-bold text-gray-900">Trace</span>
               </span>
             </div>
-            
+
             {/* Collapse/Expand button - desktop only */}
             <button
               onClick={() => setIsCondensed(!isCondensed)}
+              aria-label={shouldShowCondensed ? "Expand sidebar" : "Collapse sidebar"}
               className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
             >
-              <ChevronLeft className={`h-5 w-5 transition-transform duration-300 ${shouldShowCondensed ? 'rotate-180' : ''}`} />
+              <ChevronLeft
+                className={`h-5 w-5 transition-transform duration-300 ${shouldShowCondensed ? "rotate-180" : ""
+                  }`}
+              />
             </button>
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-3 sm:p-4">
+
+        {/* Menu */}
+        <nav className="flex-1 overflow-y-auto scrollbar-hide p-3 sm:p-4">
           <div className="space-y-6">
+            {/* Main Menu */}
             <div>
-              <h3 className={`px-2 sm:px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 sm:mb-3 transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 h-0' : 'opacity-100'}`}>
+              <h3
+                className={`px-2 sm:px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 sm:mb-3 transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 h-0' : 'opacity-100'}`}
+              >
                 Main Menu
               </h3>
               <div className="space-y-1">
@@ -103,7 +132,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <div key={item.name} className="relative group">
                     <NavLink
                       to={item.path}
-                      onClick={() => onClose()}
+                      onClick={() => { if (isOpen) onClose(); }}
                       className={({ isActive }) =>
                         `flex items-center px-2 sm:px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
                           ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-700'
@@ -111,15 +140,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         } ${shouldShowCondensed ? 'justify-center' : ''}`
                       }
                     >
-                      <item.icon className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`} />
-                      <span className={`truncate transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                      <item.icon
+                        className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`}
+                      />
+                      <span
+                        className={`transition-all duration-300 overflow-hidden ${shouldShowCondensed ? 'max-w-0 opacity-0' : 'max-w-xs opacity-100'}`}
+                      >
                         {item.name}
                       </span>
                     </NavLink>
-                    
-                    {/* Tooltip for condensed mode */}
+
+                    {/* Tooltip only in condensed mode */}
                     {shouldShowCondensed && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      <div
+                        role="tooltip"
+                        className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+                      >
                         {item.name}
                       </div>
                     )}
@@ -130,11 +166,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <div className="relative group">
                   <button
                     onClick={() => setIsViewsExpanded(!isViewsExpanded)}
+                    aria-expanded={isViewsExpanded}
                     className={`w-full flex items-center py-2 text-sm font-medium rounded-md transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${shouldShowCondensed ? 'justify-center px-2' : 'justify-between px-2 sm:px-3'}`}
                   >
                     <div className="flex items-center">
-                      <Eye className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`} />
-                      <span className={`truncate transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                      <Eye
+                        className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`}
+                      />
+                      <span
+                        className={`transition-all duration-300 overflow-hidden ${shouldShowCondensed ? 'max-w-0 opacity-0' : 'max-w-xs opacity-100'}`}
+                      >
                         Views
                       </span>
                     </div>
@@ -151,7 +192,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                   {/* Tooltip for condensed mode */}
                   {shouldShowCondensed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    <div
+                      role="tooltip"
+                      className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+                    >
                       Views
                     </div>
                   )}
@@ -163,7 +207,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         <div key={item.name} className="relative group">
                           <NavLink
                             to={item.path}
-                            onClick={() => onClose()}
+                            onClick={() => { if (isOpen) onClose(); }}
                             className={({ isActive }) =>
                               `flex items-center px-2 sm:px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
                                 ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-700'
@@ -182,8 +226,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
             </div>
 
+            {/* Other Items */}
             <div>
-              <h3 className={`px-2 sm:px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 sm:mb-3 transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 h-0' : 'opacity-100'}`}>
+              <h3
+                className={`px-2 sm:px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 sm:mb-3 transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 h-0' : 'opacity-100'}`}
+              >
                 Other
               </h3>
               <div className="space-y-1">
@@ -191,7 +238,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <div key={item.name} className="relative group">
                     <NavLink
                       to={item.path}
-                      onClick={() => onClose()}
+                      onClick={() => { if (isOpen) onClose(); }}
                       className={({ isActive }) =>
                         `flex items-center px-2 sm:px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive
                           ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-700'
@@ -199,15 +246,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         } ${shouldShowCondensed ? 'justify-center' : ''}`
                       }
                     >
-                      <item.icon className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`} />
-                      <span className={`truncate transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                      <item.icon
+                        className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`}
+                      />
+                      <span
+                        className={`transition-all duration-300 overflow-hidden ${shouldShowCondensed ? 'max-w-0 opacity-0' : 'max-w-xs opacity-100'}`}
+                      >
                         {item.name}
                       </span>
                     </NavLink>
-                    
-                    {/* Tooltip for condensed mode */}
+
+                    {/* Tooltip */}
                     {shouldShowCondensed && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      <div
+                        role="tooltip"
+                        className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+                      >
                         {item.name}
                       </div>
                     )}
@@ -218,6 +272,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
         </nav>
 
+        {/* Footer - Logout */}
         <div className="p-3 sm:p-4 border-t border-gray-200">
           <div className="relative group">
             <button
@@ -225,15 +280,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               disabled={logout.isPending}
               className={`w-full flex items-center px-2 sm:px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors disabled:opacity-50 ${shouldShowCondensed ? 'justify-center' : ''}`}
             >
-              <LogOut className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`} />
-              <span className={`transition-opacity duration-300 ${shouldShowCondensed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+              <LogOut
+                className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${shouldShowCondensed ? '' : 'mr-2 sm:mr-3'}`}
+              />
+              <span
+                className={`transition-all duration-300 overflow-hidden ${shouldShowCondensed ? 'max-w-0 opacity-0' : 'max-w-xs opacity-100'}`}
+              >
                 {logout.isPending ? 'Signing out...' : 'Sign Out'}
               </span>
             </button>
-            
-            {/* Tooltip for condensed mode */}
+
+            {/* Tooltip */}
             {shouldShowCondensed && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+              <div
+                role="tooltip"
+                className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+              >
                 Sign Out
               </div>
             )}
