@@ -2,13 +2,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../contexts/ToastContext';
 import apiClient from '../lib/axios';
-import { User, LoginData, SignupData, ForgotPasswordData } from '../types/auth';
+import { User, LoginData, SignupData } from '../types/auth';
 
 export const useAuth = () => {
   return useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
-      const response = await apiClient.get('/users/me');
+      const response = await apiClient.get('/auth/me');
       return response.data;
     },
     retry: false,
