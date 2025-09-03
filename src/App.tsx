@@ -4,20 +4,14 @@ import { Suspense, lazy } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastProvider } from './contexts/ToastContext';
-import { PasswordResetProvider } from './contexts/PasswordResetContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
-import ProtectedPasswordResetRoute from './components/ProtectedPasswordResetRoute';
 import PrivateLayout from './components/Layout/PrivateLayout';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Lazy load components
 const LandingPage = lazy(() => import('./pages/LandingPage'));
-const SignIn = lazy(() => import('./pages/SignIn'));
-const SignUp = lazy(() => import('./pages/SignUp'));
-const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
-const VerifyOtp = lazy(() => import('./pages/VerifyOtp'));
-const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const Auth = lazy(() => import('./pages/Auth'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analysis = lazy(() => import('./pages/Analysis'));
 const About = lazy(() => import('./pages/About'));
@@ -54,7 +48,6 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PasswordResetProvider>
         <ToastProvider>
           <Suspense fallback={<LoadingSpinner />}>
             <Router>
@@ -65,31 +58,9 @@ function App() {
                     <LandingPage />
                   </PublicRoute>
                 } />
-                <Route path="/signin" element={
+                <Route path="/log-in-or-create-account" element={
                   <PublicRoute>
-                    <SignIn />
-                  </PublicRoute>
-                } />
-                <Route path="/signup" element={
-                  <PublicRoute>
-                    <SignUp />
-                  </PublicRoute>
-                } />
-                <Route path="/forgotpassword" element={
-                  <PublicRoute>
-                    <ForgotPassword />
-                  </PublicRoute>
-                } />
-                <Route path="/verify-otp" element={
-                  <PublicRoute>
-                    <VerifyOtp />
-                  </PublicRoute>
-                } />
-                <Route path="/reset-password" element={
-                  <PublicRoute>
-                    <ProtectedPasswordResetRoute>
-                      <ResetPassword />
-                    </ProtectedPasswordResetRoute>
+                    <Auth/>
                   </PublicRoute>
                 } />
 
@@ -159,7 +130,6 @@ function App() {
             />
           </Suspense>
         </ToastProvider>
-      </PasswordResetProvider>
     </QueryClientProvider>
   );
 }
