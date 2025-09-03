@@ -31,7 +31,7 @@ function Auth() {
       <div className="mt-10 w-full flex justify-center">
         <button
           onClick={handleGoogleLogin}
-          className="w-full max-w-sm flex justify-center items-center py-3 sm:py-4 px-6 border rounded-full text-base font-medium text-gray-700 bg-white hover:bg-gray-100 shadow-sm transition"
+          className="w-full max-w-sm flex justify-center items-center py-2 sm:py-3 px-2 border rounded-full text-base font-medium text-gray-700 bg-white hover:bg-gray-100 shadow-sm transition"
         >
           <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24">
             <path

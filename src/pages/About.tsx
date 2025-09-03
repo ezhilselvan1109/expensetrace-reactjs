@@ -1,185 +1,173 @@
-import { ExternalLink,Linkedin, Mail, Heart, Users, Calendar, Star } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Users, Target, ShieldCheck, Github, Linkedin } from "lucide-react"; // 🔹 Added icons
 
-function About() {
+export default function AboutPage() {
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      {/* Hero Section */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">About ExpenseTracer</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Your personal expense tracker to master your money. Built with love to help you take control of your finances.
-        </p>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="w-full bg-white shadow-sm">
+        <div className="flex w-full px-4 sm:px-6 py-4 items-center justify-between max-w-7xl mx-auto">
+          {/* Logo */}
+          <Link to="/" className="flex-shrink-0">
+            <img
+              src="../logo.png"
+              alt="ExpenseTrace Logo"
+              className="h-8 sm:h-10 lg:h-12 w-auto"
+            />
+          </Link>
 
-      {/* Mission Section */}
-      <div className="bg-white rounded-lg shadow p-6 sm:p-8 mb-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-          <p className="text-lg text-indigo-600 font-medium">
-            Empowering financial freedom through simple expense tracking
-          </p>
+          {/* Back to Home */}
+          <Link
+            to="/log-in-or-create-account"
+            className="px-4 sm:px-5 py-2 border border-gray-300 rounded-full text-sm sm:text-base font-medium text-gray-700 hover:bg-gray-100 transition"
+          >
+            Sign In
+          </Link>
         </div>
-        
-        <div className="prose prose-lg max-w-none text-gray-600">
-          <p className="mb-4">
-            ExpenseTracer was created with the belief that everyone deserves to have a clear picture of their financial health. 
-            We make it easy to track, analyze, and optimize your spending habits so you can achieve your financial goals.
-          </p>
-          <p>
-            Whether you're saving for a vacation, paying off debt, or just want to understand where your money goes, 
-            ExpenseTracer provides the tools and insights you need to make informed financial decisions.
-          </p>
-        </div>
-      </div>
+      </header>
 
-      {/* Key Features Section */}
-      <div className="bg-white rounded-lg shadow p-6 sm:p-8 mb-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Key Features</h2>
-          <p className="text-lg text-gray-600">
-            Everything you need for complete expense management
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {[
-            { title: 'Expense Tracking', description: 'Log and categorize your daily expenses with ease' },
-            { title: 'Budget Management', description: 'Set and monitor budgets to stay on track' },
-            { title: 'Visual Analytics', description: 'Beautiful charts and insights into your spending' },
-            { title: 'Recurring Transactions', description: 'Automate tracking of regular expenses' },
-            { title: 'Category Organization', description: 'Organize expenses with custom categories' },
-            { title: 'Financial Insights', description: 'Get actionable insights to improve your finances' },
-          ].map((feature, index) => (
-            <div key={index} className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center text-gray-600">
-          <p>
-            From simple expense logging to advanced analytics and budgeting tools, 
-            ExpenseTracer grows with your financial management needs.
-          </p>
-        </div>
-      </div>
-
-      {/* Version Information */}
-      <div className="bg-white rounded-lg shadow p-6 sm:p-8 mb-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Version Information</h2>
-          <p className="text-lg text-gray-600">
-            Current application details and updates
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center">
-            <div className="bg-indigo-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Star className="h-8 w-8 text-indigo-600" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">v2.1.0</h3>
-            <p className="text-gray-600">Current Version</p>
+      {/* Main */}
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
+          <div className="max-w-3xl mx-auto px-6 sm:px-8">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-snug">
+              About <span className="text-yellow-300">ExpenseTrace</span>
+            </h1>
+            <p className="text-base sm:text-lg lg:text-xl leading-relaxed">
+              We’re on a mission to make personal finance simple, smart, and
+              stress-free for everyone.
+            </p>
           </div>
-          
-          <div className="text-center">
-            <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Calendar className="h-8 w-8 text-green-600" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">Jan 2024</h3>
-            <p className="text-gray-600">Last Updated</p>
-          </div>
-          
-          <div className="text-center">
-            <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Users className="h-8 w-8 text-purple-600" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">10K+</h3>
-            <p className="text-gray-600">Happy Users</p>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Team Section */}
-      <div className="bg-white rounded-lg shadow p-6 sm:p-8 mb-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet the Team</h2>
-          <p className="text-lg text-gray-600">
-            The people behind ExpenseTracer
-          </p>
-        </div>
+        {/* Our Values */}
+        <section className="py-14 sm:py-20 lg:py-24 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-6 sm:px-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-12">
+              Our Core Values
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8 sm:gap-12">
+              <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center text-center">
+                <Users className="w-12 h-12 text-blue-600 mb-5" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-3">
+                  Simplicity
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  We believe financial tools should be intuitive, clear, and
+                  easy for everyone to use.
+                </p>
+              </div>
 
-        <div className="flex justify-center">
-          <div className="bg-gray-50 rounded-lg p-6 max-w-sm text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">EP</span>
+              <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center text-center">
+                <Target className="w-12 h-12 text-green-600 mb-5" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-3">
+                  Empowerment
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  We provide insights that help users take control of their
+                  money and reach their goals faster.
+                </p>
+              </div>
+
+              <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center text-center">
+                <ShieldCheck className="w-12 h-12 text-purple-600 mb-5" />
+                <h3 className="text-lg sm:text-xl font-semibold mb-3">
+                  Trust
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Security and privacy are at the heart of everything we build.
+                  Your data is always safe with us.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Ezhil selvan P</h3>
-            <p className="text-gray-600 mb-4">Full-stack Developer</p>
-            <a
-              href="https://www.linkedin.com/in/ezhil-selvan-p-79a80520a/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-indigo-600 hover:text-indigo-700 transition-colors"
+          </div>
+        </section>
+
+        {/* About Developer */}
+        <section className="py-14 sm:py-20 lg:py-24 bg-white">
+          <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
+              About the Developer
+            </h2>
+            <div className="p-6 sm:p-8 bg-gray-50 rounded-2xl shadow-sm">
+              {/* Name + Role */}
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
+                Ezhil Selvan P
+              </h3>
+              <p className="text-gray-600 mb-4">Full-Stack Developer</p>
+
+              {/* App Intro */}
+              <p className="text-gray-700 text-sm sm:text-base mb-4">
+                🚀 Building <strong>ExpenseTrace</strong> – a personal finance &
+                budget tracking app that makes money management simple and
+                stress-free.
+              </p>
+
+              {/* Tech Stack */}
+              <p className="text-gray-700 text-sm sm:text-base mb-6">
+                Spring · React js · PostgreSQL · Docker
+              </p>
+
+              {/* Social Icons */}
+              <div className="flex justify-center gap-6 text-2xl">
+                <a
+                  href="https://github.com/ezhilselvan1109"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-900 hover:text-gray-700 transition"
+                >
+                  <Github />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/ezhilselvan1109"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 transition"
+                >
+                  <Linkedin />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call-to-Action */}
+        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
+          <div className="max-w-3xl mx-auto px-6 sm:px-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
+              Join Us on the Journey
+            </h2>
+            <p className="text-base sm:text-lg lg:text-xl mb-10 leading-relaxed">
+              ExpenseTrace is more than just an app — it’s a step toward a
+              brighter financial future.
+            </p>
+            <Link
+              to="/log-in-or-create-account"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-600 rounded-full text-base sm:text-lg font-semibold hover:bg-gray-100 transition"
             >
-              <Linkedin className="h-5 w-5 mr-2" />
-              LinkedIn Profile
-              <ExternalLink className="h-4 w-4 ml-1" />
-            </a>
+              Get Started Free
+            </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Contact Section */}
-      <div className="bg-white rounded-lg shadow p-6 sm:p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact</h2>
-          <p className="text-lg text-gray-600">
-            Support & Feedback
-          </p>
-          <p className="text-gray-600 mt-2">
-            We love hearing from our users
-          </p>
-        </div>
-
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-gray-600 mb-8">
-            Have questions, suggestions, or just want to say hello? We're here to help and always looking to improve ExpenseTracer.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a
-              href="mailto:support@expensetrace.com"
-              className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium"
-            >
-              <Mail className="h-5 w-5 mr-2" />
-              Contact Support
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
-            >
-              <ExternalLink className="h-5 w-5 mr-2" />
-              Documentation
-            </a>
-          </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <div className="text-center mt-12 pt-8 border-t border-gray-200">
-        <div className="flex items-center justify-center text-gray-600 mb-4">
-          <span>Made with</span>
-          <Heart className="h-5 w-5 text-red-500 mx-2" />
-          <span>for better financial management</span>
+      <footer className="bg-gray-900 text-gray-300">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-5 sm:gap-6">
+          <div className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
+            © {new Date().getFullYear()} ExpenseTrace. All rights reserved.
+          </div>
+          <div className="flex gap-6 text-sm sm:text-base">
+            <Link to="/privacy" className="hover:text-white">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="hover:text-white">
+              Terms & Conditions
+            </Link>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">
-          © 2025 ExpenseTracer. All rights reserved.
-        </p>
-      </div>
+      </footer>
     </div>
   );
 }
-
-export default About;

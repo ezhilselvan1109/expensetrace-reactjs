@@ -8,6 +8,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import PrivateLayout from './components/Layout/PrivateLayout';
 import LoadingSpinner from './components/LoadingSpinner';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsAndConditionsPage from './pages/TermsAndConditionsPage';
 
 // Lazy load components
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -48,88 +50,88 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Router>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={
-                  <PublicRoute>
-                    <LandingPage />
-                  </PublicRoute>
-                } />
-                <Route path="/log-in-or-create-account" element={
-                  <PublicRoute>
-                    <Auth/>
-                  </PublicRoute>
-                } />
+      <ToastProvider>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Router>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={
+                <PublicRoute>
+                  <LandingPage />
+                </PublicRoute>
+              } />
+              <Route path="/log-in-or-create-account" element={
+                <PublicRoute>
+                  <Auth />
+                </PublicRoute>
+              } />
 
-                {/* Protected Routes */}
-                <Route path="/" element={
-                  <ProtectedRoute>
-                    <PrivateLayout />
-                  </ProtectedRoute>
-                }>
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="analysis" element={<Analysis />} />
-                  <Route path="accounts" element={<Accounts />} />
-                  <Route path="accounts/add" element={<AccountForm />} />
-                  <Route path="accounts/edit/:id" element={<AccountForm />} />
-                  <Route path="transactions" element={<Transactions />} />
-                  <Route path="transactions/add" element={<TransactionForm />} />
-                  <Route path="transactions/edit/:id" element={<TransactionForm />} />
-                  <Route path="tags" element={<Tags />} />
-                  <Route path="budgets" element={<Budgets />} />
-                  <Route path="budgets/add" element={<BudgetForm />} />
-                  <Route path="budgets/edit/:id" element={<BudgetForm />} />
-                  <Route path="budgets/analysis/:budgetId" element={<BudgetAnalysis />} />
-                  <Route path="categories" element={<Categories />} />
-                  <Route path="categories/add" element={<CategoryForm />} />
-                  <Route path="categories/edit/:id" element={<CategoryForm />} />
-                  <Route path="scheduled" element={<ScheduledTransactions />} />
-                  <Route path="scheduled/add" element={<ScheduledTransactionForm />} />
-                  <Route path="scheduled/edit/:id" element={<ScheduledTransactionForm />} />
-                  <Route path="debts" element={<Debts />} />
-                  <Route path="debts/add" element={<DebtForm />} />
-                  <Route path="debts/edit/:id" element={<DebtForm />} />
-                  <Route path="debts/:debtId/records" element={<DebtRecords />} />
-                  <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
-                  <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
-                  <Route path="views/day" element={<DayView />} />
-                  <Route path="views/calendar" element={<CalendarView />} />
-                  <Route path="views/custom" element={
-                    <PlaceholderPage
-                      title="Custom Views"
-                      description="Create and manage custom views of your financial data"
-                    />
-                  } />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="about" element={
-                    <About />
-                  } />
-                </Route>
+              {/* Protected Routes */}
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <PrivateLayout />
+                </ProtectedRoute>
+              }>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="analysis" element={<Analysis />} />
+                <Route path="accounts" element={<Accounts />} />
+                <Route path="accounts/add" element={<AccountForm />} />
+                <Route path="accounts/edit/:id" element={<AccountForm />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="transactions/add" element={<TransactionForm />} />
+                <Route path="transactions/edit/:id" element={<TransactionForm />} />
+                <Route path="tags" element={<Tags />} />
+                <Route path="budgets" element={<Budgets />} />
+                <Route path="budgets/add" element={<BudgetForm />} />
+                <Route path="budgets/edit/:id" element={<BudgetForm />} />
+                <Route path="budgets/analysis/:budgetId" element={<BudgetAnalysis />} />
+                <Route path="categories" element={<Categories />} />
+                <Route path="categories/add" element={<CategoryForm />} />
+                <Route path="categories/edit/:id" element={<CategoryForm />} />
+                <Route path="scheduled" element={<ScheduledTransactions />} />
+                <Route path="scheduled/add" element={<ScheduledTransactionForm />} />
+                <Route path="scheduled/edit/:id" element={<ScheduledTransactionForm />} />
+                <Route path="debts" element={<Debts />} />
+                <Route path="debts/add" element={<DebtForm />} />
+                <Route path="debts/edit/:id" element={<DebtForm />} />
+                <Route path="debts/:debtId/records" element={<DebtRecords />} />
+                <Route path="debts/:debtId/records/add" element={<DebtRecordForm />} />
+                <Route path="debts/:debtId/records/edit/:recordId" element={<DebtRecordForm />} />
+                <Route path="views/day" element={<DayView />} />
+                <Route path="views/calendar" element={<CalendarView />} />
+                <Route path="views/custom" element={
+                  <PlaceholderPage
+                    title="Custom Views"
+                    description="Create and manage custom views of your financial data"
+                  />
+                } />
+                <Route path="settings" element={<Settings />} />
 
-                {/* Redirect to dashboard for authenticated users */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </Router>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              className="!top-4 !right-4"
-              toastClassName="!rounded-lg !shadow-lg"
-              bodyClassName="!p-4"
-            />
-          </Suspense>
-        </ToastProvider>
+              </Route>
+              <Route path="about" element={<About />} />
+              <Route path="privacy" element={<PrivacyPolicyPage />} />
+              <Route path="terms" element={<TermsAndConditionsPage />} />
+              {/* Redirect to dashboard for authenticated users */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            className="!top-4 !right-4"
+            toastClassName="!rounded-lg !shadow-lg"
+            bodyClassName="!p-4"
+          />
+        </Suspense>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

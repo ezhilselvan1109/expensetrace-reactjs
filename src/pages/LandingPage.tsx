@@ -100,7 +100,7 @@ export default function LandingPage() {
         </section>
 
         {/* Call-to-Action Section */}
-        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-blue-600 to-green-600 text-white text-center">
+        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
           <div className="max-w-3xl mx-auto px-6 sm:px-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-5 sm:mb-8">
               Start Managing Your Finances Today
@@ -126,6 +126,9 @@ export default function LandingPage() {
             © {new Date().getFullYear()} ExpenseTrace. All rights reserved.
           </div>
           <div className="flex gap-6 text-sm sm:text-base">
+            <Link to="/about" className="hover:text-white">
+              About
+            </Link>
             <Link to="/privacy" className="hover:text-white">
               Privacy Policy
             </Link>
