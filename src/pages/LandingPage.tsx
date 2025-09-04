@@ -34,7 +34,7 @@ export default function LandingPage() {
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-5 sm:mb-8 leading-snug">
               Take Control of Your{" "}
               <span className="text-blue-600">Expenses</span> &{" "}
-              <span className="text-green-600">Savings</span>
+              <span className="text-blue-600">Savings</span>
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-10 sm:mb-12 leading-relaxed">
               Track your income and expenses effortlessly. Get insights that

@@ -47,33 +47,35 @@ function Categories() {
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Categories</h1>
-          <p className="text-sm sm:text-base text-gray-600">Organize your expenses and income</p>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Categories</h1>
+          <p className="text-sm text-gray-500">Organize your expenses and income</p>
         </div>
         <Link
           to="/categories/add"
-          className="inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors self-start sm:self-center text-xs sm:text-sm"
+          className="mt-3 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl shadow hover:bg-indigo-700 transition"
         >
-          <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+          <Plus className="w-4 h-4" />
           Add Category
         </Link>
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-gray-100 rounded-lg p-1 mb-4 sm:mb-6">
+      <div className="flex gap-2 bg-gray-100 rounded-full p-1 w-fit mb-6">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
-              className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
-                  ? "bg-white shadow text-black"
-                  : "text-gray-500 hover:text-black"
-                }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                active
+                  ? 'bg-white shadow text-indigo-600'
+                  : 'text-gray-500 hover:text-indigo-600'
+              }`}
             >
               {tab}
             </button>
@@ -81,111 +83,83 @@ function Categories() {
         })}
       </div>
 
-      {/* Default Category Section */}
+      {/* Default Category */}
       {defaultCategory && (
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-              Default {tabs[activeTab]} Category
-            </h2>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="text-indigo-600 hover:text-indigo-700 font-medium text-xs sm:text-sm flex items-center"
-            >
-              <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-              Edit
-            </button>
-          </div>
-          <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="bg-white rounded-xl shadow p-4 mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <CategoryIcon icon={defaultCategory.icon} color={defaultCategory.color} />
             <div>
-              <p className="text-sm sm:text-base font-medium text-gray-900">{defaultCategory.name}</p>
-              <p className="text-xs sm:text-sm text-gray-500">
-                This category is used by default for new {tabs[activeTab].toLowerCase()} entries
-              </p>
+              <h2 className="font-medium text-gray-900">{defaultCategory.name}</h2>
+              <p className="text-xs text-gray-500">Default {tabs[activeTab]}</p>
             </div>
           </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+          >
+            <Edit className="w-4 h-4" />
+            Edit
+          </button>
         </div>
       )}
 
-      {/* Categories List */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 sm:p-6 border-b border-gray-200">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-            All {tabs[activeTab]} Categories ({categories.length})
-          </h2>
+      {/* Categories */}
+      {categories.length === 0 ? (
+        <div className="bg-white rounded-xl shadow p-10 text-center">
+          <CategoryIcon icon="utensils" color="gray" size="lg" className="mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No categories yet</h3>
+          <p className="text-sm text-gray-500 mb-6">
+            Create your first category to start organizing your {tabs[activeTab].toLowerCase()}s
+          </p>
+          <Link
+            to="/categories/add"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
+          >
+            <Plus className="w-4 h-4" />
+            Add Category
+          </Link>
         </div>
-
-        {categories.length === 0 ? (
-          <div className="p-6 sm:p-8 text-center">
-            <div className="text-gray-400 mb-4">
-              <CategoryIcon icon="utensils" color="gray" size="md" className="mx-auto mb-3 sm:mb-4" />
-            </div>
-            <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-              No {tabs[activeTab].toLowerCase()} categories yet
-            </h3>
-            <p className="text-sm sm:text-base text-gray-500 mb-4">
-              Create your first category to start organizing your {tabs[activeTab].toLowerCase()}s
-            </p>
-            <Link
-              to="/categories/add"
-              className="inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-xs sm:text-sm"
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((category) => (
+            <div
+              key={category.id}
+              className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
             >
-              <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-              Add Category
-            </Link>
-          </div>
-        ) : (
-          <div className="divide-y divide-gray-200">
-            {categories.map((category) => (
-              <div key={category.id} className="p-3 sm:p-4 lg:p-6 flex items-center justify-between">
-                <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
-                  <CategoryIcon icon={category.icon} color={category.color} />
-                  <div>
-                    <h3 className="text-sm sm:text-base font-medium text-gray-900 truncate">{category.name}</h3>
-                    <div className="flex items-center space-x-1 sm:space-x-2 mt-1">
-                      <span className="text-xs sm:text-sm text-gray-500">
-                        {category.type === 1 ? 'Expense' : 'Income'}
-                      </span>
-                      <span className="text-gray-300">•</span>
-                      <span className="text-xs sm:text-sm text-gray-500 capitalize">{category.color}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-1 sm:space-x-2">
-                  {category.deletable ? (
-                    <>
-                      <Link
-                        to={`/categories/edit/${category.id}`}
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-md hover:bg-gray-50"
-                      >
-                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </Link>
-                      <button
-                        onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
-                        disabled={deleteCategory.isPending}
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
-                      >
-                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </button>
-                    </>
-                  ) : (
-                    <div className="flex items-center space-x-1 sm:space-x-2">
-                      <span className="p-1.5 sm:p-2 text-gray-300 cursor-not-allowed rounded-md">
-                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </span>
-                      <span className="p-1.5 sm:p-2 text-gray-300 cursor-not-allowed rounded-md">
-                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </span>
-                    </div>
-                  )}
+              <div className="flex items-center gap-3">
+                <CategoryIcon icon={category.icon} color={category.color} />
+                <div>
+                  <h3 className="font-medium text-gray-900">{category.name}</h3>
+                  <p className="text-xs text-gray-500">
+                    {category.type === 1 ? 'Expense' : 'Income'} • {category.color}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <div className="flex items-center gap-2">
+                {category.deletable ? (
+                  <>
+                    <Link
+                      to={`/categories/edit/${category.id}`}
+                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Link>
+                    <button
+                      onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
+                      disabled={deleteCategory.isPending}
+                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 disabled:opacity-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-300 text-sm">Locked</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Default Category Modal */}
       <DefaultCategoryModal
