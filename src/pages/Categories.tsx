@@ -73,8 +73,8 @@ function Categories() {
               onClick={() => setActiveTab(index)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                 active
-                  ? 'bg-white shadow text-indigo-600'
-                  : 'text-gray-500 hover:text-indigo-600'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-900'
               }`}
             >
               {tab}
@@ -95,17 +95,17 @@ function Categories() {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+            className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600 flex items-center gap-1"
+            //className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
           >
             <Edit className="w-4 h-4" />
-            Edit
           </button>
         </div>
       )}
 
       {/* Categories */}
       {categories.length === 0 ? (
-        <div className="bg-white rounded-xl shadow p-10 text-center">
+        <div className="p-10 text-center">
           <CategoryIcon icon="utensils" color="gray" size="lg" className="mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No categories yet</h3>
           <p className="text-sm text-gray-500 mb-6">
