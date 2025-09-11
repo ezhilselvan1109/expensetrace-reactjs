@@ -1,15 +1,8 @@
 export interface Transaction {
   id: string;
   type: 1 | 2 | 3; // 1 = Expense, 2 = Income, 3 = Transfer
-  date: number;
-  month: number;
-  year: number;
-  time: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  txnDate: string;
+  txnTime: string;
   amount: number;
   categoryId?: string;
   accountId: string;
@@ -19,7 +12,10 @@ export interface Transaction {
   fromPaymentModeId?: string; // For transfers
   toPaymentModeId?: string; // For transfers
   description: string;
-  tags?: string[];
+  tags?: {
+    id: string;
+    name: string;
+  }[];
   category?: {
     id: string;
     name: string;
@@ -29,38 +25,44 @@ export interface Transaction {
   account?: {
     id: string;
     name: string;
-    type: string;
+    type: number;
+    default: boolean;
   };
   toAccount?: {
     id: string;
     name: string;
-    type: string;
+    type: number;
+    default: boolean;
   };
   fromAccount?: {
     id: string;
     name: string;
-    type: string;
+    type: number;
+    default: boolean;
   };
   paymentMode?: {
     id: string;
     name: string;
     type: number;
-  };
+  } | null;
+  fromPaymentMode?: {
+    id: string;
+    name: string;
+    type: number;
+  } | null;
+  toPaymentMode?: {
+    id: string;
+    name: string;
+    type: number;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateTransactionData {
   type: 1 | 2 | 3;
-  date: number;
-  month: number;
-  year: number;
-  time: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  txnDate: string;
+  txnTime: string;
   amount: number;
   categoryId?: string;
   accountId: string;
@@ -75,13 +77,8 @@ export interface CreateTransactionData {
 
 export interface UpdateTransactionData {
   type?: 1 | 2 | 3;
-  date?: string;
-  time?: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  txnDate?: string;
+  txnTime?: string;
   amount?: number;
   categoryId?: string;
   accountId?: string;
