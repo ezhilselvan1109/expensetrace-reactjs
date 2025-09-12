@@ -53,12 +53,12 @@ export interface UpdateYearlyBudgetData {
 
 export interface BudgetSummary {
   monthly: {
-    active: Budget[];
+    present: Budget[];
     upcoming: Budget[];
     past: Budget[];
   };
   yearly: {
-    active: Budget[];
+    present: Budget[];
     upcoming: Budget[];
     past: Budget[];
   };

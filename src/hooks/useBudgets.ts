@@ -17,8 +17,8 @@ export const useBudgetSummary = () => {
     queryKey: ['budget-summary'],
     queryFn: async () => {
       const [monthlyResponse, yearlyResponse] = await Promise.all([
-        apiClient.get('/budget/summary/month'),
-        apiClient.get('/budget/summary/year')
+        apiClient.get('/budgets/monthly'),
+        apiClient.get('/budgets/yearly')
       ]);
       return {
         monthly: monthlyResponse.data || { upcoming: [], past: [] },
@@ -34,7 +34,7 @@ export const useBudgetAnalysis = (budgetId: string, type: 'monthly' | 'yearly') 
   return useQuery<BudgetAnalysis>({
     queryKey: ['budget-analysis', budgetId, type],
     queryFn: async () => {
-      const endpoint = type === 'monthly' ? `/budget/monthly/${budgetId}` : `/budget/yearly/${budgetId}`;
+      const endpoint = type === 'monthly' ? `/budgets/${budgetId}` : `/budgets/${budgetId}`;
       const response = await apiClient.get(endpoint);
       return response.data;
     },
@@ -50,7 +50,7 @@ export const useCreateMonthlyBudget = () => {
 
   return useMutation({
     mutationFn: async (data: CreateMonthlyBudgetData) => {
-      const response = await apiClient.post('/budget/month', data);
+      const response = await apiClient.post('/budgets/monthly', data);
       return response.data;
     },
     onSuccess: () => {
@@ -79,7 +79,7 @@ export const useCreateYearlyBudget = () => {
 
   return useMutation({
     mutationFn: async (data: CreateYearlyBudgetData) => {
-      const response = await apiClient.post('/budget/year', data);
+      const response = await apiClient.post('/budgets/yearly', data);
       return response.data;
     },
     onSuccess: () => {
@@ -109,7 +109,7 @@ export const useUpdateMonthlyBudget = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateMonthlyBudgetData }) => {
-      const response = await apiClient.put(`/budget/month/${id}`, data);
+      const response = await apiClient.put(`/budgets/monthly/${id}`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -139,7 +139,7 @@ export const useUpdateYearlyBudget = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateYearlyBudgetData }) => {
-      const response = await apiClient.put(`/budget/year/${id}`, data);
+      const response = await apiClient.put(`/budgets/yearly/${id}`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -169,7 +169,7 @@ export const useDeleteBudget = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await apiClient.delete(`/budget/${id}`);
+      await apiClient.delete(`/budgets/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
