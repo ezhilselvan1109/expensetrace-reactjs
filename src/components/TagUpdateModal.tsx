@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Tag as TagIcon } from 'lucide-react';
 import { Tag } from '../types/tag';
 
 interface TagWithTransactions {
@@ -41,21 +41,27 @@ export default function TagUpdateModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Update Tag</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-sm overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900">Update Tag</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 rounded-full p-1 hover:bg-gray-100 transition"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="mb-6">
-            <label htmlFor="tagName" className="block text-sm font-medium text-gray-700 mb-2">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {/* Input */}
+          <div>
+            <label
+              htmlFor="tagName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Tag Name
             </label>
             <input
@@ -64,34 +70,37 @@ export default function TagUpdateModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter tag name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
               autoFocus
             />
           </div>
 
-          <div className="mb-4">
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm text-gray-600">
-                This tag is used in <span className="font-medium">{tag.transactions}</span> transaction(s).
-              </p>
-            </div>
+          {/* Info Box */}
+          <div className="flex items-center gap-2 bg-indigo-50 rounded-lg p-2.5">
+            <TagIcon className="w-4 h-4 text-indigo-600" />
+            <p className="text-xs text-gray-700">
+              Used in{" "}
+              <span className="font-medium">{tag.transactions}</span>{" "}
+              transaction{tag.transactions !== 1 ? "s" : ""}.
+            </p>
           </div>
 
-          <div className="flex space-x-3">
+          {/* Actions */}
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={onClose}
               disabled={isPending}
-              className="flex-1 px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!name.trim() || name.trim() === tag.tag.name || isPending}
-              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isPending ? 'Updating...' : 'Update Tag'}
+              {isPending ? "Updating..." : "Update"}
             </button>
           </div>
         </form>
