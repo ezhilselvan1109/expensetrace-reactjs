@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../contexts/ToastContext';
+import apiClient from '../lib/axios';
 import { 
   ScheduledTransaction, 
   CreateScheduledTransactionData, 
@@ -8,137 +9,43 @@ import {
   PaginatedScheduledTransactions
 } from '../types/scheduledTransaction';
 
-// Temporary mock data for development
-const mockScheduledTransactions: ScheduledTransaction[] = [
-  {
-    id: '1',
-    type: 1,
-    amount: 50.00,
-    categoryId: 'cat1',
-    accountId: 'acc1',
-    description: 'Netflix Subscription',
-    tags: ['entertainment', 'subscription'],
-    frequency: 'monthly',
-    earlyReminder: 1,
-    nextExecutionDate: '2025-02-01',
-    isActive: true,
-    category: {
-      id: 'cat1',
-      name: 'Entertainment',
-      icon: 'tv',
-      color: 'purple'
-    },
-    account: {
-      id: 'acc1',
-      name: 'Main Bank Account',
-      type: 1
-    },
-    createdAt: '2025-01-01T00:00:00Z',
-    updatedAt: '2025-01-01T00:00:00Z'
-  },
-  {
-    id: '2',
-    type: 2,
-    amount: 3000.00,
-    categoryId: 'cat2',
-    accountId: 'acc1',
-    description: 'Monthly Salary',
-    tags: ['salary', 'income'],
-    frequency: 'monthly',
-    earlyReminder: 0,
-    nextExecutionDate: '2025-01-30',
-    isActive: false,
-    category: {
-      id: 'cat2',
-      name: 'Salary',
-      icon: 'briefcase',
-      color: 'green'
-    },
-    account: {
-      id: 'acc1',
-      name: 'Main Bank Account',
-      type: 1
-    },
-    createdAt: '2025-01-01T00:00:00Z',
-    updatedAt: '2025-01-15T00:00:00Z'
-  }
-];
-
-// Get upcoming scheduled transactions
-export const useUpcomingScheduledTransactions = (page = 0, size = 10) => {
+// Get upcoming scheduled transactions with pagination
+export const useUpcomingScheduledTransactions = (page = 0, size = 10, enabled = true) => {
   return useQuery<PaginatedScheduledTransactions>({
     queryKey: ['scheduled-transactions', 'upcoming', page, size],
     queryFn: async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const upcoming = mockScheduledTransactions.filter(t => t.isActive);
-      const startIndex = page * size;
-      const endIndex = startIndex + size;
-      const paginatedContent = upcoming.slice(startIndex, endIndex);
-      
-      return {
-        content: paginatedContent,
-        totalElements: upcoming.length,
-        totalPages: Math.ceil(upcoming.length / size),
+      const response = await apiClient.get(`/schedules/upcoming?page=${page}&size=${size}`);
+      return response.data || {
+        content: [],
+        totalElements: 0,
+        totalPages: 0,
         size: size,
         number: page,
-        first: page === 0,
-        last: endIndex >= upcoming.length
+        first: true,
+        last: true
       };
     },
+    enabled,
   });
 };
 
-// Get completed scheduled transactions
-export const useCompletedScheduledTransactions = (page = 0, size = 10) => {
-  console.log('useCompletedScheduledTransactions', page, size);
+// Get completed scheduled transactions with pagination
+export const useCompletedScheduledTransactions = (page = 0, size = 10, enabled = true) => {
   return useQuery<PaginatedScheduledTransactions>({
     queryKey: ['scheduled-transactions', 'completed', page, size],
     queryFn: async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const completed = mockScheduledTransactions.filter(t => !t.isActive);
-      const startIndex = page * size;
-      const endIndex = startIndex + size;
-      const paginatedContent = completed.slice(startIndex, endIndex);
-      
-      return {
-        content: paginatedContent,
-        totalElements: completed.length,
-        totalPages: Math.ceil(completed.length / size),
+      const response = await apiClient.get(`/schedules/completed?page=${page}&size=${size}`);
+      return response.data || {
+        content: [],
+        totalElements: 0,
+        totalPages: 0,
         size: size,
         number: page,
-        first: page === 0,
-        last: endIndex >= completed.length
+        first: true,
+        last: true
       };
     },
-  });
-};
-
-// Get all scheduled transactions
-export const useScheduledTransactions = (page = 0, size = 10) => {
-  return useQuery<PaginatedScheduledTransactions>({
-    queryKey: ['scheduled-transactions', 'all', page, size],
-    queryFn: async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const startIndex = page * size;
-      const endIndex = startIndex + size;
-      const paginatedContent = mockScheduledTransactions.slice(startIndex, endIndex);
-      
-      return {
-        content: paginatedContent,
-        totalElements: mockScheduledTransactions.length,
-        totalPages: Math.ceil(mockScheduledTransactions.length / size),
-        size: size,
-        number: page,
-        first: page === 0,
-        last: endIndex >= mockScheduledTransactions.length
-      };
-    },
+    enabled,
   });
 };
 
@@ -147,14 +54,8 @@ export const useScheduledTransaction = (id: string) => {
   return useQuery<ScheduledTransaction>({
     queryKey: ['scheduled-transaction', id],
     queryFn: async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const transaction = mockScheduledTransactions.find(t => t.id === id);
-      if (!transaction) {
-        throw new Error('Scheduled transaction not found');
-      }
-      return transaction;
+      const response = await apiClient.get(`/schedules/${id}`);
+      return response.data;
     },
     enabled: !!id,
   });
@@ -167,20 +68,18 @@ export const useCreateScheduledTransaction = () => {
   const { addToast } = useToast();
 
   return useMutation({
-    mutationFn: async (data: CreateScheduledTransactionData) => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    mutationFn: async (data: CreateScheduledTransactionData & { transactionType: 'expense' | 'income' | 'transfer' }) => {
+      const { transactionType, ...scheduleData } = data;
       
-      const newTransaction: ScheduledTransaction = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...data,
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
+      let endpoint = '/schedules/expense';
+      if (transactionType === 'income') {
+        endpoint = '/schedules/incoming';
+      } else if (transactionType === 'transfer') {
+        endpoint = '/schedules/transfer';
+      }
       
-      mockScheduledTransactions.push(newTransaction);
-      return { data: newTransaction };
+      const response = await apiClient.post(endpoint, scheduleData);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
@@ -206,22 +105,20 @@ export const useUpdateScheduledTransaction = () => {
   const { addToast } = useToast();
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateScheduledTransactionData }) => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const index = mockScheduledTransactions.findIndex(t => t.id === id);
-      if (index === -1) {
-        throw new Error('Scheduled transaction not found');
+    mutationFn: async ({ id, data, transactionType }: { 
+      id: string; 
+      data: UpdateScheduledTransactionData; 
+      transactionType: 'expense' | 'income' | 'transfer' 
+    }) => {
+      let endpoint = `/schedules/expense`;
+      if (transactionType === 'income') {
+        endpoint = `/schedules/incoming`;
+      } else if (transactionType === 'transfer') {
+        endpoint = `/schedules/transfer`;
       }
       
-      mockScheduledTransactions[index] = {
-        ...mockScheduledTransactions[index],
-        ...data,
-        updatedAt: new Date().toISOString()
-      };
-      
-      return { data: mockScheduledTransactions[index] };
+      const response = await apiClient.put(endpoint, { id, ...data });
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
@@ -247,15 +144,7 @@ export const useDeleteScheduledTransaction = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const index = mockScheduledTransactions.findIndex(t => t.id === id);
-      if (index === -1) {
-        throw new Error('Scheduled transaction not found');
-      }
-      
-      mockScheduledTransactions.splice(index, 1);
+      await apiClient.delete(`/schedules/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
@@ -268,43 +157,6 @@ export const useDeleteScheduledTransaction = () => {
       addToast({
         type: 'error',
         message: 'Failed to delete scheduled transaction'
-      });
-    },
-  });
-};
-
-// Toggle scheduled transaction active status
-export const useToggleScheduledTransaction = () => {
-  const queryClient = useQueryClient();
-  const { addToast } = useToast();
-
-  return useMutation({
-    mutationFn: async (id: string) => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const index = mockScheduledTransactions.findIndex(t => t.id === id);
-      if (index === -1) {
-        throw new Error('Scheduled transaction not found');
-      }
-      
-      mockScheduledTransactions[index].isActive = !mockScheduledTransactions[index].isActive;
-      mockScheduledTransactions[index].updatedAt = new Date().toISOString();
-      
-      return { data: mockScheduledTransactions[index] };
-    },
-    onSuccess: (_, id) => {
-      const transaction = mockScheduledTransactions.find(t => t.id === id);
-      queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
-      addToast({
-        type: 'success',
-        message: `Scheduled transaction ${transaction?.isActive ? 'activated' : 'deactivated'}`
-      });
-    },
-    onError: () => {
-      addToast({
-        type: 'error',
-        message: 'Failed to update scheduled transaction'
       });
     },
   });

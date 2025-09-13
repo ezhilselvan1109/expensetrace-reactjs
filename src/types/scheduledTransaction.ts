@@ -1,83 +1,101 @@
 export interface ScheduledTransaction {
   id: string;
-  type: 1 | 2 | 3; // 1 = Expense, 2 = Income, 3 = Transfer
+  startDate: string;
+  time: string;
   amount: number;
-  categoryId?: string;
-  accountId: string;
-  fromAccountId?: string;
-  toAccountId?: string;
-  paymentModeId?: string;
-  fromPaymentModeId?: string;
-  toPaymentModeId?: string;
   description: string;
-  tags?: string[];
-  frequency: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-  earlyReminder: number; // 0 = none, 1-14 = days before
-  nextExecutionDate: string;
-  isActive: boolean;
+  type: 'EXPENSE' | 'INCOME' | 'TRANSFER';
+  frequencyType: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyInterval: number;
+  endType: 'NONE' | 'DATE' | 'OCCURRENCE';
+  occurrence: number;
+  remainderDays: number | null;
+  status: 'UPCOMING' | 'COMPLETED' | 'PAUSED';
+  tags?: {
+    id: string;
+    name: string;
+  }[];
   category?: {
     id: string;
     name: string;
-    icon: string;
+    type: string;
     color: string;
+    icon: string;
+    deletable: boolean;
   };
   account?: {
     id: string;
     name: string;
-    type: number;
-  };
-  toAccount?: {
-    id: string;
-    name: string;
-    type: number;
-  };
-  fromAccount?: {
-    id: string;
-    name: string;
-    type: number;
+    type: string;
+    default: boolean;
   };
   paymentMode?: {
     id: string;
     name: string;
-    type: number;
+    type: string;
+  } | null;
+  fromAccount?: {
+    id: string;
+    name: string;
+    type: string;
+    default: boolean;
   };
-  createdAt: string;
-  updatedAt: string;
+  fromPaymentMode?: {
+    id: string;
+    name: string;
+    type: string;
+  } | null;
+  toAccount?: {
+    id: string;
+    name: string;
+    type: string;
+    default: boolean;
+  };
+  toPaymentMode?: {
+    id: string;
+    name: string;
+    type: string;
+  } | null;
 }
 
 export interface CreateScheduledTransactionData {
-  type: 1 | 2 | 3;
+  startDate: string;
+  startTime: string;
   amount: number;
+  description: string;
+  frequencyType: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyInterval: number;
+  endType: 'NONE' | 'DATE' | 'OCCURRENCE';
+  occurrence: number;
+  remainderDays: number;
+  tags: string[];
   categoryId?: string;
-  accountId: string;
+  accountId?: string;
+  paymentModeId?: string;
   fromAccountId?: string;
   toAccountId?: string;
-  paymentModeId?: string;
   fromPaymentModeId?: string;
   toPaymentModeId?: string;
-  description: string;
-  tags?: string[];
-  frequency: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-  earlyReminder: number;
-  nextExecutionDate: string;
 }
 
 export interface UpdateScheduledTransactionData {
-  type?: 1 | 2 | 3;
+  startDate?: string;
+  startTime?: string;
   amount?: number;
+  description?: string;
+  frequencyType?: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyInterval?: number;
+  endType?: 'NONE' | 'DATE' | 'OCCURRENCE';
+  occurrence?: number;
+  remainderDays?: number;
+  tags?: string[];
   categoryId?: string;
   accountId?: string;
+  paymentModeId?: string;
   fromAccountId?: string;
   toAccountId?: string;
-  paymentModeId?: string;
   fromPaymentModeId?: string;
   toPaymentModeId?: string;
-  description?: string;
-  tags?: string[];
-  frequency?: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-  earlyReminder?: number;
-  nextExecutionDate?: string;
-  isActive?: boolean;
 }
 
 export interface PaginatedScheduledTransactions {
@@ -91,11 +109,17 @@ export interface PaginatedScheduledTransactions {
 }
 
 export const FREQUENCY_OPTIONS = {
-  'none': 'Does not repeat',
-  'daily': 'Every day',
-  'weekly': 'Every week',
-  'monthly': 'Every month',
-  'yearly': 'Every year'
+  'NONE': 'Does not repeat',
+  'DAILY': 'Every day',
+  'WEEKLY': 'Every week',
+  'MONTHLY': 'Every month',
+  'YEARLY': 'Every year'
+} as const;
+
+export const END_TYPE_OPTIONS = {
+  'NONE': 'Never ends',
+  'DATE': 'Ends on date',
+  'OCCURRENCE': 'Ends after occurrences'
 } as const;
 
 export const EARLY_REMINDER_OPTIONS = [
@@ -117,10 +141,11 @@ export const EARLY_REMINDER_OPTIONS = [
 ] as const;
 
 export const SCHEDULED_TRANSACTION_TYPES = {
-  '1': 'Expense',
-  '2': 'Income',
-  '3': 'Transfer'
+  'EXPENSE': 'Expense',
+  'INCOME': 'Income',
+  'TRANSFER': 'Transfer'
 } as const;
 
 export type ScheduledTransactionType = keyof typeof SCHEDULED_TRANSACTION_TYPES;
 export type FrequencyType = keyof typeof FREQUENCY_OPTIONS;
+export type EndType = keyof typeof END_TYPE_OPTIONS;

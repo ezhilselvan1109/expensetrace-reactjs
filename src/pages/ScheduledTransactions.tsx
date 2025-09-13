@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2, Play, Pause, Calendar, TrendingUp, TrendingDown, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { 
-  useUpcomingScheduledTransactions, 
+import {
+  Plus,
+  Edit,
+  Trash2,
+  TrendingUp,
+  TrendingDown,
+  ArrowUpDown,
+  Calendar,
+} from 'lucide-react';
+import {
+  useUpcomingScheduledTransactions,
   useCompletedScheduledTransactions,
   useDeleteScheduledTransaction,
-  useToggleScheduledTransaction
 } from '../hooks/useScheduledTransactions';
 import { SCHEDULED_TRANSACTION_TYPES, FREQUENCY_OPTIONS } from '../types/scheduledTransaction';
 import { useFormatters } from '../hooks/useFormatters';
@@ -16,30 +23,23 @@ const tabs = ['Upcoming', 'Completed'];
 
 function ScheduledTransactions() {
   const [activeTab, setActiveTab] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize] = useState(10);
   const [transactionToDelete, setTransactionToDelete] = useState<{ id: string; description: string } | null>(null);
 
-  const { data: upcomingData, isLoading: upcomingLoading } = useUpcomingScheduledTransactions(currentPage, pageSize);
-  const { data: completedData, isLoading: completedLoading } = useCompletedScheduledTransactions(currentPage, pageSize);
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(15);
+
+  const { data: upcomingData, isLoading: upcomingLoading } = useUpcomingScheduledTransactions(currentPage, pageSize, activeTab === 0);
+  const { data: completedData, isLoading: completedLoading } = useCompletedScheduledTransactions(currentPage, pageSize, activeTab === 1);
+
   const deleteTransaction = useDeleteScheduledTransaction();
-  const toggleTransaction = useToggleScheduledTransaction();
   const { formatCurrency } = useFormatters();
 
-  // Get current data based on active tab
-  const getCurrentData = () => {
-    switch (activeTab) {
-      case 1:
-        return { data: completedData, isLoading: completedLoading };
-      default:
-        return { data: upcomingData, isLoading: upcomingLoading };
-    }
-  };
-
-  const { data: currentData, isLoading } = getCurrentData();
-  const transactions = currentData?.content || [];
-  const totalPages = currentData?.totalPages || 0;
-  const totalElements = currentData?.totalElements || 0;
+  // switch dataset based on tab
+  const data = activeTab === 1 ? completedData : upcomingData;
+  const isLoading = activeTab === 1 ? completedLoading : upcomingLoading;
+  const transactions = data?.content || [];
+  const totalPages = data?.totalPages || 0;
 
   const handleDeleteTransaction = async () => {
     if (transactionToDelete) {
@@ -52,78 +52,53 @@ function ScheduledTransactions() {
     }
   };
 
-  const handleToggleTransaction = async (id: string) => {
-    try {
-      await toggleTransaction.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to toggle scheduled transaction:', error);
-    }
-  };
-
-  const getTransactionIcon = (type: number) => {
+  const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 1: // Expense
-        return <TrendingDown className="w-5 h-5 text-red-600" />;
-      case 2: // Income
-        return <TrendingUp className="w-5 h-5 text-green-600" />;
-      case 3: // Transfer
-        return <ArrowUpDown className="w-5 h-5 text-blue-600" />;
-      default:
-        return <ArrowUpDown className="w-5 h-5 text-gray-600" />;
+      case 'EXPENSE': return <TrendingDown className="w-5 h-5 text-red-600" />;
+      case 'INCOME': return <TrendingUp className="w-5 h-5 text-green-600" />;
+      case 'TRANSFER': return <ArrowUpDown className="w-5 h-5 text-blue-600" />;
+      default: return <ArrowUpDown className="w-5 h-5 text-gray-600" />;
     }
   };
 
-  const getAmountColor = (type: number) => {
+  const getAmountColor = (type: string) => {
     switch (type) {
-      case 1: // Expense
-        return 'text-red-600';
-      case 2: // Income
-        return 'text-green-600';
-      case 3: // Transfer
-        return 'text-blue-600';
-      default:
-        return 'text-gray-600';
+      case 'EXPENSE': return 'text-red-600';
+      case 'INCOME': return 'text-green-600';
+      case 'TRANSFER': return 'text-blue-600';
+      default: return 'text-gray-600';
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString();
 
-  if (isLoading) {
-    return (
-      <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
-          <div className="h-12 bg-gray-200 rounded mb-6"></div>
-          <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-20 bg-gray-200 rounded"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    return `${displayHour}:${minutes.padStart(2, '0')} ${period}`;
+  };
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Scheduled Transactions</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">Set up recurring income and expenses</p>
+          <h1 className="text-2xl font-bold text-gray-900">Scheduled Transactions</h1>
+          <p className="text-sm text-gray-500">Automate your recurring income and expenses</p>
         </div>
         <Link
           to="/scheduled/add"
-          className="mt-3 sm:mt-0 inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-xs sm:text-sm"
+          className="mt-3 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl shadow hover:bg-indigo-700 transition"
         >
-          <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-          Add Scheduled Transaction
+          <Plus className="w-4 h-4" /> Add Scheduled Transaction
         </Link>
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-gray-100 rounded-lg p-1 mb-4 sm:mb-6">
+      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-6">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (
@@ -131,13 +106,12 @@ function ScheduledTransactions() {
               key={tab}
               onClick={() => {
                 setActiveTab(index);
-                setCurrentPage(0);
+                setCurrentPage(0); // reset pagination when switching tabs
               }}
-              className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                active
-                  ? "bg-white shadow text-black"
-                  : "text-gray-500 hover:text-black"
-              }`}
+              className={`w-full px-4 py-2 rounded-full text-sm font-medium transition ${active
+                ? 'bg-white shadow text-gray-900'
+                : 'text-gray-500 hover:text-gray-900'
+                }`}
             >
               {tab}
             </button>
@@ -145,162 +119,127 @@ function ScheduledTransactions() {
         })}
       </div>
 
-      {/* Transactions List */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 sm:p-6 border-b border-gray-200">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-            {tabs[activeTab]} Transactions ({totalElements})
-          </h2>
+      {/* Loading / Empty / Data */}
+      {isLoading ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse"></div>
+          ))}
         </div>
-
-        {transactions.length === 0 ? (
-          <div className="p-6 sm:p-8 text-center">
-            <Calendar className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-3 sm:mb-4" />
-            <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-              No {tabs[activeTab].toLowerCase()} scheduled transactions
-            </h3>
-            <p className="text-sm sm:text-base text-gray-500 mb-3 sm:mb-4">
-              {activeTab === 0 
-                ? 'Create your first scheduled transaction to automate recurring expenses and income'
-                : 'No completed scheduled transactions yet'
-              }
-            </p>
-            {activeTab === 0 && (
-              <Link
-                to="/scheduled/add"
-                className="inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm sm:text-base"
+      ) : transactions.length === 0 ? (
+        <div className="p-10 text-center">
+          <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No {tabs[activeTab].toLowerCase()} scheduled transactions
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">
+            {activeTab === 0
+              ? 'Set up your first scheduled transaction to automate finances'
+              : 'No completed scheduled transactions yet'}
+          </p>
+          {activeTab === 0 && (
+            <Link
+              to="/scheduled/add"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
+            >
+              <Plus className="w-4 h-4" /> Add Scheduled Transaction
+            </Link>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {transactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="bg-white rounded-xl shadow p-4 flex flex-col justify-between hover:shadow-md transition"
               >
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-                Add Scheduled Transaction
-              </Link>
-            )}
-          </div>
-        ) : (
-          <>
-            <div className="divide-y divide-gray-200">
-              {transactions.map((transaction) => (
-                <div key={transaction.id} className="p-3 sm:p-4 lg:p-6 flex items-center justify-between">
-                  <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-1 min-w-0">
-                    <div className="flex-shrink-0">
-                      {transaction.category ? (
-                        <CategoryIcon
-                          icon={transaction.category.icon}
-                          color={transaction.category.color}
-                          size="sm"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                          {getTransactionIcon(transaction.type)}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-1 sm:space-x-2 mb-1">
-                        <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
-                          {transaction.description}
-                        </p>
-                        <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 flex-shrink-0">
-                          {SCHEDULED_TRANSACTION_TYPES[transaction.type.toString() as keyof typeof SCHEDULED_TRANSACTION_TYPES]}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 lg:space-x-4 text-xs sm:text-sm text-gray-500">
-                        <span>Next: {formatDate(transaction.nextExecutionDate)}</span>
-                        <span className="hidden sm:inline">• {FREQUENCY_OPTIONS[transaction.frequency]}</span>
-                        {transaction.earlyReminder > 0 && (
-                          <span className="hidden md:inline">• {transaction.earlyReminder} day(s) reminder</span>
-                        )}
-                        {transaction.account && (
-                          <span className="hidden lg:inline">• {transaction.account.name}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
-                    <div className="text-right">
-                      <p className={`text-sm sm:text-base font-semibold ${getAmountColor(transaction.type)}`}>
-                        {transaction.type === 1 ? '-' : transaction.type === 2 ? '+' : ''}
-                        {formatCurrency(transaction.amount)}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center space-x-1 sm:space-x-2">
-                      <button
-                        onClick={() => handleToggleTransaction(transaction.id)}
-                        disabled={toggleTransaction.isPending}
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-indigo-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
-                        title={transaction.isActive ? 'Pause' : 'Resume'}
-                      >
-                        {transaction.isActive ? (
-                          <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
-                        ) : (
-                          <Play className="w-4 h-4 sm:w-5 sm:h-5" />
-                        )}
-                      </button>
-                      <Link
-                        to={`/scheduled/edit/${transaction.id}`}
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-indigo-600 transition-colors rounded-md hover:bg-gray-50"
-                      >
-                        <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </Link>
-                      <button
-                        onClick={() => setTransactionToDelete({ id: transaction.id, description: transaction.description })}
-                        disabled={deleteTransaction.isPending}
-                        className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 rounded-md hover:bg-gray-50"
-                      >
-                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </button>
-                    </div>
+                <div className="flex items-center gap-3 mb-2">
+                  {transaction.category ? (
+                    <CategoryIcon
+                      icon={transaction.category.icon}
+                      color={transaction.category.color}
+                    />
+                  ) : (
+                    getTransactionIcon(transaction.type)
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">{transaction.description}</h3>
+                    <p className="text-xs text-gray-500">
+                      {SCHEDULED_TRANSACTION_TYPES[transaction.type]}
+                    </p>
                   </div>
                 </div>
-              ))}
-            </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="p-4 sm:p-6 border-t border-gray-200">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div className="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
-                    Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} transactions
-                  </div>
-
-                  <div className="flex items-center justify-center space-x-1 sm:space-x-2">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
-                      disabled={currentPage === 0}
-                      className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                <div className="flex justify-between items-center mt-2">
+                  <span className={`font-semibold ${getAmountColor(transaction.type)}`}>
+                    {transaction.type === 'EXPENSE' ? '-' : transaction.type === 'INCOME' ? '+' : ''}
+                    {formatCurrency(transaction.amount)}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      to={`/scheduled/edit/${transaction.id}`}
+                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
                     >
-                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </button>
-
-                    <span className="px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium bg-gray-50 rounded-md">
-                      Page {currentPage + 1} of {totalPages}
-                    </span>
-
+                      <Edit className="w-4 h-4" />
+                    </Link>
                     <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
-                      disabled={currentPage >= totalPages - 1}
-                      className="p-1.5 sm:p-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      onClick={() => setTransactionToDelete({ id: transaction.id, description: transaction.description })}
+                      disabled={deleteTransaction.isPending}
+                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 disabled:opacity-50"
                     >
-                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
+                </div>
+
+                <div className="text-xs text-gray-500 mt-2 space-y-1">
+                  <div>Start: {formatDate(transaction.startDate)} at {formatTime(transaction.time)}</div>
+                  <div>{FREQUENCY_OPTIONS[transaction.frequencyType]}</div>
+                  {transaction.account && <div>From: {transaction.account.name}</div>}
+                  {transaction.type === 'TRANSFER' && transaction.toAccount && (
+                    <div>→ {transaction.toAccount.name}</div>
+                  )}
+                  {transaction.remainderDays && (
+                    <div>{transaction.remainderDays} day(s) reminder</div>
+                  )}
                 </div>
               </div>
-            )}
-          </>
-        )}
-      </div>
+            ))}
+          </div>
 
-      {/* Delete Confirmation Modal */}
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-6 flex justify-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                disabled={currentPage === 0}
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <span className="px-3 py-1 border rounded-lg bg-gray-50">
+                {currentPage + 1} / {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                disabled={currentPage >= totalPages - 1}
+                className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Delete Modal */}
       <ConfirmationModal
         isOpen={!!transactionToDelete}
         onClose={() => setTransactionToDelete(null)}
         onConfirm={handleDeleteTransaction}
         title="Delete Scheduled Transaction"
-        message={`Are you sure you want to delete "${transactionToDelete?.description}" scheduled transaction? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${transactionToDelete?.description}"?`}
         confirmText="Delete Transaction"
         confirmButtonClass="bg-red-600 hover:bg-red-700"
         isPending={deleteTransaction.isPending}

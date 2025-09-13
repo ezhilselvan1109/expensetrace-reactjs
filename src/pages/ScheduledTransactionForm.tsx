@@ -15,7 +15,7 @@ import {
   useAccounts,
   useDefaultPaymentMode
 } from '../hooks/useAccounts';
-import { CreateScheduledTransactionData, FrequencyType, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS } from '../types/scheduledTransaction';
+import { CreateScheduledTransactionData, FrequencyType, EndType, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS } from '../types/scheduledTransaction';
 import CalculatorModal from '../components/CalculatorModal';
 import CategorySelectModal from '../components/CategorySelectModal';
 import AccountSelectModal from '../components/AccountSelectModal';
@@ -23,24 +23,28 @@ import FrequencyModal from '../components/FrequencyModal';
 import EarlyReminderModal from '../components/EarlyReminderModal';
 import CategoryIcon from '../components/CategoryIcon';
 import DatePicker from '../components/DatePicker';
+import TimePicker from '../components/TimePicker';
 
 const tabs = ['Expense', 'Income', 'Transfer'];
 
 interface FormData {
-  type: 1 | 2 | 3;
+  startDate: string;
+  startTime: string;
   amount: number;
+  description: string;
+  frequencyType: FrequencyType;
+  frequencyInterval: number;
+  endType: EndType;
+  occurrence: number;
+  remainderDays: number;
+  tags: string[];
   categoryId?: string;
-  accountId: string;
+  accountId?: string;
+  paymentModeId?: string;
   fromAccountId?: string;
   toAccountId?: string;
-  paymentModeId?: string;
   fromPaymentModeId?: string;
   toPaymentModeId?: string;
-  description: string;
-  tags: string[];
-  frequency: FrequencyType;
-  earlyReminder: number;
-  nextExecutionDate: string;
 }
 
 function ScheduledTransactionForm() {
@@ -71,26 +75,30 @@ function ScheduledTransactionForm() {
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
-      type: 1,
+      startDate: new Date().toISOString().split('T')[0],
+      startTime: '00:00:00',
       amount: 0,
+      description: '',
+      frequencyType: 'NONE',
+      frequencyInterval: 1,
+      endType: 'NONE',
+      occurrence: 1,
+      remainderDays: 0,
+      tags: [],
       categoryId: '',
       accountId: '',
-      toAccountId: '',
-      fromAccountId: '',
       paymentModeId: '',
+      fromAccountId: '',
+      toAccountId: '',
       fromPaymentModeId: '',
-      toPaymentModeId: '',
-      description: '',
-      tags: [],
-      frequency: 'none',
-      earlyReminder: 0,
-      nextExecutionDate: new Date().toISOString().split('T')[0]
+      toPaymentModeId: ''
     }
   });
 
   const watchedValues = watch();
   const selectedCategory = categories.find(cat => cat.id === watchedValues.categoryId);
   const selectedAccount = accounts.find(acc => acc.id === watchedValues.accountId);
+  const selectedFromAccount = accounts.find(acc => acc.id === watchedValues.fromAccountId);
   const selectedToAccount = accounts.find(acc => acc.id === watchedValues.toAccountId);
   const selectedPaymentMode = selectedAccount?.linkedPaymentModes?.find(pm => pm.id === watchedValues.paymentModeId);
 
@@ -98,19 +106,24 @@ function ScheduledTransactionForm() {
   useEffect(() => {
     if (isEditing && transaction) {
       const transactionType = transaction.type;
-      setActiveTab(transactionType === 1 ? 0 : transactionType === 2 ? 1 : 2);
-      setValue('type', transactionType);
+      setActiveTab(transactionType === 'EXPENSE' ? 0 : transactionType === 'INCOME' ? 1 : 2);
+      setValue('startDate', transaction.startDate);
+      setValue('startTime', transaction.time);
       setValue('amount', transaction.amount);
+      setValue('description', transaction.description);
+      setValue('frequencyType', transaction.frequencyType);
+      setValue('frequencyInterval', transaction.frequencyInterval);
+      setValue('endType', transaction.endType);
+      setValue('occurrence', transaction.occurrence);
+      setValue('remainderDays', transaction.remainderDays || 0);
+      setValue('tags', transaction.tags?.map(tag => tag.name) || []);
       setValue('categoryId', transaction.category?.id || '');
       setValue('accountId', transaction.account?.id || '');
-      setValue('toAccountId', transaction.toAccount?.id || '');
-      setValue('fromAccountId', transaction.fromAccount?.id || '');
       setValue('paymentModeId', transaction.paymentMode?.id || '');
-      setValue('description', transaction.description);
-      setValue('tags', transaction.tags || []);
-      setValue('frequency', transaction.frequency);
-      setValue('earlyReminder', transaction.earlyReminder);
-      setValue('nextExecutionDate', transaction.nextExecutionDate);
+      setValue('fromAccountId', transaction.fromAccount?.id || '');
+      setValue('toAccountId', transaction.toAccount?.id || '');
+      setValue('fromPaymentModeId', transaction.fromPaymentMode?.id || '');
+      setValue('toPaymentModeId', transaction.toPaymentMode?.id || '');
     }
   }, [isEditing, transaction, setValue]);
 
@@ -127,45 +140,41 @@ function ScheduledTransactionForm() {
     }
   }, [defaultCategory, defaultPaymentMode, activeTab, isEditing, setValue]);
 
-  // Update form type when tab changes
-  useEffect(() => {
-    const newType = activeTab === 0 ? 1 : activeTab === 1 ? 2 : 3;
-    setValue('type', newType);
-
-    // Clear category for transfer
-    if (activeTab === 2) {
-      setValue('categoryId', '');
-    } else if (defaultCategory) {
-      setValue('categoryId', defaultCategory.id);
-    }
-  }, [activeTab, setValue, defaultCategory]);
-
   const onSubmit = async (data: FormData) => {
     try {
       const transactionData: CreateScheduledTransactionData = {
-        type: data.type,
+        startDate: data.startDate,
+        startTime: data.startTime,
         amount: data.amount,
-        categoryId: data.type === 3 ? undefined : data.categoryId,
-        accountId: data.accountId,
-        toAccountId: data.type === 3 ? data.toAccountId : undefined,
-        fromAccountId: data.type === 3 ? data.fromAccountId : undefined,
-        paymentModeId: data.type === 3 ? data.fromPaymentModeId : data.paymentModeId,
-        fromPaymentModeId: data.type === 3 ? data.fromPaymentModeId : undefined,
-        toPaymentModeId: data.type === 3 ? data.toPaymentModeId : undefined,
         description: data.description,
+        frequencyType: data.frequencyType,
+        frequencyInterval: data.frequencyInterval,
+        endType: data.endType,
+        occurrence: data.occurrence,
+        remainderDays: data.remainderDays,
         tags: data.tags,
-        frequency: data.frequency,
-        earlyReminder: data.earlyReminder,
-        nextExecutionDate: data.nextExecutionDate
+        categoryId: activeTab === 2 ? undefined : data.categoryId,
+        accountId: activeTab === 2 ? undefined : data.accountId,
+        paymentModeId: activeTab === 2 ? undefined : data.paymentModeId,
+        fromAccountId: activeTab === 2 ? data.fromAccountId : undefined,
+        toAccountId: activeTab === 2 ? data.toAccountId : undefined,
+        fromPaymentModeId: activeTab === 2 ? data.fromPaymentModeId : undefined,
+        toPaymentModeId: activeTab === 2 ? data.toPaymentModeId : undefined
       };
+
+      const transactionType = activeTab === 0 ? 'expense' : activeTab === 1 ? 'income' : 'transfer';
 
       if (isEditing && id) {
         await updateTransaction.mutateAsync({
           id,
-          data: transactionData
+          data: transactionData,
+          transactionType
         });
       } else {
-        await createTransaction.mutateAsync(transactionData);
+        await createTransaction.mutateAsync({
+          ...transactionData,
+          transactionType
+        });
       }
     } catch (error) {
       console.error('Failed to save scheduled transaction:', error);
@@ -183,6 +192,14 @@ function ScheduledTransactionForm() {
     } else {
       setValue('tags', [...currentTags, tag]);
     }
+  };
+
+  const addNewTag = () => {
+    const trimmedTag = newTag.trim();
+    if (trimmedTag && !watch('tags').includes(trimmedTag)) {
+      setValue('tags', [...watch('tags'), trimmedTag]);
+    }
+    setNewTag('');
   };
 
   const isPending = createTransaction.isPending || updateTransaction.isPending;
@@ -249,18 +266,32 @@ function ScheduledTransactionForm() {
           </div>
         </div>
 
-        {/* Next Execution Date */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <DatePicker
-            value={watchedValues.nextExecutionDate}
-            onChange={(date) => setValue('nextExecutionDate', date)}
-            label="Next Execution Date"
-            required
-            minDate={new Date().toISOString().split('T')[0]}
-          />
-          {errors.nextExecutionDate && (
-            <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.nextExecutionDate.message}</p>
-          )}
+        {/* Start Date and Time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <DatePicker
+              value={watchedValues.startDate}
+              onChange={(date) => setValue('startDate', date)}
+              label="Start Date"
+              required
+              minDate={new Date().toISOString().split('T')[0]}
+            />
+            {errors.startDate && (
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.startDate.message}</p>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <TimePicker
+              value={watchedValues.startTime}
+              onChange={(time) => setValue('startTime', time + ':00')}
+              label="Start Time"
+              required
+            />
+            {errors.startTime && (
+              <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.startTime.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Amount */}
@@ -324,7 +355,7 @@ function ScheduledTransactionForm() {
           </div>
         )}
 
-        {/* Account */}
+        {/* Account (for Expense and Income) */}
         {activeTab !== 2 && (
           <div className="bg-white rounded-lg shadow p-4 sm:p-6">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -356,7 +387,7 @@ function ScheduledTransactionForm() {
                 </div>
 
                 {/* Payment Mode for non-transfer transactions */}
-                {activeTab !== 2 && selectedAccount.linkedPaymentModes && selectedAccount.linkedPaymentModes.length > 0 && (
+                {selectedAccount.linkedPaymentModes && selectedAccount.linkedPaymentModes.length > 0 && (
                   <div>
                     <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                       Payment Mode (Optional)
@@ -416,16 +447,16 @@ function ScheduledTransactionForm() {
                 </button>
               </div>
 
-              {selectedAccount ? (
+              {selectedFromAccount ? (
                 <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-red-50 rounded-lg">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-full flex items-center justify-center">
                     <span className="text-red-600 text-sm sm:text-base font-medium">
-                      {selectedAccount.name.charAt(0).toUpperCase()}
+                      {selectedFromAccount.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm sm:text-base font-medium text-gray-900">{selectedAccount.name}</p>
-                    <p className="text-xs sm:text-sm text-gray-500 capitalize">{selectedAccount.type}</p>
+                    <p className="text-sm sm:text-base font-medium text-gray-900">{selectedFromAccount.name}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 capitalize">{selectedFromAccount.type}</p>
                   </div>
                 </div>
               ) : (
@@ -472,70 +503,6 @@ function ScheduledTransactionForm() {
           </div>
         )}
 
-        {/* Tags */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
-            Tags <span className="text-xs sm:text-sm text-gray-500">(optional)</span>
-          </label>
-          <div className="flex flex-col gap-2">
-            {/* Input to add new tag */}
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                placeholder="Add a new tag"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const trimmedTag = newTag.trim();
-                  if (trimmedTag && !watch('tags').includes(trimmedTag)) {
-                    setValue('tags', [...watch('tags'), trimmedTag]);
-                  }
-                  setNewTag('');
-                }}
-                className="bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-700 text-sm sm:text-base"
-              >
-                Add
-              </button>
-            </div>
-
-            {/* Tag list */}
-            <div className="flex flex-wrap gap-2 mt-2">
-              {watch('tags')?.map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => toggleTag(tag)}
-                  className="px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border bg-indigo-600 text-white border-indigo-600"
-                >
-                  {tag}
-                </button>
-              ))}
-              {/* Default Tags */}
-              {watch('tags').length < defaultTags.length && (
-                <div className="flex flex-wrap gap-2">
-                  {defaultTags
-                    .filter(tag => !watch('tags').includes(tag))
-                    .slice(0, 3)
-                    .map(tag => (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => toggleTag(tag)}
-                        className="px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                      >
-                        {tag}
-                      </button>
-                    ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
         {/* Description */}
         <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <label htmlFor="description" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
@@ -551,6 +518,66 @@ function ScheduledTransactionForm() {
           {errors.description && (
             <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.description.message}</p>
           )}
+        </div>
+
+        {/* Tags */}
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
+            Tags <span className="text-xs sm:text-sm text-gray-500">(optional)</span>
+          </label>
+          <div className="flex flex-col gap-2">
+            {/* Input to add new tag */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addNewTag())}
+                placeholder="Add a new tag"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+              />
+              <button
+                type="button"
+                onClick={addNewTag}
+                className="bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-700 text-sm sm:text-base"
+              >
+                Add
+              </button>
+            </div>
+
+            {/* Selected Tags */}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {watch('tags')?.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleTag(tag)}
+                  className="px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border bg-indigo-600 text-white border-indigo-600"
+                >
+                  {tag} ×
+                </button>
+              ))}
+            </div>
+
+            {/* Default Tags */}
+            {watch('tags').length < defaultTags.length && (
+              <div className="flex flex-wrap gap-2">
+                {defaultTags
+                  .filter(tag => !watch('tags').includes(tag))
+                  .slice(0, 3)
+                  .map(tag => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className="px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm border bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    >
+                      + {tag}
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Frequency */}
@@ -569,11 +596,25 @@ function ScheduledTransactionForm() {
             </button>
           </div>
 
-          <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
-            <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
-            <span className="text-sm sm:text-base font-medium text-gray-900">
-              {FREQUENCY_OPTIONS[watchedValues.frequency]}
-            </span>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
+              <span className="text-sm sm:text-base font-medium text-gray-900">
+                {FREQUENCY_OPTIONS[watchedValues.frequencyType]}
+                {watchedValues.frequencyType !== 'NONE' && watchedValues.frequencyInterval > 1 && 
+                  ` (every ${watchedValues.frequencyInterval} ${watchedValues.frequencyType.toLowerCase()}s)`
+                }
+              </span>
+            </div>
+            
+            {watchedValues.endType !== 'NONE' && (
+              <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-blue-50 rounded-lg">
+                <span className="text-sm text-blue-600">
+                  {END_TYPE_OPTIONS[watchedValues.endType]}
+                  {watchedValues.endType === 'OCCURRENCE' && ` (${watchedValues.occurrence} times)`}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -596,7 +637,7 @@ function ScheduledTransactionForm() {
           <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
             <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
             <span className="text-sm sm:text-base font-medium text-gray-900">
-              {EARLY_REMINDER_OPTIONS.find(option => option.value === watchedValues.earlyReminder)?.label || 'None'}
+              {EARLY_REMINDER_OPTIONS.find(option => option.value === watchedValues.remainderDays)?.label || 'None'}
             </span>
           </div>
         </div>
@@ -658,7 +699,7 @@ function ScheduledTransactionForm() {
         selectedAccount={selectedAccount}
         selectedPaymentModeId={watchedValues.paymentModeId}
         title="Select Account"
-        showPaymentModes={activeTab !== 2}
+        showPaymentModes={true}
       />
 
       <AccountSelectModal
@@ -666,11 +707,11 @@ function ScheduledTransactionForm() {
         onClose={() => setIsFromAccountModalOpen(false)}
         accounts={accounts}
         onSelect={(account) => {
-          setValue('accountId', account.id);
+          setValue('fromAccountId', account.id);
           setValue('fromPaymentModeId', '');
         }}
         onPaymentModeSelect={(paymentModeId) => setValue('fromPaymentModeId', paymentModeId)}
-        selectedAccount={selectedAccount}
+        selectedAccount={selectedFromAccount}
         selectedPaymentModeId={watchedValues.fromPaymentModeId}
         title="Select From Account"
         showPaymentModes={true}
@@ -688,22 +729,30 @@ function ScheduledTransactionForm() {
         selectedAccount={selectedToAccount}
         selectedPaymentModeId={watchedValues.toPaymentModeId}
         title="Select Destination Account"
-        excludeAccountId={watchedValues.accountId}
+        excludeAccountId={watchedValues.fromAccountId}
         showPaymentModes={true}
       />
 
       <FrequencyModal
         isOpen={isFrequencyModalOpen}
         onClose={() => setIsFrequencyModalOpen(false)}
-        currentFrequency={watchedValues.frequency}
-        onUpdate={(frequency) => setValue('frequency', frequency)}
+        currentFrequency={watchedValues.frequencyType}
+        currentEndType={watchedValues.endType}
+        currentInterval={watchedValues.frequencyInterval}
+        currentOccurrence={watchedValues.occurrence}
+        onUpdate={(frequency, endType, interval, occurrence) => {
+          setValue('frequencyType', frequency);
+          setValue('endType', endType);
+          setValue('frequencyInterval', interval);
+          setValue('occurrence', occurrence);
+        }}
       />
 
       <EarlyReminderModal
         isOpen={isEarlyReminderModalOpen}
         onClose={() => setIsEarlyReminderModalOpen(false)}
-        currentReminder={watchedValues.earlyReminder}
-        onUpdate={(reminder) => setValue('earlyReminder', reminder)}
+        currentReminder={watchedValues.remainderDays}
+        onUpdate={(reminder) => setValue('remainderDays', reminder)}
       />
     </div>
   );
