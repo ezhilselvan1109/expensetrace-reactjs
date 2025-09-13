@@ -36,15 +36,13 @@ export const useUpdateTag = () => {
       queryClient.invalidateQueries({ queryKey: ['tags'] });
       addToast({
         type: 'success',
-        title: 'Tag updated',
-        message: 'Your tag has been updated successfully.',
+        message: 'Tag updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update tag',
-        message: 'Please try again.',
+        message: 'Failed to update tag'
       });
     },
   });
@@ -64,15 +62,13 @@ export const useMergeTag = () => {
       queryClient.invalidateQueries({ queryKey: ['tags'] });
       addToast({
         type: 'success',
-        title: 'Tag merged',
-        message: 'Tags have been merged successfully.',
+        message: 'Tag merged'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to merge tags',
-        message: 'Please try again.',
+        message: 'Failed to merge tags'
       });
     },
   });
@@ -91,15 +87,13 @@ export const useDeleteTag = () => {
       queryClient.invalidateQueries({ queryKey: ['tags'] });
       addToast({
         type: 'success',
-        title: 'Tag deleted',
-        message: 'The tag has been deleted successfully.',
+        message: 'Tag deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete tag',
-        message: 'Please try again.',
+        message: 'Failed to delete tag'
       });
     },
   });

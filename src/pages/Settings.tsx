@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Edit, Clock, Globe, Bell, AlertTriangle, Trash2 } from 'lucide-react';
-import { 
+import {
   useSettings,
   useUpdateTimeFormat,
   useUpdateDecimalFormat,
@@ -8,14 +8,14 @@ import {
   useUpdateCurrencyCode,
   useUpdateDailyReminder,
   useClearAllData,
-  useDeleteAccount
+  useDeleteAccount,
 } from '../hooks/useSettings';
-import { 
-  TIME_FORMATS, 
-  DECIMAL_FORMATS, 
-  NUMBER_FORMATS, 
+import {
+  TIME_FORMATS,
+  DECIMAL_FORMATS,
+  NUMBER_FORMATS,
   CURRENCIES,
-  Currency
+  Currency,
 } from '../types/settings';
 import TimeFormatModal from '../components/TimeFormatModal';
 import DecimalFormatModal from '../components/DecimalFormatModal';
@@ -56,27 +56,16 @@ function Settings() {
     setIsDeleteAccountModalOpen(false);
   };
 
-  const getCurrentCurrency = (): Currency | undefined => {
-    return CURRENCIES.find(currency => currency.code === settings?.currencyCode);
-  };
+  const getCurrentCurrency = (): Currency | undefined =>
+    CURRENCIES.find((currency) => currency.code === settings?.currencyCode);
 
   if (isLoading) {
     return (
       <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-          <div className="space-y-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow p-6">
-                <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
-                <div className="space-y-4">
-                  {[1, 2].map((j) => (
-                    <div key={j} className="h-16 bg-gray-200 rounded"></div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-16 bg-gray-200 rounded-lg"></div>
+          ))}
         </div>
       </div>
     );
@@ -84,140 +73,127 @@ function Settings() {
 
   if (!settings) {
     return (
-      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-        <div className="text-center py-12">
-          <p className="text-gray-500">Failed to load settings</p>
-        </div>
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto text-center text-gray-500">
+        Failed to load settings
       </div>
     );
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your account preferences and settings</p>
+    <div className="p-2 sm:p-4 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="mb-4">
+        <h1 className="text-xl font-bold text-gray-900">Settings</h1>
+        <p className="text-sm text-gray-500">Manage your account preferences and settings</p>
       </div>
 
-      <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-6">
         {/* Appearance */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-            <Clock className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-indigo-600" />
+        <div className="bg-white rounded-lg shadow p-4 space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
+            <Clock className="w-5 h-5 text-indigo-600" />
             Appearance
           </h2>
-          
-          <div className="space-y-4 sm:space-y-6">
-            {/* Time Format */}
-            <div className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-900">Time Format</h3>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  {TIME_FORMATS[settings.timeFormat as keyof typeof TIME_FORMATS]}
-                </p>
-              </div>
-              <button
-                onClick={() => setIsTimeFormatModalOpen(true)}
-                className="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-              >
-                <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                Edit
-              </button>
-            </div>
 
-            {/* Decimal Format */}
-            <div className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-900">Decimal Format</h3>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  {DECIMAL_FORMATS[settings.decimalFormat as keyof typeof DECIMAL_FORMATS]}
-                </p>
-              </div>
-              <button
-                onClick={() => setIsDecimalFormatModalOpen(true)}
-                className="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-              >
-                <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                Edit
-              </button>
+          {/* Time Format */}
+          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+            <div>
+              <h3 className="font-medium text-gray-900">Time Format</h3>
+              <p className="text-sm text-gray-500">
+                {TIME_FORMATS[settings.timeFormat as keyof typeof TIME_FORMATS]}
+              </p>
             </div>
+            <button
+              onClick={() => setIsTimeFormatModalOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Decimal Format */}
+          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+            <div>
+              <h3 className="font-medium text-gray-900">Decimal Format</h3>
+              <p className="text-sm text-gray-500">
+                {DECIMAL_FORMATS[settings.decimalFormat as keyof typeof DECIMAL_FORMATS]}
+              </p>
+            </div>
+            <button
+              onClick={() => setIsDecimalFormatModalOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
         {/* Preferences */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-            <Globe className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-indigo-600" />
+        <div className="bg-white rounded-lg shadow p-4 space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
+            <Globe className="w-5 h-5 text-indigo-600" />
             Preferences
           </h2>
-          
-          <div className="space-y-4 sm:space-y-6">
-            {/* Currency */}
-            <div className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-900">Currency</h3>
-                <div className="flex items-center mt-1">
-                  {getCurrentCurrency() && (
-                    <>
-                      <span className="text-base sm:text-lg mr-1 sm:mr-2">{getCurrentCurrency()?.flag}</span>
-                      <span className="text-xs sm:text-sm text-gray-500">
-                        {getCurrentCurrency()?.country} - {getCurrentCurrency()?.name} ({getCurrentCurrency()?.symbol})
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={() => setIsCurrencyModalOpen(true)}
-                className="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-              >
-                <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                Edit
-              </button>
-            </div>
 
-            {/* Number Format */}
-            <div className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-900">Number Format</h3>
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  {NUMBER_FORMATS[settings.numberFormat as keyof typeof NUMBER_FORMATS]}
-                </p>
-              </div>
-              <button
-                onClick={() => setIsNumberFormatModalOpen(true)}
-                className="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-              >
-                <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                Edit
-              </button>
+          {/* Currency */}
+          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+            <div>
+              <h3 className="font-medium text-gray-900">Currency</h3>
+              <p className="text-sm text-gray-500 flex items-center gap-2">
+                {getCurrentCurrency()?.flag} {getCurrentCurrency()?.country} -{' '}
+                {getCurrentCurrency()?.name} ({getCurrentCurrency()?.symbol})
+              </p>
             </div>
+            <button
+              onClick={() => setIsCurrencyModalOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Number Format */}
+          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+            <div>
+              <h3 className="font-medium text-gray-900">Number Format</h3>
+              <p className="text-sm text-gray-500">
+                {NUMBER_FORMATS[settings.numberFormat as keyof typeof NUMBER_FORMATS]}
+              </p>
+            </div>
+            <button
+              onClick={() => setIsNumberFormatModalOpen(true)}
+              className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
         {/* Notifications */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center">
-            <Bell className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-indigo-600" />
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 mb-4">
+            <Bell className="w-5 h-5 text-indigo-600" />
             Notifications
           </h2>
-          
-          <div className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg">
+
+          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
             <div>
-              <h3 className="text-sm sm:text-base font-medium text-gray-900">Daily Reminder</h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                {settings.dailyReminder ? 'Remind me daily at 7:00 PM' : 'Daily reminders are disabled'}
+              <h3 className="font-medium text-gray-900">Daily Reminder</h3>
+              <p className="text-sm text-gray-500">
+                {settings.dailyReminder
+                  ? 'Remind me daily at 7:00 PM'
+                  : 'Daily reminders are disabled'}
               </p>
             </div>
             <button
               onClick={handleDailyReminderToggle}
               disabled={updateDailyReminder.isPending}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 ${
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
                 settings.dailyReminder ? 'bg-indigo-600' : 'bg-gray-200'
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
                   settings.dailyReminder ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -226,48 +202,46 @@ function Settings() {
         </div>
 
         {/* Danger Zone */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6 border-l-4 border-red-500">
-          <h2 className="text-lg sm:text-xl font-semibold text-red-900 mb-4 sm:mb-6 flex items-center">
-            <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-red-600" />
+        <div className="bg-white rounded-lg shadow p-4 border border-red-200 space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-red-600">
+            <AlertTriangle className="w-5 h-5" />
             Danger Zone
           </h2>
-          
-          <div className="space-y-4">
-            {/* Clear Data */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-red-200 rounded-lg bg-red-50 gap-3 sm:gap-0">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-red-900">Delete Data & Start Afresh</h3>
-                <p className="text-xs sm:text-sm text-red-600 mt-1">
-                  This will permanently delete all your data but keep your account
-                </p>
-              </div>
-              <button
-                onClick={() => setIsClearDataModalOpen(true)}
-                disabled={clearAllData.isPending}
-                className="inline-flex items-center px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
-              >
-                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                Clear Data
-              </button>
-            </div>
 
-            {/* Delete Account */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border border-red-200 rounded-lg bg-red-50 gap-3 sm:gap-0">
-              <div>
-                <h3 className="text-sm sm:text-base font-medium text-red-900">Delete Account</h3>
-                <p className="text-xs sm:text-sm text-red-600 mt-1">
-                  This will permanently delete your account and all data. This action cannot be undone.
-                </p>
-              </div>
-              <button
-                onClick={() => setIsDeleteAccountModalOpen(true)}
-                disabled={deleteAccount.isPending}
-                className="inline-flex items-center px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
-              >
-                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                Delete Account
-              </button>
+          {/* Clear Data */}
+          <div className="flex justify-between items-center p-3 rounded-lg border bg-red-50">
+            <div>
+              <h3 className="font-medium text-red-900">Delete Data & Start Afresh</h3>
+              <p className="text-sm text-red-600">
+                This will permanently delete all your data but keep your account.
+              </p>
             </div>
+            <button
+              onClick={() => setIsClearDataModalOpen(true)}
+              disabled={clearAllData.isPending}
+              className="w-full sm:w-auto px-2 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4 inline mr-1" />
+              Clear Data
+            </button>
+          </div>
+
+          {/* Delete Account */}
+          <div className="flex justify-between items-center p-3 rounded-lg border bg-red-50">
+            <div>
+              <h3 className="font-medium text-red-900">Delete Account</h3>
+              <p className="text-sm text-red-600">
+                Permanently delete your account and all data. This action cannot be undone.
+              </p>
+            </div>
+            <button
+              onClick={() => setIsDeleteAccountModalOpen(true)}
+              disabled={deleteAccount.isPending}
+              className="w-full sm:w-auto px-2 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4 inline mr-1" />
+              Delete
+            </button>
           </div>
         </div>
       </div>
@@ -279,45 +253,40 @@ function Settings() {
         currentFormat={settings.timeFormat}
         onUpdate={updateTimeFormat.mutateAsync}
       />
-
       <DecimalFormatModal
         isOpen={isDecimalFormatModalOpen}
         onClose={() => setIsDecimalFormatModalOpen(false)}
         currentFormat={settings.decimalFormat}
         onUpdate={updateDecimalFormat.mutateAsync}
       />
-
       <NumberFormatModal
         isOpen={isNumberFormatModalOpen}
         onClose={() => setIsNumberFormatModalOpen(false)}
         currentFormat={settings.numberFormat}
         onUpdate={updateNumberFormat.mutateAsync}
       />
-
       <CurrencyModal
         isOpen={isCurrencyModalOpen}
         onClose={() => setIsCurrencyModalOpen(false)}
         currentCurrency={settings.currencyCode}
         onUpdate={updateCurrencyCode.mutateAsync}
       />
-
       <ConfirmationModal
         isOpen={isClearDataModalOpen}
         onClose={() => setIsClearDataModalOpen(false)}
         onConfirm={handleClearData}
         title="Clear All Data"
-        message="Are you sure you want to delete all your data? This action cannot be undone. Your account will remain active but all transactions, budgets, and other data will be permanently deleted."
+        message="Are you sure you want to delete all your data? This action cannot be undone."
         confirmText="Clear Data"
         confirmButtonClass="bg-red-600 hover:bg-red-700"
         isPending={clearAllData.isPending}
       />
-
       <ConfirmationModal
         isOpen={isDeleteAccountModalOpen}
         onClose={() => setIsDeleteAccountModalOpen(false)}
         onConfirm={handleDeleteAccount}
         title="Delete Account"
-        message="Are you sure you want to permanently delete your account? This action cannot be undone. All your data will be permanently deleted and you will not be able to recover it."
+        message="Are you sure you want to permanently delete your account? This cannot be undone."
         confirmText="Delete Account"
         confirmButtonClass="bg-red-600 hover:bg-red-700"
         isPending={deleteAccount.isPending}

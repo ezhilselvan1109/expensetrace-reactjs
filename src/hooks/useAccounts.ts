@@ -127,16 +127,14 @@ export const useCreateBankAccount = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Bank account created',
-        message: 'Your bank account has been added successfully.',
+        message: 'Bank account created'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create account',
-        message: 'Please try again.',
+        message: 'Failed to create account'
       });
     },
   });
@@ -156,16 +154,14 @@ export const useCreateWallet = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Wallet created',
-        message: 'Your wallet has been added successfully.',
+        message: 'Wallet created'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create wallet',
-        message: 'Please try again.',
+        message: 'Failed to create wallet'
       });
     },
   });
@@ -185,16 +181,14 @@ export const useCreateCreditCard = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Credit card added',
-        message: 'Your credit card has been added successfully.',
+        message: 'Credit card added'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to add credit card',
-        message: 'Please try again.',
+        message: 'Failed to add credit card'
       });
     },
   });
@@ -216,16 +210,14 @@ export const useUpdateBankAccount = () => {
       queryClient.invalidateQueries({ queryKey: ['account'] });
       addToast({
         type: 'success',
-        title: 'Account updated',
-        message: 'Your bank account has been updated successfully.',
+        message: 'Account updated'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update account',
-        message: 'Please try again.',
+        message: 'Failed to update account'
       });
     },
   });
@@ -245,16 +237,14 @@ export const useUpdateWallet = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Wallet updated',
-        message: 'Your wallet has been updated successfully.',
+        message: 'Wallet updated'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update wallet',
-        message: 'Please try again.',
+        message: 'Failed to update wallet'
       });
     },
   });
@@ -274,16 +264,14 @@ export const useUpdateCreditCard = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Credit card updated',
-        message: 'Your credit card has been updated successfully.',
+        message: 'Credit card updated'
       });
       navigate('/accounts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update credit card',
-        message: 'Please try again.',
+        message: 'Failed to update credit card'
       });
     },
   });
@@ -302,15 +290,13 @@ export const useDeleteAccount = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Account deleted',
-        message: 'The account has been deleted successfully.',
+        message: 'Account deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete account',
-        message: 'Please try again.',
+        message: 'Failed to delete account'
       });
     },
   });

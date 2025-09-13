@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Hash } from 'lucide-react';
 import { DECIMAL_FORMATS } from '../types/settings';
 
@@ -7,16 +7,21 @@ interface DecimalFormatModalProps {
   onClose: () => void;
   currentFormat: number;
   onUpdate: (formatCode: number) => Promise<void>;
+  isPending?: boolean;
 }
 
-export default function DecimalFormatModal({ 
-  isOpen, 
-  onClose, 
+export default function DecimalFormatModal({
+  isOpen,
+  onClose,
   currentFormat,
-  onUpdate 
+  onUpdate,
+  isPending = false
 }: DecimalFormatModalProps) {
   const [selectedFormat, setSelectedFormat] = useState(currentFormat);
-  const [isUpdating, setIsUpdating] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) setSelectedFormat(currentFormat);
+  }, [isOpen, currentFormat]);
 
   const getExample = (code: number) => {
     switch (code) {
@@ -29,44 +34,43 @@ export default function DecimalFormatModal({
   };
 
   const handleUpdate = async () => {
-    setIsUpdating(true);
-    try {
+    if (selectedFormat !== currentFormat) {
       await onUpdate(selectedFormat);
       onClose();
-    } catch (error) {
-      console.error('Failed to update decimal format:', error);
-    } finally {
-      setIsUpdating(false);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-            <Hash className="w-6 h-6 mr-2 text-indigo-600" />
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-sm flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <Hash className="w-5 h-5 text-indigo-600" />
             Decimal Format
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 rounded-full p-1 hover:bg-gray-100 transition"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6">
-          <p className="text-gray-600 mb-6">Choose how decimal numbers should be displayed:</p>
-          
-          <div className="space-y-3">
+        {/* Content */}
+        <div className="p-4 space-y-3 overflow-y-auto">
+          <p className="text-sm text-gray-600">
+            Choose how decimal numbers should be displayed:
+          </p>
+
+          <div className="space-y-2">
             {Object.entries(DECIMAL_FORMATS).map(([code, label]) => (
               <button
                 key={code}
                 onClick={() => setSelectedFormat(Number(code))}
-                className={`w-full p-4 text-left border-2 rounded-lg transition-all ${
+                className={`w-full p-3 text-left border rounded-lg transition-colors text-sm ${
                   selectedFormat === Number(code)
                     ? 'border-indigo-500 bg-indigo-50'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
@@ -75,10 +79,10 @@ export default function DecimalFormatModal({
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{label}</span>
                   {selectedFormat === Number(code) && (
-                    <div className="w-4 h-4 bg-indigo-600 rounded-full"></div>
+                    <span className="text-indigo-600 text-xs font-medium">Selected</span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   Example: {getExample(Number(code))}
                 </p>
               </button>
@@ -86,22 +90,22 @@ export default function DecimalFormatModal({
           </div>
         </div>
 
-        <div className="p-6 border-t">
-          <div className="flex space-x-3">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleUpdate}
-              disabled={isUpdating || selectedFormat === currentFormat}
-              className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isUpdating ? 'Updating...' : 'Update'}
-            </button>
-          </div>
+        {/* Footer */}
+        <div className="p-4 border-t flex gap-2">
+          <button
+            onClick={onClose}
+            disabled={isPending}
+            className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleUpdate}
+            disabled={isPending || selectedFormat === currentFormat}
+            className="flex-1 px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isPending ? 'Updating...' : 'Update'}
+          </button>
         </div>
       </div>
     </div>

@@ -21,7 +21,6 @@ export const useTransactions = (page = 0, size = 10, filters?: TransactionFilter
       });
 
       if (filters?.search) params.append('search', filters.search);
-      if (filters?.type) params.append('type', filters.type);
       if (filters?.categoryId) params.append('categoryId', filters.categoryId);
       if (filters?.accountId) params.append('accountId', filters.accountId);
       if (filters?.startDate) params.append('startDate', filters.startDate);
@@ -74,7 +73,6 @@ export const useCreateTransaction = () => {
           fromAccountId: transactionData.accountId,
           fromPaymentModeId: transactionData.paymentModeId,
         };
-        delete transferData.accountId;
         delete transferData.paymentModeId;
         delete transferData.categoryId;
         const response = await apiClient.post(endpoint, transferData);
@@ -89,16 +87,14 @@ export const useCreateTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Transaction created',
-        message: 'Your transaction has been recorded successfully.',
+        message: 'Transaction created'
       });
       navigate('/transactions');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create transaction',
-        message: 'Please try again.',
+        message: 'Failed to create transaction'
       });
     },
   });
@@ -143,16 +139,14 @@ export const useUpdateTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Transaction updated',
-        message: 'Your transaction has been updated successfully.',
+        message: 'Transaction updated'
       });
       navigate('/transactions');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update transaction',
-        message: 'Please try again.',
+        message: 'Failed to update transaction'
       });
     },
   });
@@ -172,15 +166,13 @@ export const useDeleteTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['accounts'] });
       addToast({
         type: 'success',
-        title: 'Transaction deleted',
-        message: 'The transaction has been deleted successfully.',
+        message: 'Transaction deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete transaction',
-        message: 'Please try again.',
+        message: 'Failed to delete transaction'
       });
     },
   });

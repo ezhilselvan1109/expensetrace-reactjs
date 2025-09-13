@@ -4,7 +4,6 @@ import { toast, ToastOptions } from 'react-toastify';
 interface ToastContextType {
   addToast: (options: {
     type: 'success' | 'error' | 'warning' | 'info';
-    title: string;
     message?: string;
     duration?: number;
     action?: {
@@ -31,9 +30,8 @@ interface ToastProviderProps {
 }
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
-  const addToast = ({ type, title, message, duration = 5000, action }: {
+  const addToast = ({ type, message, duration = 5000, action }: {
     type: 'success' | 'error' | 'warning' | 'info';
-    title: string;
     message?: string;
     duration?: number;
     action?: {
@@ -43,8 +41,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   }) => {
     const content = (
       <div>
-        <div className="font-semibold">{title}</div>
-        {message && <div className="text-sm mt-1">{message}</div>}
+        {message && <div className="font-semibold">{message}</div>}
         {action && (
           <button
             onClick={action.onClick}

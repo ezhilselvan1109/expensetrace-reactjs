@@ -32,15 +32,13 @@ export const useUpdateTimeFormat = () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       addToast({
         type: 'success',
-        title: 'Time format updated',
-        message: 'Your time format preference has been saved.',
+        message: 'Time format updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update time format',
-        message: 'Please try again.',
+        message: 'Failed to update time format'
       });
     },
   });
@@ -52,23 +50,21 @@ export const useUpdateDecimalFormat = () => {
   const { addToast } = useToast();
 
   return useMutation({
-    mutationFn: async (formatCode: number) => {
-      const response = await apiClient.patch(`/settings/number-format?formatCode=${formatCode}`);
+    mutationFn: async (decimalCode: number) => {
+      const response = await apiClient.patch(`/settings/decimal-format?decimalCode=${decimalCode}`);
       return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       addToast({
         type: 'success',
-        title: 'Decimal format updated',
-        message: 'Your decimal format preference has been saved.',
+        message: 'Decimal format updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update decimal format',
-        message: 'Please try again.',
+        message: 'Failed to update decimal format'
       });
     },
   });
@@ -88,15 +84,13 @@ export const useUpdateNumberFormat = () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       addToast({
         type: 'success',
-        title: 'Number format updated',
-        message: 'Your number format preference has been saved.',
+        message: 'Number format updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update number format',
-        message: 'Please try again.',
+        message: 'Failed to update number format'
       });
     },
   });
@@ -116,15 +110,13 @@ export const useUpdateCurrencyCode = () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       addToast({
         type: 'success',
-        title: 'Currency updated',
-        message: 'Your currency preference has been saved.',
+        message: 'Currency updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update currency',
-        message: 'Please try again.',
+        message: 'Failed to update currency'
       });
     },
   });
@@ -144,15 +136,13 @@ export const useUpdateDailyReminder = () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       addToast({
         type: 'success',
-        title: 'Daily reminder updated',
-        message: 'Your daily reminder preference has been saved.',
+        message: 'Daily reminder updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update daily reminder',
-        message: 'Please try again.',
+        message: 'Failed to update daily reminder'
       });
     },
   });
@@ -173,16 +163,14 @@ export const useClearAllData = () => {
       queryClient.clear();
       addToast({
         type: 'success',
-        title: 'Data cleared',
-        message: 'All your data has been cleared successfully.',
+        message: 'Data cleared'
       });
       navigate('/dashboard');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to clear data',
-        message: 'Please try again.',
+        message: 'Failed to clear data'
       });
     },
   });
@@ -203,16 +191,14 @@ export const useDeleteAccount = () => {
       queryClient.clear();
       addToast({
         type: 'info',
-        title: 'Account deleted',
-        message: 'Your account has been deleted successfully.',
+        message: 'Account deleted'
       });
       navigate('/signin');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete account',
-        message: 'Please try again.',
+        message: 'Failed to delete account'
       });
     },
   });

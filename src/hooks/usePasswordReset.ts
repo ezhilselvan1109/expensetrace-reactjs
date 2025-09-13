@@ -33,16 +33,14 @@ export const useForgotPassword = () => {
       setEmail(variables.email);
       addToast({
         type: 'success',
-        title: 'OTP sent',
-        message: 'A 6-digit verification code has been sent to your email.',
+        message: 'OTP sent'
       });
       navigate('/verify-otp');
     },
-    onError: (error: any) => {
+    onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to send OTP',
-        message: error?.response?.data?.message || 'Please try again.',
+        message: 'Failed to send OTP'
       });
     },
   });
@@ -65,16 +63,14 @@ export const useVerifyOtp = () => {
       setOtpVerified(true);
       addToast({
         type: 'success',
-        title: 'OTP verified',
-        message: 'You can now reset your password.',
+        message: 'OTP verified'
       });
       navigate('/reset-password');
     },
-    onError: (error: any) => {
+    onError: () => {
       addToast({
         type: 'error',
-        title: 'Invalid OTP',
-        message: error?.response?.data?.message || 'Please check your code and try again.',
+        message: 'Invalid OTP'
       });
     },
   });
@@ -97,16 +93,14 @@ export const useResetPassword = () => {
       clearState();
       addToast({
         type: 'success',
-        title: 'Password reset successful',
-        message: 'You can now sign in with your new password.',
+        message: 'Password reset successful'
       });
       navigate('/signin');
     },
-    onError: (error: any) => {
+    onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to reset password',
-        message: error?.response?.data?.message || 'Please try again.',
+        message: 'Failed to reset password'
       });
     },
   });

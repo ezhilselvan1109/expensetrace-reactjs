@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
@@ -81,7 +81,7 @@ function SidebarItem({
           `flex items-center px-2 sm:px-3 py-2 text-sm font-medium rounded-md transition-colors 
           focus:outline-none focus-visible:ring focus-visible:ring-indigo-300
           ${isActive
-            ? "bg-indigo-50 text-indigo-700 border-r-2 border-indigo-700"
+            ? "bg-indigo-50 text-blue-600 border-r-2 border-blue-600"
             : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }
           ${shouldShowCondensed ? "justify-center" : ""}`
@@ -142,7 +142,7 @@ function SidebarSubMenu({
         className={`w-full flex items-center py-2 text-sm font-medium rounded-md transition-colors
         focus:outline-none focus-visible:ring focus-visible:ring-indigo-300
         ${isAnyChildActive
-            ? "bg-indigo-50 text-indigo-700 border-r-2 border-indigo-700"
+            ? `bg-indigo-50 text-blue-600 ${shouldShowCondensed && `border-r-2 border-blue-600`}`
             : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }
         ${shouldShowCondensed ? "justify-center px-2" : "justify-between px-2 sm:px-3"}`}
@@ -282,30 +282,35 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div
-              className={`flex items-center space-x-2 transition-all duration-300 overflow-hidden ${shouldShowCondensed ? "max-w-0 opacity-0" : "max-w-xs opacity-100"
-                }`}
-            >
-              <span className="text-2xl font-extrabold text-indigo-600 leading-none">
-                Expense
-                <span className="text-xl font-bold text-gray-900 ml-1">
-                  Trace
-                </span>
-              </span>
-            </div>
-            <button
-              onClick={() => setIsCondensed((s) => !s)}
-              aria-label={shouldShowCondensed ? "Expand sidebar" : "Collapse sidebar"}
-              aria-pressed={shouldShowCondensed}
-              className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-indigo-300"
-            >
-              <ChevronLeft
-                className={`h-5 w-5 transition-transform duration-300 ${shouldShowCondensed ? "rotate-180" : ""
-                  }`}
-              />
-            </button>
+        <div className="p-1 sm:p-4">
+          <div className={`flex items-center ${shouldShowCondensed ? "justify-center" : "justify-between"}`}>
+            {/* Logo */}
+            <Link to="/">
+              {shouldShowCondensed ? (
+                <img
+                  src="/logo1.png"
+                  alt="Logo Icon"
+                  className="h-auto w-auto object-contain"  // Fixed size for condensed mode
+                />
+              ) : (
+                <img
+                  src="/logo.png"
+                  alt="ExpenseTrace Logo"
+                  className="h-10 lg:h-12 w-auto object-contain" // Bigger size for expanded mode
+                />
+              )}
+
+            </Link>
+
+            {!shouldShowCondensed && (
+              <button
+                onClick={() => setIsCondensed((s) => !s)}
+                className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-indigo-300"
+              >
+                <ChevronLeft
+                  className={`h-5 w-5 transition-transform duration-300}`}
+                />
+              </button>)}
           </div>
         </div>
 

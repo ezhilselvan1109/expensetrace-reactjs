@@ -116,7 +116,7 @@ function App() {
             </Routes>
           </Router>
           <ToastContainer
-            position="top-right"
+            position="top-center"
             autoClose={5000}
             hideProgressBar={false}
             newestOnTop={false}
@@ -128,7 +128,7 @@ function App() {
             theme="light"
             className="!top-4 !right-4"
             toastClassName="!rounded-lg !shadow-lg"
-            bodyClassName="!p-4"
+            closeButton={false}
           />
         </Suspense>
       </ToastProvider>

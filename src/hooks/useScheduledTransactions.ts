@@ -186,16 +186,14 @@ export const useCreateScheduledTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
       addToast({
         type: 'success',
-        title: 'Scheduled transaction created',
-        message: 'Your scheduled transaction has been created successfully.',
+        message: 'Scheduled transaction created'
       });
       navigate('/scheduled');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create scheduled transaction',
-        message: 'Please try again.',
+        message: 'Failed to create scheduled transaction'
       });
     },
   });
@@ -229,16 +227,14 @@ export const useUpdateScheduledTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
       addToast({
         type: 'success',
-        title: 'Scheduled transaction updated',
-        message: 'Your scheduled transaction has been updated successfully.',
+        message: 'Scheduled transaction updated'
       });
       navigate('/scheduled');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update scheduled transaction',
-        message: 'Please try again.',
+        message: 'Failed to update scheduled transaction'
       });
     },
   });
@@ -265,15 +261,13 @@ export const useDeleteScheduledTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
       addToast({
         type: 'success',
-        title: 'Scheduled transaction deleted',
-        message: 'The scheduled transaction has been deleted successfully.',
+        message: 'Scheduled transaction deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete scheduled transaction',
-        message: 'Please try again.',
+        message: 'Failed to delete scheduled transaction'
       });
     },
   });
@@ -304,15 +298,13 @@ export const useToggleScheduledTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['scheduled-transactions'] });
       addToast({
         type: 'success',
-        title: `Scheduled transaction ${transaction?.isActive ? 'activated' : 'deactivated'}`,
-        message: `The scheduled transaction has been ${transaction?.isActive ? 'activated' : 'deactivated'} successfully.`,
+        message: `Scheduled transaction ${transaction?.isActive ? 'activated' : 'deactivated'}`
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update scheduled transaction',
-        message: 'Please try again.',
+        message: 'Failed to update scheduled transaction'
       });
     },
   });

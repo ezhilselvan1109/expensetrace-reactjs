@@ -125,16 +125,14 @@ export const useCreateDebt = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Debt created',
-        message: 'Your debt record has been created successfully.',
+        message: 'Debt created'
       });
       navigate('/debts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create debt',
-        message: 'Please try again.',
+        message: 'Failed to create debt'
       });
     },
   });
@@ -154,16 +152,14 @@ export const useUpdateDebt = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Debt updated',
-        message: 'Your debt record has been updated successfully.',
+        message: 'Debt updated'
       });
       navigate('/debts');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update debt',
-        message: 'Please try again.',
+        message: 'Failed to update debt'
       });
     },
   });
@@ -181,15 +177,13 @@ export const useDeleteDebt = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Debt deleted',
-        message: 'The debt record has been deleted successfully.',
+        message: 'Debt deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete debt',
-        message: 'Please try again.',
+        message: 'Failed to delete debt'
       });
     },
   });
@@ -316,15 +310,13 @@ export const useCreateDebtRecord = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Record created',
-        message: 'Your debt record has been created successfully.',
+        message: 'Record created'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create record',
-        message: 'Please try again.',
+        message: 'Failed to create record'
       });
     },
   });
@@ -345,15 +337,13 @@ export const useUpdateDebtRecord = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Record updated',
-        message: 'Your debt record has been updated successfully.',
+        message: 'Record updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update record',
-        message: 'Please try again.',
+        message: 'Failed to update record'
       });
     },
   });
@@ -373,15 +363,13 @@ export const useDeleteDebtRecord = () => {
       queryClient.invalidateQueries({ queryKey: ['debts'] });
       addToast({
         type: 'success',
-        title: 'Record deleted',
-        message: 'The debt record has been deleted successfully.',
+        message: 'Record deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete record',
-        message: 'Please try again.',
+        message: 'Failed to delete record'
       });
     },
   });

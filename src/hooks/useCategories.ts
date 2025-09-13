@@ -66,16 +66,14 @@ export const useCreateCategory = () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       addToast({
         type: 'success',
-        title: 'Category created',
-        message: 'Your category has been created successfully.',
+        message: 'Category created'
       });
       navigate('/categories');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create category',
-        message: 'Please try again.',
+        message: 'Failed to create category'
       });
     },
   });
@@ -96,16 +94,14 @@ export const useUpdateCategory = () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       addToast({
         type: 'success',
-        title: 'Category updated',
-        message: 'Your category has been updated successfully.',
+        message: 'Category updated'
       });
       navigate('/categories');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update category',
-        message: 'Please try again.',
+        message: 'Failed to update category'
       });
     },
   });
@@ -124,15 +120,13 @@ export const useDeleteCategory = () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       addToast({
         type: 'success',
-        title: 'Category deleted',
-        message: 'The category has been deleted successfully.',
+        message: 'Category deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete category',
-        message: 'Please try again.',
+        message: 'Failed to delete category'
       });
     },
   });
@@ -155,15 +149,13 @@ export const useSetDefaultCategory = () => {
       });
       addToast({
         type: 'success',
-        title: 'Default category updated',
-        message: 'Your default category has been set successfully.',
+        message: 'Default category updated'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to set default category',
-        message: 'Please try again.',
+        message: 'Failed to set default category'
       });
     },
   });

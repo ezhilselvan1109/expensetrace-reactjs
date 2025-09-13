@@ -57,16 +57,14 @@ export const useCreateMonthlyBudget = () => {
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
       addToast({
         type: 'success',
-        title: 'Monthly budget created',
-        message: 'Your monthly budget has been created successfully.',
+        message: 'Monthly budget created'
       });
       navigate('/budgets');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create budget',
-        message: 'Please try again.',
+        message: 'Failed to create budget'
       });
     },
   });
@@ -86,16 +84,14 @@ export const useCreateYearlyBudget = () => {
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
       addToast({
         type: 'success',
-        title: 'Yearly budget created',
-        message: 'Your yearly budget has been created successfully.',
+        message: 'Yearly budget created'
       });
       navigate('/budgets');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to create budget',
-        message: 'Please try again.',
+        message: 'Failed to create budget'
       });
     },
   });
@@ -117,16 +113,14 @@ export const useUpdateMonthlyBudget = () => {
       queryClient.invalidateQueries({ queryKey: ['budget-analysis'] });
       addToast({
         type: 'success',
-        title: 'Budget updated',
-        message: 'Your monthly budget has been updated successfully.',
+        message: 'Budget updated'
       });
       navigate('/budgets');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update budget',
-        message: 'Please try again.',
+        message: 'Failed to update budget'
       });
     },
   });
@@ -147,16 +141,14 @@ export const useUpdateYearlyBudget = () => {
       queryClient.invalidateQueries({ queryKey: ['budget-analysis'] });
       addToast({
         type: 'success',
-        title: 'Budget updated',
-        message: 'Your yearly budget has been updated successfully.',
+        message: 'Budget updated'
       });
       navigate('/budgets');
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to update budget',
-        message: 'Please try again.',
+        message: 'Failed to update budget'
       });
     },
   });
@@ -176,15 +168,13 @@ export const useDeleteBudget = () => {
       queryClient.invalidateQueries({ queryKey: ['budget-analysis'] });
       addToast({
         type: 'success',
-        title: 'Budget deleted',
-        message: 'The budget has been deleted successfully.',
+        message: 'Budget deleted'
       });
     },
     onError: () => {
       addToast({
         type: 'error',
-        title: 'Failed to delete budget',
-        message: 'Please try again.',
+        message: 'Failed to delete budget'
       });
     },
   });
