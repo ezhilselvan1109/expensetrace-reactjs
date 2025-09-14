@@ -8,14 +8,14 @@ import {
   useUpdateMonthlyBudget,
   useUpdateYearlyBudget,
   useBudgetAnalysis
-} from '../hooks/useBudgets';
-import { useCategoriesByType } from '../hooks/useCategories';
-import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from '../types/budget';
-import CategorySelectModal from '../components/CategorySelectModal';
-import CategoryIcon from '../components/CategoryIcon';
-import { formatCurrency } from '../utils/formatters';
-import MonthYearPicker from '../components/MonthYearPicker';
-import YearPicker from '../components/YearPicker';
+} from '../../hooks/useBudgets';
+import { useCategoriesByType } from '../../hooks/useCategories';
+import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from '../../types/budget';
+import CategorySelectModal from '../../components/CategorySelectModal';
+import CategoryIcon from '../../components/CategoryIcon';
+import { formatCurrency } from '../../utils/formatters';
+import MonthYearPicker from '../../components/MonthYearPicker';
+import YearPicker from '../../components/YearPicker';
 
 const tabs = ['Monthly', 'Yearly'];
 

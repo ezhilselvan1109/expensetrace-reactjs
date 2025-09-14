@@ -149,17 +149,28 @@ function Accounts() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl shadow p-4">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Available Balance</h3>
-          <p className="text-2xl font-bold text-gray-900">
-            {formatCurrencyWithVisibility(summary?.availableAmount || 0)}
-          </p>
+        <div className="bg-white rounded-xl shadow p-4 flex items-center gap-3">
+          <div className="p-3 bg-indigo-100 rounded-full">
+            <Wallet className="w-6 h-6 text-indigo-600" />
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Available Balance</h3>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrencyWithVisibility(summary?.availableAmount || 0)}
+            </p>
+          </div>
         </div>
-        <div className="bg-white rounded-xl shadow p-4">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Available Credit</h3>
-          <p className="text-2xl font-bold text-green-600">
-            {formatCurrencyWithVisibility(summary?.availableCredit || 0)}
-          </p>
+
+        <div className="bg-white rounded-xl shadow p-4 flex items-center gap-3">
+          <div className="p-3 bg-green-100 rounded-full">
+            <CreditCard className="w-6 h-6 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-600 mb-1">Available Credit</h3>
+            <p className="text-2xl font-bold text-green-600">
+              {formatCurrencyWithVisibility(summary?.availableCredit || 0)}
+            </p>
+          </div>
         </div>
       </div>
 

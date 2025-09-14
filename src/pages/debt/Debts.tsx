@@ -11,6 +11,8 @@ import {
   TrendingUp,
   TrendingDown,
   Eye,
+  PiggyBank,
+  Scale,
 } from 'lucide-react';
 import {
   useDebts,
@@ -106,7 +108,7 @@ function Debts() {
   return (
     <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Debts</h1>
           <p className="text-sm text-gray-500 mt-1">Track money you've lent and borrowed</p>
@@ -117,6 +119,37 @@ function Debts() {
         >
           <Plus className="w-4 h-4" /> Add Debt
         </button>
+      </div>
+
+      {/* Totals */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        {/* Total Lent */}
+        <div className="bg-white rounded-xl shadow p-4 flex items-center gap-3">
+          <div className="p-3 rounded-full bg-gradient-to-tr from-indigo-200 to-indigo-400">
+            <HandCoins className="w-6 h-6 text-indigo-700" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm text-gray-500">Total Lent</span>
+            <span className="text-xl font-bold text-gray-900">
+              {formatCurrency(0)}
+              {/* {formatCurrency(summary?.totalPayable ?? 0)} */}
+            </span>
+          </div>
+        </div>
+
+        {/* Total Borrowed */}
+        <div className="bg-white rounded-xl shadow p-4 flex items-center gap-3">
+          <div className="p-3 rounded-full bg-gradient-to-tr from-orange-200 to-orange-400">
+            <PiggyBank className="w-6 h-6 text-orange-700" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm text-gray-500">Total Borrowed</span>
+            <span className="text-xl font-bold text-gray-900">
+              {formatCurrency(0)}
+              {/* {formatCurrency(summary?.totalReceivable ?? 0)} */}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -139,18 +172,6 @@ function Debts() {
         })}
       </div>
 
-      {/* Totals */}
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <div className="bg-white rounded-xl shadow p-4 flex justify-between items-center">
-          <span className="text-sm text-gray-500">Total Lent</span>
-          <span className="font-semibold text-gray-900">{formatCurrency(summary?.totalPayable ?? 0)}</span>
-        </div>
-        <div className="bg-white rounded-xl shadow p-4 flex justify-between items-center">
-          <span className="text-sm text-gray-500">Total Borrowed</span>
-          <span className="font-semibold text-gray-900">{formatCurrency(summary?.totalReceivable ?? 0)}</span>
-        </div>
-      </div> */}
-
       {/* Debts List */}
       {debts.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -159,7 +180,7 @@ function Debts() {
               key={debt.id}
               className="bg-white rounded-xl shadow p-4 hover:shadow-md transition flex flex-col justify-between"
             >
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3">
                 <div className={`p-3 rounded-full ${getDebtTypeColor(debt.type)}`}>
                   {getDebtTypeIcon(debt.type)}
                 </div>
@@ -171,7 +192,7 @@ function Debts() {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex justify-between items-center">
                 <span className="font-semibold text-gray-900">
                   {formatCurrency(debt.remainingAmount || 0)}
                 </span>
@@ -202,7 +223,7 @@ function Debts() {
         </div>
       ) : (
         <div className="p-8 text-center">
-          <User className="mx-auto h-12 w-12 text-gray-400" />
+          <Scale className="mx-auto h-12 w-12 text-gray-400" />
           <h3 className="mt-2 text-sm font-semibold text-gray-900">No debts found</h3>
           <p className="mt-1 text-sm text-gray-500">Start by adding a new debt record</p>
           <div className="mt-4">

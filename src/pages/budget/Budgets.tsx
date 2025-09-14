@@ -126,7 +126,7 @@ function Budgets() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Budgets</h1>
           <p className="text-sm text-gray-500">Track and manage your spending limits</p>
@@ -141,7 +141,7 @@ function Budgets() {
       </div>
 
       {/* Tabs */}
-      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-6">
+      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-4">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (

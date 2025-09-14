@@ -1,24 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, X } from 'lucide-react';
+import { ArrowLeft, Plus, X, Building2, Wallet, CreditCard, Banknote, Smartphone } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { 
-  useCreateBankAccount, 
-  useCreateWallet, 
+import {
+  useCreateBankAccount,
+  useCreateWallet,
   useCreateCreditCard,
   useUpdateBankAccount,
   useUpdateWallet,
   useUpdateCreditCard,
-  useAccount 
-} from '../hooks/useAccounts';
-import { 
-  CreateBankAccountData, 
-  CreateWalletData, 
+  useAccount
+} from '../../hooks/useAccounts';
+import {
+  CreateBankAccountData,
+  CreateWalletData,
   CreateCreditCardData,
   CreatePaymentModeData,
   PAYMENT_MODE_TYPES
-} from '../types/account';
-import PaymentModeModal from '../components/PaymentModeModal';
+} from '../../types/account';
+import PaymentModeModal from '../../components/PaymentModeModal';
 
 const tabs = ['Bank Account', 'Wallet', 'Credit Card'];
 
@@ -91,32 +91,32 @@ function AccountForm() {
       if (isEditing && id) {
         // Update existing account
         if (activeTab === 0) {
-          await updateBankAccount.mutateAsync({ 
-            id, 
-            data: { 
-              name: data.name, 
+          await updateBankAccount.mutateAsync({
+            id,
+            data: {
+              name: data.name,
               currentBalance: data.currentBalance,
-              linkedPaymentModes: paymentModes 
-            } 
+              linkedPaymentModes: paymentModes
+            }
           });
         } else if (activeTab === 1) {
-          await updateWallet.mutateAsync({ 
-            id, 
-            data: { 
-              name: data.name, 
-              currentBalance: data.currentBalance 
-            } 
+          await updateWallet.mutateAsync({
+            id,
+            data: {
+              name: data.name,
+              currentBalance: data.currentBalance
+            }
           });
         } else if (activeTab === 2) {
-          await updateCreditCard.mutateAsync({ 
-            id, 
-            data: { 
+          await updateCreditCard.mutateAsync({
+            id,
+            data: {
               name: data.name,
               currentAvailableLimit: data.currentAvailableLimit,
               totalCreditLimit: data.totalCreditLimit,
               billingCycleStartDate: data.billingCycleStartDate,
               paymentDueDate: data.paymentDueDate
-            } 
+            }
           });
         }
       } else {
@@ -162,8 +162,43 @@ function AccountForm() {
     setPaymentModes(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Helper to get icon and color based on payment mode type
+  const getPaymentModeIconAndColor = (type: string) => {
+    switch (type) {
+      case '1': // UPI
+        return { icon: <Smartphone className="w-4 h-4 text-white" />, color: 'bg-green-500' };
+      case '2': // Debit Card
+        return { icon: <CreditCard className="w-4 h-4 text-white" />, color: 'bg-blue-500' };
+      case '3': // Cheque
+        return { icon: <Banknote className="w-4 h-4 text-white" />, color: 'bg-yellow-500' };
+      case '4': // Internet Banking
+        return { icon: <Wallet className="w-4 h-4 text-white" />, color: 'bg-purple-500' };
+      default:
+        return { icon: <CreditCard className="w-4 h-4 text-white" />, color: 'bg-gray-500' };
+    }
+  };
+
+
+  const getAccountIcon = (tabIndex: number) => {
+    switch (tabIndex) {
+      case 0: return <Building2 className="w-5 h-5" />;
+      case 1: return <Wallet className="w-5 h-5" />;
+      case 2: return <CreditCard className="w-5 h-5" />;
+      default: return <Building2 className="w-5 h-5" />;
+    }
+  };
+
+  const getAccountColor = (tabIndex: number) => {
+    switch (tabIndex) {
+      case 0: return 'bg-blue-500';
+      case 1: return 'bg-green-500';
+      case 2: return 'bg-purple-500';
+      default: return 'bg-blue-500';
+    }
+  };
+
   const isPending = createBankAccount.isPending || createWallet.isPending || createCreditCard.isPending ||
-                   updateBankAccount.isPending || updateWallet.isPending || updateCreditCard.isPending;
+    updateBankAccount.isPending || updateWallet.isPending || updateCreditCard.isPending;
 
   if (isEditing && accountLoading) {
     return (
@@ -185,27 +220,27 @@ function AccountForm() {
 
   return (
     <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
-      <div className="mb-6 sm:mb-8">
+      <div className="mb-5 sm:mb-4">
         <button
           onClick={() => navigate('/accounts')}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base"
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-1 text-sm sm:text-base"
         >
           <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
           Back to Accounts
         </button>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-2xl font-bold text-gray-900">
           {isEditing ? 'Edit Account' : 'Add Account'}
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-1">
+        <p className="text-sm sm:text-base text-gray-600">
           {isEditing ? 'Update account details' : 'Create a new account for tracking your finances'}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6 lg:space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 sm:space-y-4 lg:space-y-6">
         {/* Account Type Tabs */}
         {!isEditing && (
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-3 sm:mb-4">
+          <div className="bg-white rounded-lg shadow p-4">
+            <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">
               Account Type
             </label>
             <div className="flex bg-gray-100 rounded-lg p-1">
@@ -216,11 +251,10 @@ function AccountForm() {
                     key={tab}
                     type="button"
                     onClick={() => setActiveTab(index)}
-                    className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${
-                      active
-                        ? "bg-white shadow text-black"
-                        : "text-gray-500 hover:text-black"
-                    }`}
+                    className={`flex-1 text-xs sm:text-sm font-medium rounded-lg py-2 transition-all duration-200 ${active
+                      ? "bg-white shadow text-black"
+                      : "text-gray-500 hover:text-black"
+                      }`}
                   >
                     {tab}
                   </button>
@@ -231,7 +265,7 @@ function AccountForm() {
         )}
 
         {/* Account Name */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="bg-white rounded-lg shadow p-4">
           <label htmlFor="name" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
             Account Name
           </label>
@@ -250,12 +284,12 @@ function AccountForm() {
         {/* Bank Account Fields */}
         {activeTab === 0 && (
           <>
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <label htmlFor="currentBalance" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                 Current Balance
               </label>
               <input
-                {...register('currentBalance', { 
+                {...register('currentBalance', {
                   required: 'Current balance is required',
                   min: { value: 0, message: 'Balance cannot be negative' }
                 })}
@@ -271,40 +305,58 @@ function AccountForm() {
             </div>
 
             {/* Linked Payment Modes */}
-            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center justify-between mb-4">
-                <label className="block text-sm sm:text-base font-medium text-gray-700">
-                  Linked Payment Modes (Optional)
-                </label>
+                <div>
+                  <label className="block text-sm sm:text-base font-medium text-gray-700">
+                    Linked Payment Modes
+                  </label>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                    {paymentModes.length === 0
+                      ? 'No payment modes added yet'
+                      : `${paymentModes.length} payment mode(s) linked to this account`
+                    }
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsPaymentModeModalOpen(true)}
-                  className="inline-flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                  className="inline-flex items-center px-3 py-2 text-xs sm:text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
                 >
                   <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   Add
                 </button>
               </div>
 
-              {paymentModes.length === 0 ? (
-                <p className="text-gray-500 text-xs sm:text-sm">No payment modes added yet</p>
-              ) : (
-                <div className="space-y-2 sm:space-y-3">
-                  {paymentModes.map((mode, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <p className="text-sm sm:text-base font-medium text-gray-900">{mode.name}</p>
-                        <p className="text-xs sm:text-sm text-gray-500">{PAYMENT_MODE_TYPES[mode.type]}</p>
+              {paymentModes.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                  {paymentModes.map((mode, index) => {
+                    const { icon, color } = getPaymentModeIconAndColor(mode.type);
+                    return (
+                      <div key={index} className="flex items-center justify-between p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-full ${color}`}>
+                            {icon}
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{mode.name}</p>
+                            <p className="text-xs text-gray-500">{PAYMENT_MODE_TYPES[mode.type]}</p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removePaymentMode(index)}
+                          className="p-2 rounded-lg hover:bg-gray-300 text-gray-400 hover:text-red-600 disabled:opacity-50"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removePaymentMode(index)}
-                        className="text-red-500 hover:text-red-700 transition-colors p-1"
-                      >
-                        <X className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-4 text-xs sm:text-sm text-gray-500">
+                  No payment modes added yet
                 </div>
               )}
             </div>
@@ -313,12 +365,12 @@ function AccountForm() {
 
         {/* Wallet Fields */}
         {activeTab === 1 && (
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow p-4">
             <label htmlFor="currentBalance" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
               Current Balance
             </label>
             <input
-              {...register('currentBalance', { 
+              {...register('currentBalance', {
                 required: 'Current balance is required',
                 min: { value: 0, message: 'Balance cannot be negative' }
               })}
@@ -338,12 +390,12 @@ function AccountForm() {
         {activeTab === 2 && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="bg-white rounded-lg shadow p-4">
                 <label htmlFor="currentAvailableLimit" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Current Available Limit
                 </label>
                 <input
-                  {...register('currentAvailableLimit', { 
+                  {...register('currentAvailableLimit', {
                     required: 'Available limit is required',
                     min: { value: 0, message: 'Limit cannot be negative' }
                   })}
@@ -358,12 +410,12 @@ function AccountForm() {
                 )}
               </div>
 
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="bg-white rounded-lg shadow p-4">
                 <label htmlFor="totalCreditLimit" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Total Credit Limit
                 </label>
                 <input
-                  {...register('totalCreditLimit', { 
+                  {...register('totalCreditLimit', {
                     required: 'Total credit limit is required',
                     min: { value: 0, message: 'Limit cannot be negative' }
                   })}
@@ -380,7 +432,7 @@ function AccountForm() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="bg-white rounded-lg shadow p-4">
                 <label htmlFor="billingCycleStartDate" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Billing Cycle Start Date
                 </label>
@@ -395,7 +447,7 @@ function AccountForm() {
                 )}
               </div>
 
-              <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="bg-white rounded-lg shadow p-4">
                 <label htmlFor="paymentDueDate" className="block text-sm sm:text-base font-medium text-gray-700 mb-2">
                   Payment Due Date
                 </label>
@@ -413,15 +465,26 @@ function AccountForm() {
           </>
         )}
 
-        {/* Error Messages */}
-        {(createBankAccount.error || createWallet.error || createCreditCard.error ||
-          updateBankAccount.error || updateWallet.error || updateCreditCard.error) && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-3 sm:p-4">
-            <div className="text-xs sm:text-sm text-red-600">
-              Failed to save account. Please try again.
+        {/* Preview */}
+        <div className="bg-white rounded-lg shadow p-4">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 mb-2 sm:mb-2">
+            Preview
+          </label>
+          <div className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className={`p-3 rounded-full ${getAccountColor(activeTab)}`}>
+              {getAccountIcon(activeTab)}
+            </div>
+            <div>
+              <p className="text-sm sm:text-base font-medium text-gray-900">
+                {watch('name') || 'Account Name'}
+              </p>
+              <p className="text-xs sm:text-sm text-gray-500">
+                {tabs[activeTab]}
+                {activeTab === 0 && paymentModes.length > 0 && ` • ${paymentModes.length} payment mode(s)`}
+              </p>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Submit Button */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
