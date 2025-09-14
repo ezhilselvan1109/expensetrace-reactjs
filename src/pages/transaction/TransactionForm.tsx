@@ -6,22 +6,22 @@ import {
   useCreateTransaction,
   useUpdateTransaction,
   useTransaction
-} from '../hooks/useTransactions';
+} from '../../hooks/useTransactions';
 import {
   useCategoriesByType,
   useDefaultCategory
-} from '../hooks/useCategories';
+} from '../../hooks/useCategories';
 import {
   useAccounts,
   useDefaultPaymentMode
-} from '../hooks/useAccounts';
-import { CreateTransactionData } from '../types/transaction';
-import CalculatorModal from '../components/CalculatorModal';
-import CategorySelectModal from '../components/CategorySelectModal';
-import AccountSelectModal from '../components/AccountSelectModal';
-import CategoryIcon from '../components/CategoryIcon';
-import DatePicker from '../components/DatePicker';
-import TimePicker from '../components/TimePicker';
+} from '../../hooks/useAccounts';
+import { CreateTransactionData } from '../../types/transaction';
+import CalculatorModal from '../../components/CalculatorModal';
+import CategorySelectModal from '../../components/CategorySelectModal';
+import AccountSelectModal from '../../components/AccountSelectModal';
+import CategoryIcon from '../../components/CategoryIcon';
+import DatePicker from '../../components/DatePicker';
+import TimePicker from '../../components/TimePicker';
 
 const tabs = ['Expense', 'Income', 'Transfer'];
 
