@@ -15,9 +15,9 @@ import {
   useAccounts,
   useAccountSummary,
   useDeleteAccount,
-} from '../hooks/useAccounts';
-import { useFormatters } from '../hooks/useFormatters';
-import ConfirmationModal from '../components/ConfirmationModal';
+} from '../../hooks/useAccounts';
+import { useFormatters } from '../../hooks/useFormatters';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 function Accounts() {
   const [showBalance, setShowBalance] = useState(false);
@@ -181,7 +181,7 @@ function Accounts() {
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`p-2 rounded-xl ${getAccountTypeColor(account.type)}`}
+                        className={`p-3 rounded-full ${getAccountTypeColor(account.type)}`}
                       >
                         {getAccountIcon(account.type)}
                       </div>
@@ -242,7 +242,7 @@ function Accounts() {
                         )}
                       </>
                     ) : (
-                      <div className="flex justify-between text-sm">
+                      <div className="flex gap-2 text-sm">
                         <span className="text-gray-600">Balance:</span>
                         <span className="font-medium">
                           {formatCurrencyWithVisibility(account.currentBalance || 0)}
