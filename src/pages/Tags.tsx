@@ -90,12 +90,6 @@ function Tags() {
           <p className="text-sm text-gray-500 mb-4">
             Start organizing your transactions by creating tags
           </p>
-          <Link
-            to="/tags/add"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
-          >
-            <Plus className="w-4 h-4" /> Add Tag
-          </Link>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

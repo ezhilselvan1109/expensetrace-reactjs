@@ -9,11 +9,11 @@ import {
   useAdjustmentRecords,
   useDebtRecordSummary,
   useDeleteDebtRecord 
-} from '../hooks/useDebts';
-import { DEBT_RECORD_TYPES } from '../types/debt';
-import DebtRecordTypeModal from '../components/DebtRecordTypeModal';
-import { useFormatters } from '../hooks/useFormatters';
-import ConfirmationModal from '../components/ConfirmationModal';
+} from '../../../hooks/useDebts';
+import { DEBT_RECORD_TYPES } from '../../../types/debt';
+import DebtRecordTypeModal from '../../../components/DebtRecordTypeModal';
+import { useFormatters } from '../../../hooks/useFormatters';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 
 const tabs = ['All', 'Paid', 'Received'];
 

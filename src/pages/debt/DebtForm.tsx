@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useCreateDebt, useUpdateDebt, useDebt } from '../hooks/useDebts';
-import { useAccounts } from '../hooks/useAccounts';
-import { CreateDebtData } from '../types/debt';
-import AccountSelectModal from '../components/AccountSelectModal';
-import DatePicker from '../components/DatePicker';
-import TimePicker from '../components/TimePicker';
+import { useCreateDebt, useUpdateDebt, useDebt } from '../../hooks/useDebts';
+import { useAccounts } from '../../hooks/useAccounts';
+import { CreateDebtData } from '../../types/debt';
+import AccountSelectModal from '../../components/AccountSelectModal';
+import DatePicker from '../../components/DatePicker';
+import TimePicker from '../../components/TimePicker';
 
 interface FormData {
   personName: string;

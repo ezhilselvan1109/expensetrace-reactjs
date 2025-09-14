@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useCreateDebtRecord, useUpdateDebtRecord, useDebtRecord } from '../hooks/useDebts';
-import { useAccounts, useDefaultPaymentMode } from '../hooks/useAccounts';
-import { CreateDebtRecordData } from '../types/debt';
-import AccountSelectModal from '../components/AccountSelectModal';
-import DatePicker from '../components/DatePicker';
-import TimePicker from '../components/TimePicker';
+import { useCreateDebtRecord, useUpdateDebtRecord, useDebtRecord } from '../../../hooks/useDebts';
+import { useAccounts, useDefaultPaymentMode } from '../../../hooks/useAccounts';
+import { CreateDebtRecordData } from '../../../types/debt';
+import AccountSelectModal from '../../../components/AccountSelectModal';
+import DatePicker from '../../../components/DatePicker';
+import TimePicker from '../../../components/TimePicker';
 
 interface FormData {
   date: string;
