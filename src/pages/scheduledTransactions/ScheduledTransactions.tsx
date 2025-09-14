@@ -13,11 +13,11 @@ import {
   useUpcomingScheduledTransactions,
   useCompletedScheduledTransactions,
   useDeleteScheduledTransaction,
-} from '../hooks/useScheduledTransactions';
-import { SCHEDULED_TRANSACTION_TYPES, FREQUENCY_OPTIONS } from '../types/scheduledTransaction';
-import { useFormatters } from '../hooks/useFormatters';
-import CategoryIcon from '../components/CategoryIcon';
-import ConfirmationModal from '../components/ConfirmationModal';
+} from '../../hooks/useScheduledTransactions';
+import { SCHEDULED_TRANSACTION_TYPES, FREQUENCY_OPTIONS } from '../../types/scheduledTransaction';
+import { useFormatters } from '../../hooks/useFormatters';
+import CategoryIcon from '../../components/CategoryIcon';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 const tabs = ['Upcoming', 'Completed'];
 

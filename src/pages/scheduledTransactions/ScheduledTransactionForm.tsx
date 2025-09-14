@@ -6,24 +6,24 @@ import {
   useCreateScheduledTransaction,
   useUpdateScheduledTransaction,
   useScheduledTransaction
-} from '../hooks/useScheduledTransactions';
+} from '../../hooks/useScheduledTransactions';
 import {
   useCategoriesByType,
   useDefaultCategory
-} from '../hooks/useCategories';
+} from '../../hooks/useCategories';
 import {
   useAccounts,
   useDefaultPaymentMode
-} from '../hooks/useAccounts';
-import { CreateScheduledTransactionData, FrequencyType, EndType, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS } from '../types/scheduledTransaction';
-import CalculatorModal from '../components/CalculatorModal';
-import CategorySelectModal from '../components/CategorySelectModal';
-import AccountSelectModal from '../components/AccountSelectModal';
-import FrequencyModal from '../components/FrequencyModal';
-import EarlyReminderModal from '../components/EarlyReminderModal';
-import CategoryIcon from '../components/CategoryIcon';
-import DatePicker from '../components/DatePicker';
-import TimePicker from '../components/TimePicker';
+} from '../../hooks/useAccounts';
+import { CreateScheduledTransactionData, FrequencyType, EndType, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS } from '../../types/scheduledTransaction';
+import CalculatorModal from '../../components/CalculatorModal';
+import CategorySelectModal from '../../components/CategorySelectModal';
+import AccountSelectModal from '../../components/AccountSelectModal';
+import FrequencyModal from '../../components/FrequencyModal';
+import EarlyReminderModal from '../../components/EarlyReminderModal';
+import CategoryIcon from '../../components/CategoryIcon';
+import DatePicker from '../../components/DatePicker';
+import TimePicker from '../../components/TimePicker';
 
 const tabs = ['Expense', 'Income', 'Transfer'];
 

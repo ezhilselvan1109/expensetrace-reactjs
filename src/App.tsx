@@ -21,8 +21,8 @@ const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage')
 const Categories = lazy(() => import('./pages/categories/Categories'));
 const CategoryForm = lazy(() => import('./pages/categories/CategoryForm'));
 const Tags = lazy(() => import('./pages/Tags'));
-const ScheduledTransactions = lazy(() => import('./pages/ScheduledTransactions'));
-const ScheduledTransactionForm = lazy(() => import('./pages/ScheduledTransactionForm'));
+const ScheduledTransactions = lazy(() => import('./pages/scheduledTransactions/ScheduledTransactions'));
+const ScheduledTransactionForm = lazy(() => import('./pages/scheduledTransactions/ScheduledTransactionForm'));
 const Budgets = lazy(() => import('./pages/budget/Budgets'));
 const BudgetForm = lazy(() => import('./pages/budget/BudgetForm'));
 const BudgetAnalysis = lazy(() => import('./pages/budget/BudgetAnalysis'));
