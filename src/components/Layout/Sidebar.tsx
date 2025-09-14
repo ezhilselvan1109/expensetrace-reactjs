@@ -282,36 +282,28 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Header */}
-        <div className="p-1 sm:p-2 border-b border-gray-200 flex-shrink-0">
-          <div className={`flex items-center ${shouldShowCondensed ? "justify-center" : "justify-between"}`}>
-            {/* Logo */}
-            <Link to="/">
-              {shouldShowCondensed ? (
-                <img
-                  src="/logo1.png"
-                  alt="Logo Icon"
-                  className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
-                />
-              ) : (
-                <img
-                  src="/logo.png"
-                  alt="ExpenseTrace Logo"
-                  className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
-                />
-              )}
-            </Link>
+        <div className="flex items-center justify-between p-3 sm:p-4 ">
+          {/* Logo */}
+          <Link to="/dashboard" className="flex items-center">
+            <img
+              src={shouldShowCondensed ? "/logo1.png" : "/logo.png"}
+              alt="Logo"
+              className={`transition-all duration-300 
+              ${shouldShowCondensed ? "h-8 w-8" : "h-8 sm:h-10"} 
+              object-contain`}
+            />
+          </Link>
 
-            {!shouldShowCondensed && (
-              <button
-                onClick={() => setIsCondensed((s) => !s)}
-                className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-indigo-300"
-              >
-                <ChevronLeft
-                  className="h-5 w-5 transition-transform duration-300"
-                />
-              </button>
-            )}
-          </div>
+          {/* Collapse Button (only desktop) */}
+          {!shouldShowCondensed && (
+            <button
+              onClick={() => setIsCondensed((s) => !s)}
+              className="hidden lg:block p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-indigo-300"
+              aria-label="Collapse sidebar"
+            >
+              <ChevronLeft className="h-5 w-5 transition-transform duration-300" />
+            </button>
+          )}
         </div>
 
         {/* Menu */}
