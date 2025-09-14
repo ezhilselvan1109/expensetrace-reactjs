@@ -80,7 +80,7 @@ function Settings() {
   }
 
   return (
-    <div className="p-2 sm:p-4 max-w-7xl mx-auto">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-xl font-bold text-gray-900">Settings</h1>

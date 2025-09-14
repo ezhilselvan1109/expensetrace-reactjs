@@ -337,7 +337,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer - Logout */}
-        <div className="p-3 sm:p-4 border-t border-gray-200">
+        <div className="p-3 sm:p-4">
           <div className="relative group">
             <button
               onClick={handleLogout}
