@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useCreateCategory, useUpdateCategory, useCategory } from '../hooks/useCategories';
-import { CATEGORY_COLORS, CATEGORY_ICONS, colorMap, iconTitle } from '../types/category';
-import CategoryIcon from '../components/CategoryIcon';
+import { useCreateCategory, useUpdateCategory, useCategory } from '../../hooks/useCategories';
+import { CATEGORY_COLORS, CATEGORY_ICONS, colorMap, iconTitle } from '../../types/category';
+import CategoryIcon from '../../components/CategoryIcon';
 
 const tabs = ['Expense', 'Income'];
 

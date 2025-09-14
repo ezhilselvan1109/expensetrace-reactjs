@@ -5,10 +5,10 @@ import {
   useCategoriesByType,
   useDefaultCategory,
   useDeleteCategory,
-} from '../hooks/useCategories';
-import CategoryIcon from '../components/CategoryIcon';
-import DefaultCategoryModal from '../components/DefaultCategoryModal';
-import ConfirmationModal from '../components/ConfirmationModal';
+} from '../../hooks/useCategories';
+import CategoryIcon from '../../components/CategoryIcon';
+import DefaultCategoryModal from '../../components/DefaultCategoryModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 const tabs = ['Expense', 'Income'];
 
