@@ -1,10 +1,10 @@
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { useBudgetAnalysis } from '../hooks/useBudgets';
-import { MONTHS } from '../types/budget';
-import CategoryIcon from '../components/CategoryIcon';
-import { useFormatters } from '../hooks/useFormatters';
+import { useBudgetAnalysis } from '../../hooks/useBudgets';
+import { MONTHS } from '../../types/budget';
+import CategoryIcon from '../../components/CategoryIcon';
+import { useFormatters } from '../../hooks/useFormatters';
 
 function BudgetAnalysis() {
   const { budgetId } = useParams<{ budgetId: string }>();
