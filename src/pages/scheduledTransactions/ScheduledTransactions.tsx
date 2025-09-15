@@ -154,7 +154,7 @@ function ScheduledTransactions() {
                 key={transaction.id}
                 className="bg-white rounded-xl shadow p-4 flex flex-col justify-between hover:shadow-md transition"
               >
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3">
                   {transaction.category ? (
                     <CategoryIcon
                       icon={transaction.category.icon}
@@ -171,7 +171,7 @@ function ScheduledTransactions() {
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-2">
+                <div className="flex justify-between items-center">
                   <span className={`font-semibold ${getAmountColor(transaction.type)}`}>
                     {transaction.type === 'EXPENSE' ? '-' : transaction.type === 'INCOME' ? '+' : ''}
                     {formatCurrency(transaction.amount)}
@@ -193,7 +193,7 @@ function ScheduledTransactions() {
                   </div>
                 </div>
 
-                <div className="text-xs text-gray-500 mt-2 space-y-1">
+                <div className="text-xs text-gray-500 space-y-1">
                   <div>Start: {formatDate(transaction.startDate)} at {formatTime(transaction.time)}</div>
                   <div>{FREQUENCY_OPTIONS[transaction.frequencyType]}</div>
                   {transaction.account && <div>From: {transaction.account.name}</div>}

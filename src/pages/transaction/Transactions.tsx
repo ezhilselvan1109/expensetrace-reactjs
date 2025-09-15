@@ -121,11 +121,13 @@ function Transactions() {
             const { date, time } = formatDateTime(txn.txnDate, txn.txnTime);
             return (
               <div key={txn.id} className="bg-white rounded-xl shadow p-4 hover:shadow-md transition flex flex-col justify-between">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3">
                   {txn.category ? (
                     <CategoryIcon icon={txn.category.icon} color={txn.category.color} />
                   ) : (
-                    getTransactionIcon(txn.type)
+                    <div className={`rounded-full flex items-center justify-center w-10 h-10 bg-gray-200`}>
+                    {getTransactionIcon(txn.type)}
+                    </div>
                   )}
                   <div className="min-w-0">
                     <h3 className="text-sm font-medium text-gray-900 truncate">{txn.description}</h3>
@@ -135,7 +137,7 @@ function Transactions() {
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-2">
+                <div className="flex justify-between items-center">
                   <span className={`font-semibold ${getAmountColor(txn.type)}`}>
                     {txn.type === 1 ? '-' : txn.type === 2 ? '+' : ''}
                     {formatCurrency(txn.amount)}
@@ -157,7 +159,7 @@ function Transactions() {
                   </div>
                 </div>
 
-                <div className="text-xs text-gray-500 mt-2 space-y-1">
+                <div className="text-xs text-gray-500 space-y-1">
                   <div>{date} at {time}</div>
                   {txn.account && (
                     <div className="truncate flex items-center gap-1">
