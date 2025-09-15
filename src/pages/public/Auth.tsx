@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { initiateGoogleLogin } from "../hooks/useAuth";
+import { initiateGoogleLogin } from "../../hooks/useAuth";
 
 function Auth() {
   const handleGoogleLogin = () => {
@@ -7,31 +7,31 @@ function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
       {/* Logo */}
       <Link to="/" className="flex-shrink-0">
         <img
           src="../logo.png"
           alt="ExpenseTrace Logo"
-          className="h-10 sm:h-12 lg:h-14 w-auto"
+          className="h-12 sm:h-14 lg:h-16 w-auto"
         />
       </Link>
 
       {/* Title */}
-      <h2 className="mt-8 text-center text-2xl sm:text-3xl font-semibold text-gray-900">
+      <h2 className="mt-8 sm:mt-10 text-center text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900">
         Log in or sign up
       </h2>
 
       {/* Tagline */}
-      <p className="mt-2 text-center text-sm sm:text-base text-gray-600">
+      <p className="mt-3 sm:mt-4 text-center text-sm sm:text-base lg:text-lg text-gray-600 max-w-md">
         Track your spending, grow your savings, and get smarter with money.
       </p>
 
       {/* Google Button */}
-      <div className="mt-10 w-full flex justify-center">
+      <div className="mt-10 sm:mt-12 w-full flex justify-center">
         <button
           onClick={handleGoogleLogin}
-          className="w-full max-w-sm flex justify-center items-center py-2 sm:py-3 px-2 border rounded-full text-base font-medium text-gray-700 bg-white hover:bg-gray-100 shadow-sm transition"
+          className="w-full max-w-sm flex justify-center items-center py-2.5 sm:py-3 px-4 border rounded-full text-base sm:text-lg font-medium text-gray-700 bg-white hover:bg-gray-100 shadow-sm transition"
         >
           <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24">
             <path
@@ -56,7 +56,7 @@ function Auth() {
       </div>
 
       {/* Footer links */}
-      <p className="mt-8 text-sm text-gray-500 text-center">
+      <p className="mt-10 sm:mt-12 text-sm sm:text-base text-gray-500 text-center">
         <Link to="/terms" className="text-indigo-600 hover:text-indigo-500">
           Terms of Service
         </Link>
