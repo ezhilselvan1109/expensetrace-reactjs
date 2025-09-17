@@ -6,11 +6,14 @@ import {
   ChevronRight,
   DollarSign,
   BarChart3,
-  ArrowUpDown
+  ArrowUpDown,
 } from 'lucide-react';
 import { useFormatters } from '../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../hooks/useAnalysis';
 import DateRangeModal from '../components/DateRangeModal';
+import CategoryIcon from '../components/CategoryIcon';
+import { Cell, Pie, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart } from 'recharts';
 
 const tabs = ['Week', 'Month', 'Year', 'Custom'];
 
@@ -174,6 +177,65 @@ function Analysis() {
     }
   };
 
+  // Get color hex value from category color name
+  const getCategoryColorHex = (colorName: string): string => {
+    const colorMap: Record<string, string> = {
+      'indigo': '#6366F1',
+      'teal': '#14B8A6',
+      'yellow': '#F59E0B',
+      'orange': '#F97316',
+      'maroon': '#991B1B',
+      'pink': '#EC4899',
+      'lime': '#84CC16',
+      'violet': '#8B5CF6',
+      'rose': '#F43F5E',
+      'slate': '#64748B',
+      'sky': '#0EA5E9',
+      'purple': '#A855F7',
+      'stone': '#78716C',
+      'red': '#EF4444',
+      'green': '#22C55E',
+      'blue': '#3B82F6',
+      'amber': '#F59E0B',
+      'cyan': '#06B6D4',
+      'emerald': '#10B981',
+      'fuchsia': '#D946EF',
+      'gray': '#6B7280',
+      'zinc': '#71717A',
+      'brown': '#92400E',
+      'magenta': '#BE185D',
+      'bronze': '#A16207',
+      'peach': '#FED7AA',
+      'lavender': '#DDD6FE',
+      'mint': '#BBF7D0',
+      'olive': '#365314',
+      'navy': '#1E3A8A',
+      'gold': '#FBBF24',
+      'charcoal': '#374151',
+      'coral': '#FCA5A5',
+      'aqua': '#A7F3D0',
+      'plum': '#6B21A8',
+      'mustard': '#D97706',
+      'ruby': '#B91C1C',
+      'sapphire': '#1E3A8A',
+      'topaz': '#FDE047'
+    };
+    return colorMap[colorName] || '#6B7280';
+  };
+
+  // Prepare chart data
+  const spendingChartData = analysisData?.spendingCategory?.map(item => ({
+    name: item.category.name,
+    value: item.amount,
+    color: getCategoryColorHex(item.category.color),
+  })) || [];
+
+  const incomeChartData = analysisData?.incomeCategory?.map(item => ({
+    name: item.category.name,
+    value: item.amount,
+    color: getCategoryColorHex(item.category.color),
+  })) || [];
+
   const balance = (analysisData?.income || 0) - (analysisData?.spending || 0);
   const showMainLoading = isLoading && !analysisData;
   const showCustomLoading = activeTab === 3 && (isFetching);
@@ -187,7 +249,7 @@ function Analysis() {
       </div>
 
       {/* Tabs */}
-      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-6">
+      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-4">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (
@@ -213,7 +275,7 @@ function Analysis() {
       </div>
 
       {/* Date Navigation */}
-      <div className={`bg-white rounded-xl shadow p-4 mb-6 flex items-center justify-between ${showCustomLoading ? 'opacity-50' : ''}`}>
+      <div className={`bg-white rounded-xl shadow p-4 mb-4 flex items-center justify-between ${showCustomLoading ? 'opacity-50' : ''}`}>
         <button
           onClick={() => {
             if (activeTab === 0) navigateWeek('prev');
@@ -298,6 +360,201 @@ function Analysis() {
       )}
 
       <div className={`mt-4 space-y-2 sm:space-y-4 transition-opacity ${showCustomLoading ? 'opacity-50' : ''}`}>
+
+        {/* Spending Categories */}
+        <div
+          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+        >
+          {isFetching && !showCustomLoading && (
+            <div className="absolute top-2 right-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+            </div>
+          )}
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <TrendingDown className="w-5 h-5 text-red-600" />
+            Category-wise Spending
+          </h3>
+
+          {spendingChartData.length > 0 ? (
+            <>
+              {/* Chart */}
+              <div className="relative h-72 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={spendingChartData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      innerRadius={60}
+                      dataKey="value"
+                      label={({ percent }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
+                    >
+                      {spendingChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value, name) => [
+                        formatCurrency(Number(value)),
+                        name,
+                      ]}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                {/* Total in center */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <p className="text-sm text-gray-500">Total</p>
+                  <p className="text-xl font-bold text-red-600">
+                    {formatCurrency(analysisData?.spending || 0)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Category List - now 3/3 layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {analysisData?.spendingCategory?.map((item, index) => {
+                  const percentage =
+                    ((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1);
+                  return (
+                    <div
+                      key={index}
+                      className="p-4 border rounded-xl hover:shadow-md transition"
+                    >
+                      <div className="flex justify-between items-center gap-3">
+                        <div className="flex items-center gap-3 mb-2">
+                          <CategoryIcon
+                            icon={item.category.icon}
+                            color={item.category.color}
+                            size="sm"
+                          />
+                          <div>
+                            <p className="font-medium text-gray-900">{item.category.name}</p>
+                            <p className="text-xs text-gray-500">
+                              {formatCurrency(item.amount)}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 text-right">{percentage}%</p>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full bg-red-500"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No spending data available for this period
+            </div>
+          )}
+        </div>
+
+
+        {/* Income Categories */}
+        <div
+          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+        >
+          {isFetching && !showCustomLoading && (
+            <div className="absolute top-2 right-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+            </div>
+          )}
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+            Category-wise Income
+          </h3>
+
+          {incomeChartData.length > 0 ? (
+            <>
+              {/* Chart */}
+              <div className="relative h-72 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={incomeChartData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      innerRadius={60}
+                      dataKey="value"
+                      label={({ percent }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
+                    >
+                      {incomeChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value, name) => [
+                        formatCurrency(Number(value)),
+                        name,
+                      ]}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+
+                {/* Total in center */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <p className="text-sm text-gray-500">Total</p>
+                  <p className="text-xl font-bold text-green-600">
+                    {formatCurrency(analysisData?.income || 0)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Category List - now 3/3 layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {analysisData?.incomeCategory?.map((item, index) => {
+                  const percentage =
+                    ((item.amount / (analysisData?.income || 1)) * 100).toFixed(1);
+                  return (
+                    <div
+                      key={index}
+                      className="p-4 border rounded-xl hover:shadow-md transition"
+                    >
+                      <div className="flex justify-between items-center gap-3">
+                        <div className="flex items-center gap-3 mb-2">
+                          <CategoryIcon
+                            icon={item.category.icon}
+                            color={item.category.color}
+                            size="sm"
+                          />
+                          <div>
+                            <p className="font-medium text-gray-900">{item.category.name}</p>
+                            <p className="text-xs text-gray-500">
+                              {formatCurrency(item.amount)}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 text-right">{percentage}%</p>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full bg-green-500"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No income data available for this period
+            </div>
+          )}
+        </div>
+
+
 
         {/* Payment Modes Section */}
         <div
