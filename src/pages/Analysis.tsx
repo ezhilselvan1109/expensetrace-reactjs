@@ -5,7 +5,8 @@ import {
   ChevronLeft,
   ChevronRight,
   DollarSign,
-  BarChart3
+  BarChart3,
+  ArrowUpDown
 } from 'lucide-react';
 import { useFormatters } from '../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../hooks/useAnalysis';
@@ -146,6 +147,33 @@ function Analysis() {
     }
   };
 
+  // Get account type icon
+  const getAccountIcon = (type: number) => {
+    switch (type) {
+      case 1: // Bank
+        return '🏦';
+      case 2: // Wallet  
+        return '👛';
+      case 3: // Credit Card
+        return '💳';
+      case 4: // Cash
+        return '💵';
+      default:
+        return '🏦';
+    }
+  };
+
+  // Get account type name
+  const getAccountTypeName = (type: number) => {
+    switch (type) {
+      case 1: return 'Bank Account';
+      case 2: return 'Wallet';
+      case 3: return 'Credit Card';
+      case 4: return 'Cash';
+      default: return 'Account';
+    }
+  };
+
   const balance = (analysisData?.income || 0) - (analysisData?.spending || 0);
   const showMainLoading = isLoading && !analysisData;
   const showCustomLoading = activeTab === 3 && (isFetching);
@@ -173,7 +201,7 @@ function Analysis() {
                   setActiveTab(index);
                 }
               }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition ${active
+              className={`w-full px-4 py-2 rounded-full text-sm font-medium transition ${active
                 ? 'bg-white shadow text-gray-900'
                 : 'text-gray-500 hover:text-gray-900'
                 }`}
@@ -269,7 +297,143 @@ function Analysis() {
         </div>
       )}
 
-      <div className={`space-y-6 sm:space-y-8 transition-opacity ${showCustomLoading ? 'opacity-50' : ''}`}>
+      <div className={`mt-4 space-y-2 sm:space-y-4 transition-opacity ${showCustomLoading ? 'opacity-50' : ''}`}>
+
+        {/* Payment Modes Section */}
+        <div
+          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+        >
+          {isFetching && !showCustomLoading && (
+            <div className="absolute top-2 right-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+            </div>
+          )}
+
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">
+            Payment Modes
+          </h3>
+
+          <div className="space-y-4">
+            {/* Spending Accounts */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                <TrendingDown className="w-4 h-4 mr-2 text-red-600" />
+                Spending Accounts
+              </h4>
+              {analysisData?.spendingAccount?.length ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {analysisData.spendingAccount.map((item, i) => (
+                    <div
+                      key={`sp-${i}`}
+                      className="bg-red-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <h3 className="font-medium text-gray-900 truncate">
+                            {item.accountResponseDto.name}
+                          </h3>
+                          <p className="text-xs text-gray-500">
+                            {getAccountTypeName(item.accountResponseDto.type)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-red-600">
+                          {formatCurrency(item.amount)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">No spending accounts</p>
+              )}
+            </div>
+
+            {/* Income Accounts */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                <TrendingUp className="w-4 h-4 mr-2 text-green-600" />
+                Income Accounts
+              </h4>
+              {analysisData?.incomeAccount?.length ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {analysisData.incomeAccount.map((item, i) => (
+                    <div
+                      key={`in-${i}`}
+                      className="bg-green-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <h3 className="font-medium text-gray-900 truncate">
+                            {item.accountResponseDto.name}
+                          </h3>
+                          <p className="text-xs text-gray-500">
+                            {getAccountTypeName(item.accountResponseDto.type)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-green-600">
+                          {formatCurrency(item.amount)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">No income accounts</p>
+              )}
+            </div>
+
+            {/* Transfer Accounts */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                <ArrowUpDown className="w-4 h-4 mr-2 text-blue-600" />
+                Transfer Accounts
+              </h4>
+              {analysisData?.transfersAccount?.length ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {analysisData.transfersAccount.map((item, i) => (
+                    <div
+                      key={`tr-${i}`}
+                      className="bg-blue-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                        <div>
+                          <h3 className="font-medium text-gray-900 truncate">
+                            {item.accountResponseDto.name}
+                          </h3>
+                          <p className="text-xs text-gray-500">
+                            {getAccountTypeName(item.accountResponseDto.type)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-blue-600">
+                          {formatCurrency(item.amount)}
+                        </p>
+                        <p className="text-xs text-gray-500">Transfer</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">No transfer accounts</p>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Statistics Section */}
         <div
           className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""
