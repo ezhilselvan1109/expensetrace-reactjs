@@ -116,3 +116,16 @@ export const TRANSACTION_TYPES = {
 } as const;
 
 export type TransactionType = keyof typeof TRANSACTION_TYPES;
+
+
+export interface TransactionSummary {
+  totalIncome: number;
+  totalExpense: number;
+}
+
+
+export interface TransactionsByDateResponse {
+  totalIncome: number;
+  totalExpense: number;
+  transactions:PaginatedTransactions;
+}

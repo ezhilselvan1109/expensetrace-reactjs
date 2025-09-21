@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   size = "md",
 }) => {
   const base =
-    "inline-block rounded-full font-semibold transition shadow hover:shadow-lg transform hover:-translate-y-0.5";
+    "inline-block rounded-full font-semibold transition shadow hover:shadow-lg";
 
   const variants: Record<"primary" | "secondary", string> = {
     primary:
