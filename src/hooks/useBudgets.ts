@@ -29,12 +29,11 @@ export const useBudgetSummary = () => {
 };
 
 // Get budget analysis
-export const useBudgetAnalysis = (budgetId: string, type: 'monthly' | 'yearly') => {
-  console.log('useBudgetAnalysis called with budgetId:', budgetId, 'and type:', type);
+export const useBudgetAnalysis = (budgetId: string) => {
   return useQuery<BudgetAnalysis>({
-    queryKey: ['budget-analysis', budgetId, type],
+    queryKey: ['budget-analysis', budgetId],
     queryFn: async () => {
-      const endpoint = type === 'monthly' ? `/budgets/${budgetId}` : `/budgets/${budgetId}`;
+      const endpoint = `/budgets/${budgetId}/summary`;
       const response = await apiClient.get(endpoint);
       return response.data;
     },

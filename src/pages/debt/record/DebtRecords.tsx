@@ -8,9 +8,6 @@ import {
   TrendingDown,
   DollarSign,
   ArrowLeft,
-  Banknote,
-  CircleDollarSign,
-  CreditCard,
   CheckCircle2,
   MinusCircle,
   PlusCircle,
@@ -25,6 +22,7 @@ import {
   useReceivedDebtTransactions,
   useAdjustmentDebtTransactions,
   useDeleteDebtRecord,
+  useDebtTransactionSummary,
 } from '../../../hooks/useDebts';
 import { DEBT_TRANSACTION_TYPES } from '../../../types/debt';
 import DebtRecordTypeModal from '../../../components/DebtRecordTypeModal';
@@ -42,15 +40,15 @@ function DebtRecords() {
   const [pageSize] = useState(10);
   const [isRecordTypeModalOpen, setIsRecordTypeModalOpen] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<{ id: string; description: string } | null>(null);
-
+  const { data: summary } = useDebtTransactionSummary(debtId || '');
   const { data: debt } = useDebt(debtId || '');
-  
+
   // Only fetch data for the active tab to avoid unnecessary API calls
   const { data: allTransactions, isLoading: allLoading } = useAllDebtTransactions(currentPage, pageSize, activeTab === 0);
   const { data: paidTransactions, isLoading: paidLoading } = usePaidDebtTransactions(currentPage, pageSize, activeTab === 1);
   const { data: receivedTransactions, isLoading: receivedLoading } = useReceivedDebtTransactions(currentPage, pageSize, activeTab === 2);
   const { data: adjustmentTransactions, isLoading: adjustmentLoading } = useAdjustmentDebtTransactions(currentPage, pageSize, activeTab === 3);
-  
+
   const deleteRecord = useDeleteDebtRecord();
   const { formatCurrency } = useFormatters();
 
@@ -135,8 +133,7 @@ function DebtRecords() {
           <div>
             <p className="text-sm text-gray-500">Total Payable</p>
             <p className="text-xl font-semibold text-red-600">
-              {formatCurrency(80)}
-              {/* {formatCurrency(summary.totalPayable)} */}
+              {formatCurrency(summary?.totalPaid ?? 0)}
             </p>
           </div>
         </div>
@@ -148,8 +145,7 @@ function DebtRecords() {
           <div>
             <p className="text-sm text-gray-500">Total Receivable</p>
             <p className="text-xl font-semibold text-green-600">
-              {formatCurrency(80)}
-              {/* {formatCurrency(summary.totalReceivable)} */}
+              {formatCurrency(summary?.totalReceived ?? 0)}
             </p>
           </div>
         </div>
@@ -198,28 +194,28 @@ function DebtRecords() {
           ))}
         </div>
       ) : transactions.length === 0 ? (
-          <div className="p-10 text-center">
-            <Coins className="w-10 h-10 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No {tabs[activeTab].toLowerCase()} transactions</h3>
-            <p className="text-sm text-gray-500 mb-6">
-              {activeTab === 0 
-                ? 'No debt transactions found'
-                : `No ${tabs[activeTab].toLowerCase()} transactions found`
-              }
-            </p>
-            <button
-              onClick={() => setIsRecordTypeModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
-            >
-              <Plus className="w-4 h-4" />
-              Add Record
-            </button>
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {transactions.map((transaction) => {
-              const { date, time } = formatDateTime(transaction.txnDate, transaction.txnTime);
-              return (
+        <div className="p-10 text-center">
+          <Coins className="w-10 h-10 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No {tabs[activeTab].toLowerCase()} transactions</h3>
+          <p className="text-sm text-gray-500 mb-6">
+            {activeTab === 0
+              ? 'No debt transactions found'
+              : `No ${tabs[activeTab].toLowerCase()} transactions found`
+            }
+          </p>
+          <button
+            onClick={() => setIsRecordTypeModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
+          >
+            <Plus className="w-4 h-4" />
+            Add Record
+          </button>
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {transactions.map((transaction) => {
+            const { date, time } = formatDateTime(transaction.txnDate, transaction.txnTime);
+            return (
               <div
                 key={transaction.id}
                 className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
@@ -238,7 +234,7 @@ function DebtRecords() {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <div className="text-right">
                     <p className={`text-sm font-semibold ${getAmountColor(transaction.type)}`}>
@@ -249,7 +245,7 @@ function DebtRecords() {
                       <p className="text-xs text-gray-500">{transaction.account.name}</p>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center gap-1">
                     <Link
                       to={`/debts/${debtId}/records/edit/${transaction.id}`}
@@ -267,10 +263,10 @@ function DebtRecords() {
                   </div>
                 </div>
               </div>
-              );
-            })}
-          </div>
-        )}
+            );
+          })}
+        </div>
+      )}
 
       {/* Pagination */}
       {totalPages > 1 && (

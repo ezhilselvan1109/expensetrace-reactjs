@@ -5,8 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   DollarSign,
-  BarChart3,
-  ArrowUpDown,
+  BarChart3
 } from 'lucide-react';
 import { useFormatters } from '../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../hooks/useAnalysis';
@@ -275,7 +274,7 @@ function Analysis() {
       </div>
 
       {/* Date Navigation */}
-      <div className={`bg-white rounded-xl shadow p-4 mb-4 flex items-center justify-between ${showCustomLoading ? 'opacity-50' : ''}`}>
+      <div className={`bg-white rounded-xl shadow p-2 mb-4 flex items-center justify-between ${showCustomLoading ? 'opacity-50' : ''}`}>
         <button
           onClick={() => {
             if (activeTab === 0) navigateWeek('prev');
@@ -290,7 +289,6 @@ function Analysis() {
 
         <div className="text-center">
           <h2 className="text-lg font-semibold text-gray-900">{getDisplayText()}</h2>
-          <p className="text-sm text-gray-500">{tabs[activeTab]} Analysis</p>
         </div>
 
         <button
@@ -359,23 +357,24 @@ function Analysis() {
         </div>
       )}
 
+
       <div className={`mt-4 space-y-2 sm:space-y-4 transition-opacity ${showCustomLoading ? 'opacity-50' : ''}`}>
 
         {/* Spending Categories */}
-        <div
-          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
-        >
-          {isFetching && !showCustomLoading && (
-            <div className="absolute top-2 right-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
-            </div>
-          )}
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <TrendingDown className="w-5 h-5 text-red-600" />
-            Category-wise Spending
-          </h3>
+        {spendingChartData.length > 0 && (
+          <div
+            className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+          >
+            {isFetching && !showCustomLoading && (
+              <div className="absolute top-2 right-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+              </div>
+            )}
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              Category-wise Spending
+            </h3>
 
-          {spendingChartData.length > 0 ? (
+
             <>
               {/* Chart */}
               <div className="relative h-72 flex items-center justify-center">
@@ -419,7 +418,7 @@ function Analysis() {
                   return (
                     <div
                       key={index}
-                      className="p-4 border rounded-xl hover:shadow-md transition"
+                      className="rounded-xl shadow p-4 hover:shadow-md transition"
                     >
                       <div className="flex justify-between items-center gap-3">
                         <div className="flex items-center gap-3 mb-2">
@@ -449,29 +448,23 @@ function Analysis() {
                 })}
               </div>
             </>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              No spending data available for this period
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
 
         {/* Income Categories */}
-        <div
-          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
-        >
-          {isFetching && !showCustomLoading && (
-            <div className="absolute top-2 right-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
-            </div>
-          )}
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-green-600" />
-            Category-wise Income
-          </h3>
-
-          {incomeChartData.length > 0 ? (
+        {incomeChartData.length > 0 && (
+          <div
+            className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+          >
+            {isFetching && !showCustomLoading && (
+              <div className="absolute top-2 right-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+              </div>
+            )}
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              Category-wise Income
+            </h3>
             <>
               {/* Chart */}
               <div className="relative h-72 flex items-center justify-center">
@@ -516,7 +509,7 @@ function Analysis() {
                   return (
                     <div
                       key={index}
-                      className="p-4 border rounded-xl hover:shadow-md transition"
+                      className="rounded-xl shadow p-4 hover:shadow-md transition"
                     >
                       <div className="flex justify-between items-center gap-3">
                         <div className="flex items-center gap-3 mb-2">
@@ -547,160 +540,135 @@ function Analysis() {
                 })}
               </div>
             </>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              No income data available for this period
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
 
 
         {/* Payment Modes Section */}
-        <div
-          className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
-        >
-          {isFetching && !showCustomLoading && (
-            <div className="absolute top-2 right-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
-            </div>
-          )}
-
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">
-            Payment Modes
-          </h3>
-
-          <div className="space-y-4">
-            {/* Spending Accounts */}
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                <TrendingDown className="w-4 h-4 mr-2 text-red-600" />
-                Spending Accounts
-              </h4>
-              {analysisData?.spendingAccount?.length ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {analysisData.spendingAccount.map((item, i) => (
-                    <div
-                      key={`sp-${i}`}
-                      className="bg-red-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                        <div>
-                          <h3 className="font-medium text-gray-900 truncate">
-                            {item.accountResponseDto.name}
-                          </h3>
+        {(analysisData?.spendingAccount?.length || analysisData?.incomeAccount?.length || analysisData?.transfersAccount?.length) && (
+          <div className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">
+              Payment Modes
+            </h3>
+            <div className="space-y-4">
+              {/* Spending Accounts */}
+              {((analysisData?.spendingAccount?.length ?? 0) > 0) && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    Spending Accounts
+                  </h4>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {analysisData?.spendingAccount.map((item, i) => (
+                      <div
+                        key={`sp-${i}`}
+                        className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                          <div>
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {item.accountResponseDto.name}
+                            </h3>
+                            <p className="text-xs text-gray-500">
+                              {getAccountTypeName(item.accountResponseDto.type)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-red-600">
+                            {formatCurrency(item.amount)}
+                          </p>
                           <p className="text-xs text-gray-500">
-                            {getAccountTypeName(item.accountResponseDto.type)}
+                            {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-red-600">
-                          {formatCurrency(item.amount)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-sm text-gray-500">No spending accounts</p>
               )}
-            </div>
 
-            {/* Income Accounts */}
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                <TrendingUp className="w-4 h-4 mr-2 text-green-600" />
-                Income Accounts
-              </h4>
-              {analysisData?.incomeAccount?.length ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {analysisData.incomeAccount.map((item, i) => (
-                    <div
-                      key={`in-${i}`}
-                      className="bg-green-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                        <div>
-                          <h3 className="font-medium text-gray-900 truncate">
-                            {item.accountResponseDto.name}
-                          </h3>
+              {/* Income Accounts */}
+              {((analysisData?.incomeAccount?.length ?? 0) > 0) && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    Income Accounts
+                  </h4>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {analysisData?.incomeAccount.map((item, i) => (
+                      <div
+                        key={`in-${i}`}
+                        className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                          <div>
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {item.accountResponseDto.name}
+                            </h3>
+                            <p className="text-xs text-gray-500">
+                              {getAccountTypeName(item.accountResponseDto.type)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-green-600">
+                            {formatCurrency(item.amount)}
+                          </p>
                           <p className="text-xs text-gray-500">
-                            {getAccountTypeName(item.accountResponseDto.type)}
+                            {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-green-600">
-                          {formatCurrency(item.amount)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-sm text-gray-500">No income accounts</p>
               )}
-            </div>
 
-            {/* Transfer Accounts */}
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                <ArrowUpDown className="w-4 h-4 mr-2 text-blue-600" />
-                Transfer Accounts
-              </h4>
-              {analysisData?.transfersAccount?.length ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {analysisData.transfersAccount.map((item, i) => (
-                    <div
-                      key={`tr-${i}`}
-                      className="bg-blue-50 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                    >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                        <div>
-                          <h3 className="font-medium text-gray-900 truncate">
-                            {item.accountResponseDto.name}
-                          </h3>
-                          <p className="text-xs text-gray-500">
-                            {getAccountTypeName(item.accountResponseDto.type)}
+              {/* Transfer Accounts */}
+              {((analysisData?.transfersAccount?.length ?? 0) > 0) && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    Transfer Accounts
+                  </h4>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {analysisData?.transfersAccount.map((item, i) => (
+                      <div
+                        key={`tr-${i}`}
+                        className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
+                          <div>
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {item.accountResponseDto.name}
+                            </h3>
+                            <p className="text-xs text-gray-500">
+                              {getAccountTypeName(item.accountResponseDto.type)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-blue-600">
+                            {formatCurrency(item.amount)}
                           </p>
+                          <p className="text-xs text-gray-500">Transfer</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-blue-600">
-                          {formatCurrency(item.amount)}
-                        </p>
-                        <p className="text-xs text-gray-500">Transfer</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-sm text-gray-500">No transfer accounts</p>
               )}
             </div>
           </div>
-        </div>
+        )}
 
         {/* Statistics Section */}
         <div
           className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""
             }`}
         >
-          {isFetching && !showCustomLoading && (
-            <div className="absolute top-2 right-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
-            </div>
-          )}
 
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
             Statistics

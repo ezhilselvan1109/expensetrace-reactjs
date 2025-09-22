@@ -5,7 +5,7 @@ export interface Debt {
   additionalDetail: string;
   type: '1' | '2'; // 1 = Lending (you lent money), 2 = Borrowing (you borrowed money)
   totalAmount: number;
-  remainingAmount: number;
+  amount: number;
   createdAt: string;
   updatedAt: string;
 }
