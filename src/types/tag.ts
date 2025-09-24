@@ -1,6 +1,7 @@
 export interface Tags {
   tag: Tag;
   transactions: number;
+  scheduledTransactions:number;
 }
 
 export interface Tag {
@@ -24,4 +25,11 @@ export interface PaginatedTags {
   number: number;
   first: boolean;
   last: boolean;
+}
+
+
+export interface TagWithTransactions {
+  tag: Tag;
+  transactions: number;
+  scheduledTransactions:number;
 }

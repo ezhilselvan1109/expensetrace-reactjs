@@ -29,7 +29,7 @@ export const useUpdateTag = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateTagData }) => {
-      const response = await apiClient.put(`/tags/${id}/update`, data);
+      const response = await apiClient.put(`/tags/${id}`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ export const useDeleteTag = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await apiClient.delete(`/tags/${id}/delete`);
+      await apiClient.delete(`/tags/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tags'] });

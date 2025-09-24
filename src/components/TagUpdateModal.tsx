@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { X, Tag as TagIcon } from 'lucide-react';
-import { Tag } from '../types/tag';
+import { TagWithTransactions } from '../types/tag';
 
-interface TagWithTransactions {
-  tag: Tag;
-  transactions: number;
-}
+
 
 interface TagUpdateModalProps {
   isOpen: boolean;
@@ -15,9 +12,9 @@ interface TagUpdateModalProps {
   isPending?: boolean;
 }
 
-export default function TagUpdateModal({ 
-  isOpen, 
-  onClose, 
+export default function TagUpdateModal({
+  isOpen,
+  onClose,
   tag,
   onUpdate,
   isPending = false
@@ -70,7 +67,7 @@ export default function TagUpdateModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter tag name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
               autoFocus
             />
           </div>
@@ -79,9 +76,23 @@ export default function TagUpdateModal({
           <div className="flex items-center gap-2 bg-indigo-50 rounded-lg p-2.5">
             <TagIcon className="w-4 h-4 text-indigo-600" />
             <p className="text-xs text-gray-700">
-              Used in{" "}
-              <span className="font-medium">{tag.transactions}</span>{" "}
-              transaction{tag.transactions !== 1 ? "s" : ""}.
+              {tag.transactions > 0 && (
+                <>
+                  <span className="font-medium">{tag.transactions}</span>{" "}
+                  transaction{tag.transactions !== 1 ? "s" : ""}
+                </>
+              )}
+
+              {tag.transactions > 0 && tag.scheduledTransactions > 0 && " · "}
+
+              {tag.scheduledTransactions > 0 && (
+                <>
+                  <span className="font-medium">{tag.scheduledTransactions}</span>{" "}
+                  scheduled
+                </>
+              )}
+
+              {tag.transactions === 0 && tag.scheduledTransactions === 0 && "Not used yet"}
             </p>
           </div>
 

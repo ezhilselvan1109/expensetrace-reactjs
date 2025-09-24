@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2, GitMerge, Tag as TagIcon } from 'lucide-react';
+import { Edit, Trash2, GitMerge, Tag as TagIcon } from 'lucide-react';
 import { useTags, useUpdateTag, useMergeTag, useDeleteTag } from '../hooks/useTags';
 import TagMergeModal from '../components/TagMergeModal';
 import TagUpdateModal from '../components/TagUpdateModal';
 import ConfirmationModal from '../components/ConfirmationModal';
-import { Tag } from '../types/tag';
+import { TagWithTransactions } from '../types/tag';
 
-interface TagWithTransactions {
-  tag: Tag;
-  transactions: number;
-}
 
 function Tags() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -101,8 +96,21 @@ function Tags() {
               <div>
                 <h3 className="font-medium text-gray-900">{item.tag.name}</h3>
                 <p className="text-xs text-gray-500">
-                  {item.transactions} transaction
-                  {item.transactions !== 1 ? 's' : ''}
+                  {item.transactions > 0 && (
+                    <>
+                      {item.transactions} transaction{item.transactions !== 1 ? "s" : ""}
+                    </>
+                  )}
+
+                  {item.transactions > 0 && item.scheduledTransactions > 0 && " · "}
+
+                  {item.scheduledTransactions > 0 && (
+                    <>
+                      {item.scheduledTransactions} scheduled
+                    </>
+                  )}
+
+                  {item.transactions === 0 && item.scheduledTransactions === 0 && "No usage yet"}
                 </p>
               </div>
               <div className="flex items-center gap-2">
