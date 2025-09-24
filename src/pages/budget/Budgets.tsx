@@ -18,7 +18,7 @@ function Budgets() {
   };
 
   const BudgetCard = ({ budget, isActive = false }: { budget: Budget; isActive?: boolean }) => {
-    const percentage = getProgressPercentage(budget.totalSpent, budget.budget);
+    const percentage = getProgressPercentage(budget.totalSpent, budget.totalLimit);
 
     return (
       <Link
@@ -61,7 +61,7 @@ function Budgets() {
         <div className="space-y-1 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Budget</span>
-            <span className="font-medium">{formatCurrency(budget.budget)}</span>
+            <span className="font-medium">{formatCurrency(budget.totalLimit)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Spent</span>
@@ -71,12 +71,12 @@ function Budgets() {
             <div className="flex justify-between">
               <span className="text-gray-600">Balance</span>
               <span
-                className={`font-medium ${(budget.budget - budget.totalSpent) >= 0
+                className={`font-medium ${(budget.totalLimit - budget.totalSpent) >= 0
                   ? 'text-green-600'
                   : 'text-red-600'
                   }`}
               >
-                {formatCurrency(budget.budget - budget.totalSpent)}
+                {formatCurrency(budget.totalLimit - budget.totalSpent)}
               </span>
             </div>
           )}
@@ -162,15 +162,15 @@ function Budgets() {
       {/* Active Budget */}
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-3">Active {budgetType} Budget</h2>
-        {currentData?.present[0] ? (
-          <BudgetCard budget={currentData.present[0]} isActive={true} />
+        {currentData?.present ? (
+          <BudgetCard budget={currentData.present} isActive={true} />
         ) : (
           <EmptyState type={budgetType} status="active" />
         )}
       </div>
 
       {/* Upcoming Budgets */}
-      {(currentData?.upcoming.length || currentData?.past.length) && (
+      {(currentData?.upcoming.length || currentData?.present) && (
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">
             Upcoming {budgetType} Budgets

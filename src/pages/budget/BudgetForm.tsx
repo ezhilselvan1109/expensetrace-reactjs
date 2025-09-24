@@ -60,11 +60,14 @@ export default function BudgetForm() {
   });
 
   const watchedValues = watch();
-  const remainingBudget = Number(watchedValues.totalLimit || 0) -
+  const remainingBudget = Math.max(
+    0,
+    Number(watchedValues.totalLimit || 0) -
     Object.values(watchedValues.categoryLimits ?? {}).reduce(
       (sum: number, limit) => sum + Number(limit ?? 0),
       0
-    );
+    )
+  );
 
   // Populate form when editing
   useEffect(() => {
@@ -82,8 +85,24 @@ export default function BudgetForm() {
         limits[cat.categoryId] = cat.limit;
       });
       setValue('categoryLimits', limits);
+
+      setSelectAll(categoryIds.length === categories.length);
     }
-  }, [isEditing, budgetData, setValue]);
+  }, [isEditing, budgetData, setValue, categories.length]);
+
+  // Select all categories by default if not editing
+  useEffect(() => {
+    if (!isEditing && categories.length > 0 && selectedCategories.length === 0) {
+      const allCategoryIds = categories.map(cat => cat.id);
+      setSelectedCategories(allCategoryIds);
+      setValue('selectedCategories', allCategoryIds);
+
+      // Leave categoryLimits empty so inputs show empty
+      setValue('categoryLimits', {});
+
+      setSelectAll(true);
+    }
+  }, [categories, setValue, isEditing, selectedCategories.length]);
 
   // Update type when tab changes
   useEffect(() => {
@@ -244,7 +263,7 @@ export default function BudgetForm() {
                 type="number"
                 step="0.01"
                 placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
               {errors.totalLimit && <p className="text-red-600 text-xs">{errors.totalLimit.message}</p>}
             </div>
@@ -287,14 +306,14 @@ export default function BudgetForm() {
         {/* Step 2 */}
         {(step === 2 || isEditing) && (
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-3 rounded-lg">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex-1 min-w-[120px] bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-500">Total Budget</p>
                 <p className="text-sm font-semibold text-gray-900">{formatCurrency(watchedValues.totalLimit)}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="flex-1 min-w-[120px] bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-500">Remaining</p>
-                <p className={`text-sm font-semibold ${remainingBudget >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-sm font-semibold text-green-600`}>
                   {formatCurrency(remainingBudget)}
                 </p>
               </div>
@@ -314,7 +333,7 @@ export default function BudgetForm() {
                         type="number"
                         step="0.01"
                         placeholder="0.00"
-                        className="w-24 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-24 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                     </div>
                   );

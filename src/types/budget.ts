@@ -3,7 +3,7 @@ export interface Budget {
   type: 'monthly' | 'yearly';
   year: number;
   month?: number;
-  budget: number;
+  totalLimit: number;
   totalSpent: number;
   status: 'active' | 'upcoming' | 'past';
   categories: BudgetCategory[];
@@ -53,12 +53,12 @@ export interface UpdateYearlyBudgetData {
 
 export interface BudgetSummary {
   monthly: {
-    present: Budget[];
+    present: Budget;
     upcoming: Budget[];
     past: Budget[];
   };
   yearly: {
-    present: Budget[];
+    present: Budget;
     upcoming: Budget[];
     past: Budget[];
   };
@@ -69,7 +69,7 @@ export interface BudgetAnalysis {
   type: 'monthly' | 'yearly';
   year: number;
   month?: number;
-  budget: number;
+  totalLimit: number;
   totalSpent: number;
   categories: BudgetCategory[];
 }

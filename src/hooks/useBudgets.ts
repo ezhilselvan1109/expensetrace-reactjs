@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../contexts/ToastContext';
 import apiClient from '../lib/axios';
-import {  
+import {
   BudgetSummary,
   BudgetAnalysis,
   CreateMonthlyBudgetData,
@@ -157,7 +157,7 @@ export const useUpdateYearlyBudget = () => {
 export const useDeleteBudget = () => {
   const queryClient = useQueryClient();
   const { addToast } = useToast();
-
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (id: string) => {
       await apiClient.delete(`/budgets/${id}`);
@@ -169,6 +169,7 @@ export const useDeleteBudget = () => {
         type: 'success',
         message: 'Budget deleted'
       });
+      navigate('/budgets');
     },
     onError: () => {
       addToast({
