@@ -3,7 +3,7 @@ export interface Debt {
   personName: string;
   dueDate: string;
   additionalDetail: string;
-  type: '1' | '2'; // 1 = Lending (you lent money), 2 = Borrowing (you borrowed money)
+  type: 1 | 2; // 1 = Lending (you lent money), 2 = Borrowing (you borrowed money)
   totalAmount: number;
   amount: number;
   createdAt: string;
@@ -24,7 +24,7 @@ export interface DebtRecord {
   paymentModeId?: string | null;
   description: string;
   accountId: string;
-  type: '1' | '2'; // 1 = Paid, 2 = Received
+  type: 1 | 2; // 1 = Paid, 2 = Received
   account?: {
     id: string;
     name: string;

@@ -190,13 +190,13 @@ const LandingPage: React.FC = () => {
         {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 grid lg:grid-cols-2 gap-10 items-center">
-            <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
+            <div className="max-w-2xl text-center px-4 sm:px-0">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-snug">
                 Manage & Automate{" "}
                 <span className="text-blue-300">All Your Finances</span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl text-blue-50/90 mb-6 max-w-xl mx-auto lg:mx-0">
+              <p className="text-base sm:text-lg md:text-xl text-blue-50/90 mb-6 max-w-xl">
                 From categories to accounts, transactions, and debt – everything
                 you need to stay in control of your money in one powerful app.
               </p>

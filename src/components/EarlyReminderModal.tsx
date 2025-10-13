@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X, Bell } from 'lucide-react';
+import { X, Bell, Check } from 'lucide-react';
 import { EARLY_REMINDER_OPTIONS } from '../types/scheduledTransaction';
 
 interface EarlyReminderModalProps {
@@ -69,9 +69,7 @@ export default function EarlyReminderModal({
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900">{label}</span>
                   {selectedReminder === value && (
-                    <span className="text-indigo-600 text-xs font-medium">
-                      Selected
-                    </span>
+                    <Check className="w-4 h-4 text-indigo-600" />
                   )}
                 </div>
               </button>

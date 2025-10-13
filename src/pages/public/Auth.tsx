@@ -8,15 +8,6 @@ function Auth() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-      {/* Logo */}
-      <Link to="/" className="flex-shrink-0">
-        <img
-          src="../logo.png"
-          alt="ExpenseTrace Logo"
-          className="h-12 sm:h-14 lg:h-16 w-auto"
-        />
-      </Link>
-
       {/* Title */}
       <h2 className="mt-8 sm:mt-10 text-center text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900">
         Log in or sign up

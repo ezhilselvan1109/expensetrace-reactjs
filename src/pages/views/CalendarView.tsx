@@ -56,7 +56,6 @@ function CalendarView() {
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
     const days = [];
 
-    // Empty cells
     for (let i = 0; i < firstDay; i++) {
       days.push(<div key={`empty-${i}`} />);
     }
@@ -73,43 +72,47 @@ function CalendarView() {
         <div
           key={day}
           onClick={() => handleDayClick(day)}
-          className={`rounded-xl border min-h-[60px] sm:min-h-[80px] p-2 sm:p-3 cursor-pointer transition hover:shadow-md ${
-            isToday ? 'bg-indigo-50 border-indigo-300' : 'bg-white'
-          }`}
+          className={`rounded-xl border min-h-[60px] sm:min-h-[80px] p-2 sm:p-3 cursor-pointer transition hover:shadow-md 
+            ${
+              isToday
+                ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-700'
+                : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+            }`}
         >
           <div className="flex justify-between items-center mb-1">
             <span
               className={`text-xs sm:text-sm font-medium ${
-                isToday ? 'text-indigo-600' : 'text-gray-900'
+                isToday
+                  ? 'text-indigo-600 dark:text-indigo-400'
+                  : 'text-gray-900 dark:text-gray-100'
               }`}
             >
               {day}
             </span>
             {isToday && (
-              <span className="w-2 h-2 bg-indigo-600 rounded-full"></span>
+              <span className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full"></span>
             )}
           </div>
 
           {hasData && (
             <div className="space-y-1">
               {dayData.income > 0 && (
-                <span className="block text-[10px] sm:text-xs font-medium text-green-600">
+                <span className="block text-[10px] sm:text-xs font-medium text-green-600 dark:text-green-400">
                   +{formatCurrency(dayData.income)}
                 </span>
               )}
               {dayData.expense > 0 && (
-                <span className="block text-[10px] sm:text-xs font-medium text-red-600">
+                <span className="block text-[10px] sm:text-xs font-medium text-red-600 dark:text-red-400">
                   -{formatCurrency(dayData.expense)}
                 </span>
               )}
             </div>
           )}
 
-          {/* Loading shimmer for cells without data */}
           {isLoading && (
             <div className="space-y-1 mt-2">
-              <div className="h-3 w-12 bg-gray-200 rounded animate-pulse" />
-              <div className="h-3 w-12 bg-gray-200 rounded animate-pulse" />
+              <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </div>
           )}
         </div>
@@ -119,34 +122,40 @@ function CalendarView() {
   };
 
   return (
-    <div className="p-3 sm:p-6 max-w-7xl mx-auto">
+    <div className="p-3 sm:p-6 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Calendar</h1>
-          <p className="text-xs sm:text-sm text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Calendar</h1>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             Monthly overview of your finances
           </p>
         </div>
       </div>
 
       {/* Month navigation */}
-      <div className="flex items-center justify-between bg-white rounded-xl shadow p-2 mb-4">
-        <button onClick={() => navigateToMonth('prev')} className="p-2 rounded-full hover:bg-gray-100 transition">
-          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
+      <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl shadow p-2 mb-4 border border-gray-200 dark:border-gray-700">
+        <button
+          onClick={() => navigateToMonth('prev')}
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
         </button>
 
-        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
           {MONTHS[currentMonth - 1]} {currentYear}
         </h2>
 
-        <button onClick={() => navigateToMonth('next')} className="p-2 rounded-full hover:bg-gray-100 transition">
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
+        <button
+          onClick={() => navigateToMonth('next')}
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
         </button>
       </div>
 
       {/* Weekdays */}
-      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center text-[10px] sm:text-xs font-medium text-gray-500">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400">
         {WEEKDAYS.map(day => (
           <div key={day}>{day}</div>
         ))}
@@ -156,18 +165,18 @@ function CalendarView() {
       <div className="grid grid-cols-7 gap-1 sm:gap-2">{renderCalendarDays()}</div>
 
       {/* Legend */}
-      <div className="mt-4 bg-white rounded-xl shadow p-3 sm:p-4 flex flex-wrap items-center gap-3 sm:gap-4">
+      <div className="mt-4 bg-white dark:bg-gray-800 rounded-xl shadow p-3 sm:p-4 flex flex-wrap items-center gap-3 sm:gap-4 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 sm:w-4 sm:h-4 bg-green-600 rounded" />
-          <span className="text-xs sm:text-sm text-gray-600">Income</span>
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Income</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 sm:w-4 sm:h-4 bg-red-600 rounded" />
-          <span className="text-xs sm:text-sm text-gray-600">Expense</span>
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Expense</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 sm:w-4 sm:h-4 bg-indigo-50 border border-indigo-300 rounded" />
-          <span className="text-xs sm:text-sm text-gray-600">Today</span>
+          <span className="w-3 h-3 sm:w-4 sm:h-4 bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-300 dark:border-indigo-700 rounded" />
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Today</span>
         </div>
       </div>
     </div>

@@ -39,14 +39,14 @@ export default function TagMergeModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-sm max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/50 dark:bg-black/60 flex items-center justify-center z-50 p-3">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-sm max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">Merge Tag</h2>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Merge Tag</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 rounded-full p-1 hover:bg-gray-100 transition"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -56,23 +56,21 @@ export default function TagMergeModal({
         <div className="p-4 space-y-4 overflow-y-auto">
           {/* Merge Operation */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Merge Operation</h3>
-            <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg text-sm">
-              <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded font-medium">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Merge Operation</h3>
+            <div className="flex items-center gap-2 p-2.5 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">
+              <span className="px-2 py-0.5 bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-400 rounded font-medium">
                 {sourceTag.tag.name}
               </span>
               <ArrowRight className="w-4 h-4 text-gray-400" />
               {selectedTag ? (
-                <>
-                  <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded font-medium">
-                    {selectedTag.tag.name}
-                  </span>
-                </>
+                <span className="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-400 rounded font-medium">
+                  {selectedTag.tag.name}
+                </span>
               ) : (
-                <span className="text-gray-400">Select target</span>
+                <span className="text-gray-400 dark:text-gray-500">Select target</span>
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               All transactions from <span className="font-medium">"{sourceTag.tag.name}"</span> will
               be moved, then this tag will be deleted.
             </p>
@@ -87,7 +85,7 @@ export default function TagMergeModal({
                 placeholder="Search tags..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-3 focus:outline-none w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                className="px-3 focus:outline-none w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:focus:border-indigo-400 dark:bg-gray-800 dark:text-gray-100 text-sm"
               />
             </div>
           </div>
@@ -98,23 +96,20 @@ export default function TagMergeModal({
               <button
                 key={tag.tag.id}
                 onClick={() => setSelectedTag(tag)}
-                className={`w-full flex items-center justify-between p-2.5 rounded-lg border text-sm transition-colors ${
-                  selectedTag?.tag.id === tag.tag.id
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
+                className={`w-full flex items-center justify-between p-2.5 rounded-lg border text-sm transition-colors
+                  ${
+                    selectedTag?.tag.id === tag.tag.id
+                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900 dark:border-indigo-400'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800'
+                  }`}
               >
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900">{tag.tag.name}</span>
-                </div>
-                {selectedTag?.tag.id === tag.tag.id && (
-                  <Check className="w-4 h-4 text-indigo-600" />
-                )}
+                <span className="font-medium text-gray-900 dark:text-gray-100">{tag.tag.name}</span>
+                {selectedTag?.tag.id === tag.tag.id && <Check className="w-4 h-4 text-indigo-600" />}
               </button>
             ))}
 
             {filteredTags.length === 0 && (
-              <div className="text-center py-6 text-sm text-gray-500">
+              <div className="text-center py-6 text-sm text-gray-500 dark:text-gray-400">
                 No tags found for "{searchTerm}"
               </div>
             )}
@@ -122,11 +117,11 @@ export default function TagMergeModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t flex gap-2">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex gap-2">
           <button
             onClick={onClose}
             disabled={isPending}
-            className="flex-1 px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+            className="flex-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition disabled:opacity-50"
           >
             Cancel
           </button>

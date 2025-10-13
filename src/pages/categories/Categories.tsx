@@ -44,18 +44,20 @@ function Categories() {
   };
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Categories</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Categories
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Organize your expenses and income
           </p>
         </div>
         <Link
           to="/categories/add"
-          className="mt-3 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl shadow hover:bg-indigo-700 transition"
+          className="mt-3 sm:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white text-sm font-medium rounded-xl shadow hover:bg-indigo-700 dark:hover:bg-indigo-800 transition"
         >
           <Plus className="w-4 h-4" />
           Add Category
@@ -63,17 +65,18 @@ function Categories() {
       </div>
 
       {/* Tabs */}
-      <div className="flex justify-evenly gap-2 bg-gray-100 rounded-full p-1 sm:w-fit mb-4">
+      <div className="flex justify-evenly gap-2 bg-gray-100 dark:bg-gray-800 rounded-full p-1 sm:w-fit mb-4">
         {tabs.map((tab, index) => {
           const active = activeTab === index;
           return (
             <button
               key={tab}
               onClick={() => setActiveTab(index)}
-              className={`px-4 w-full py-2 rounded-full text-sm font-medium transition ${active
-                ? 'bg-white shadow text-gray-900'
-                : 'text-gray-500 hover:text-gray-900'
-                }`}
+              className={`px-4 w-full py-2 rounded-full text-sm font-medium transition ${
+                active
+                  ? 'bg-white dark:bg-gray-900 shadow text-gray-900 dark:text-gray-100'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+              }`}
             >
               {tab}
             </button>
@@ -83,27 +86,27 @@ function Categories() {
 
       {/* Default Category */}
       {defaultLoading ? (
-        <div className="bg-gray-200 rounded-xl shadow p-4 mb-6 animate-pulse h-16" />
+        <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow p-4 mb-6 animate-pulse h-16" />
       ) : (
         defaultCategory && (
-          <div className="bg-white rounded-xl shadow p-4 mb-4 flex items-center justify-between">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <CategoryIcon
                 icon={defaultCategory.icon}
                 color={defaultCategory.color}
               />
               <div>
-                <h2 className="font-medium text-gray-900">
+                <h2 className="font-medium text-gray-900 dark:text-gray-100">
                   {defaultCategory.name}
                 </h2>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Default {tabs[activeTab]}
                 </p>
               </div>
             </div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600 flex items-center gap-1"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1"
             >
               <Edit className="w-4 h-4" />
             </button>
@@ -117,7 +120,7 @@ function Categories() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-16 bg-gray-200 rounded-xl animate-pulse"
+              className="h-16 bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl animate-pulse"
             ></div>
           ))}
         </div>
@@ -129,16 +132,16 @@ function Categories() {
             size="lg"
             className="mx-auto mb-4"
           />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
             No categories yet
           </h3>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
             Create your first category to start organizing your{' '}
             {tabs[activeTab].toLowerCase()}s
           </p>
           <Link
             to="/categories/add"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-xl shadow hover:bg-indigo-700 dark:hover:bg-indigo-800 transition"
           >
             <Plus className="w-4 h-4" />
             Add Category
@@ -149,13 +152,15 @@ function Categories() {
           {categories.map((category) => (
             <div
               key={category.id}
-              className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
             >
               <div className="flex items-center gap-3">
                 <CategoryIcon icon={category.icon} color={category.color} />
                 <div>
-                  <h3 className="font-medium text-gray-900">{category.name}</h3>
-                  <p className="text-xs text-gray-500">
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    {category.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {category.type === 1 ? 'Expense' : 'Income'} •{' '}
                     {category.color}
                   </p>
@@ -166,7 +171,7 @@ function Categories() {
                   <>
                     <Link
                       to={`/categories/edit/${category.id}`}
-                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
                     >
                       <Edit className="w-4 h-4" />
                     </Link>
@@ -178,13 +183,15 @@ function Categories() {
                         })
                       }
                       disabled={deleteCategory.isPending}
-                      className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 disabled:opacity-50"
+                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </>
                 ) : (
-                  <span className="text-gray-300 text-sm">Locked</span>
+                  <span className="text-gray-300 dark:text-gray-600 text-sm">
+                    Locked
+                  </span>
                 )}
               </div>
             </div>
@@ -209,7 +216,7 @@ function Categories() {
         title="Delete Category"
         message={`Are you sure you want to delete "${categoryToDelete?.name}"? This action cannot be undone.`}
         confirmText="Delete Category"
-        confirmButtonClass="bg-red-600 hover:bg-red-700"
+        confirmButtonClass="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
         isPending={deleteCategory.isPending}
       />
     </div>

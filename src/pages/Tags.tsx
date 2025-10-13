@@ -1,11 +1,15 @@
-import { useState } from 'react';
-import { Edit, Trash2, GitMerge, Tag as TagIcon } from 'lucide-react';
-import { useTags, useUpdateTag, useMergeTag, useDeleteTag } from '../hooks/useTags';
+import { useState, useEffect } from 'react';
+import { Edit, Trash2, GitMerge, Tag as TagIcon, Search } from 'lucide-react';
+import {
+  useTags,
+  useUpdateTag,
+  useMergeTag,
+  useDeleteTag,
+} from '../hooks/useTags';
 import TagMergeModal from '../components/TagMergeModal';
 import TagUpdateModal from '../components/TagUpdateModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { TagWithTransactions } from '../types/tag';
-
 
 function Tags() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -14,8 +18,20 @@ function Tags() {
   const [isMergeModalOpen, setIsMergeModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
-  const { data: tagsData, isLoading } = useTags(currentPage, pageSize);
+  // 🕒 Debounce search input to avoid too many API calls
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+      setCurrentPage(0); // reset to first page when search changes
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  // 🔍 Fetch tags using new /tags/search endpoint
+  const { data: tagsData, isLoading } = useTags(debouncedQuery, currentPage, pageSize);
   const updateTag = useUpdateTag();
   const mergeTag = useMergeTag();
   const deleteTag = useDeleteTag();
@@ -23,6 +39,7 @@ function Tags() {
   const tags = tagsData?.content || [];
   const totalPages = tagsData?.totalPages || 0;
 
+  // ✏️ Update
   const handleUpdateTag = async (name: string) => {
     if (selectedTag) {
       try {
@@ -35,10 +52,14 @@ function Tags() {
     }
   };
 
+  // 🔗 Merge
   const handleMergeTag = async (targetTagId: string) => {
     if (selectedTag) {
       try {
-        await mergeTag.mutateAsync({ id: selectedTag.tag.id, data: { tagId: targetTagId } });
+        await mergeTag.mutateAsync({
+          id: selectedTag.tag.id,
+          data: { tagId: targetTagId },
+        });
         setIsMergeModalOpen(false);
         setSelectedTag(null);
       } catch (error) {
@@ -47,6 +68,7 @@ function Tags() {
     }
   };
 
+  // 🗑️ Delete
   const handleDeleteTag = async () => {
     if (selectedTag) {
       try {
@@ -60,14 +82,26 @@ function Tags() {
   };
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tags</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Tags</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Organize your transactions with custom tags
           </p>
+        </div>
+
+        {/* 🔍 Search bar */}
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search tags..."
+            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+          />
         </div>
       </div>
 
@@ -75,15 +109,19 @@ function Tags() {
       {isLoading ? (
         <div className="animate-pulse grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 bg-gray-200 rounded-xl"></div>
+            <div key={i} className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
           ))}
         </div>
       ) : tags.length === 0 ? (
-        <div className="p-10 text-center text-gray-500">
-          <TagIcon className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No tags yet</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Start organizing your transactions by creating tags
+        <div className="p-10 text-center text-gray-500 dark:text-gray-400">
+          <TagIcon className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            No tags found
+          </h3>
+          <p className="text-sm mb-4">
+            {searchQuery
+              ? 'Try adjusting your search query.'
+              : 'Start organizing your transactions by creating tags.'}
           </p>
         </div>
       ) : (
@@ -91,28 +129,29 @@ function Tags() {
           {tags.map((item) => (
             <div
               key={item.tag.id}
-              className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
             >
               <div>
-                <h3 className="font-medium text-gray-900">{item.tag.name}</h3>
-                <p className="text-xs text-gray-500">
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                  {item.tag.name}
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   {item.transactions > 0 && (
                     <>
-                      {item.transactions} transaction{item.transactions !== 1 ? "s" : ""}
+                      {item.transactions} transaction
+                      {item.transactions !== 1 ? 's' : ''}
                     </>
                   )}
-
-                  {item.transactions > 0 && item.scheduledTransactions > 0 && " · "}
-
+                  {item.transactions > 0 && item.scheduledTransactions > 0 && ' · '}
                   {item.scheduledTransactions > 0 && (
-                    <>
-                      {item.scheduledTransactions} scheduled
-                    </>
+                    <>{item.scheduledTransactions} scheduled</>
                   )}
-
-                  {item.transactions === 0 && item.scheduledTransactions === 0 && "No usage yet"}
+                  {item.transactions === 0 &&
+                    item.scheduledTransactions === 0 &&
+                    'No usage yet'}
                 </p>
               </div>
+
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => {
@@ -120,7 +159,7 @@ function Tags() {
                     setIsMergeModalOpen(true);
                   }}
                   disabled={tags.length <= 1}
-                  className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 disabled:opacity-50"
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-blue-600 disabled:opacity-50 transition"
                 >
                   <GitMerge className="w-4 h-4" />
                 </button>
@@ -129,7 +168,7 @@ function Tags() {
                     setSelectedTag(item);
                     setIsUpdateModalOpen(true);
                   }}
-                  className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-600 transition"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
@@ -139,7 +178,7 @@ function Tags() {
                     setIsDeleteModalOpen(true);
                   }}
                   disabled={deleteTag.isPending}
-                  className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 disabled:opacity-50"
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-red-600 disabled:opacity-50 transition"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -150,29 +189,30 @@ function Tags() {
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="mt-6 flex justify-center gap-2">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
-            disabled={currentPage === 0}
-            className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
-          >
-            Prev
-          </button>
-          <span className="px-3 py-1 border rounded-lg bg-gray-50">
-            {currentPage + 1} / {totalPages}
-          </span>
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))
-            }
-            disabled={currentPage >= totalPages - 1}
-            className="px-3 py-1 border rounded-lg hover:bg-gray-50 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      )}
+
+      <div className="mt-6 flex justify-center gap-2">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
+          disabled={currentPage === 0}
+          className="px-3 py-1 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition"
+        >
+          Prev
+        </button>
+
+        <span className="px-3 py-1 border rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition">
+          {currentPage + 1} / {totalPages}
+        </span>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))
+          }
+          disabled={currentPage >= totalPages - 1}
+          className="px-3 py-1 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition"
+        >
+          Next
+        </button>
+      </div>
 
       {/* Modals */}
       {selectedTag && (
@@ -210,7 +250,7 @@ function Tags() {
             title="Delete Tag"
             message={`Are you sure you want to delete "${selectedTag.tag.name}"? This tag is used in ${selectedTag.transactions} transaction(s). This action cannot be undone.`}
             confirmText="Delete Tag"
-            confirmButtonClass="bg-red-600 hover:bg-red-700"
+            confirmButtonClass="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
             isPending={deleteTag.isPending}
           />
         </>

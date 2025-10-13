@@ -30,13 +30,13 @@ export const formatCurrency = (
       formattedAmount = Math.round(amount).toString();
       break;
     case 3: // 1 decimal place
-      formattedAmount = amount.toFixed(1);
+      formattedAmount =  Math.round(amount).toString();
       break;
     case 4: // 2 decimal places
-      formattedAmount = amount.toFixed(2);
+      formattedAmount =  Math.round(amount).toString();
       break;
     default: // Default (optimized for readability)
-      formattedAmount = amount % 1 === 0 ? amount.toString() : amount.toFixed(2);
+      formattedAmount = Math.round(amount).toString() ;
       break;
   }
 

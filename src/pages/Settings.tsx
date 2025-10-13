@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Edit, Clock, Globe, Bell, AlertTriangle, Trash2 } from 'lucide-react';
+import { Edit, AlertTriangle, Trash2, LogOut } from 'lucide-react';
 import {
   useSettings,
   useUpdateTimeFormat,
@@ -22,6 +22,9 @@ import DecimalFormatModal from '../components/DecimalFormatModal';
 import NumberFormatModal from '../components/NumberFormatModal';
 import CurrencyModal from '../components/CurrencyModal';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../hooks/useTheme";
+import { useLogout } from "../hooks/useAuth";
 
 function Settings() {
   const [isTimeFormatModalOpen, setIsTimeFormatModalOpen] = useState(false);
@@ -39,6 +42,20 @@ function Settings() {
   const updateDailyReminder = useUpdateDailyReminder();
   const clearAllData = useClearAllData();
   const deleteAccount = useDeleteAccount();
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const { theme, toggleTheme } = useTheme();
+
+  const logout = useLogout();
+
+  const handleLogout = () => {
+    setLogoutError(null);
+    logout.mutate(undefined, {
+      onError: (err: any) => {
+        const message = err?.response?.data?.message || err?.message || "Logout failed. Please try again.";
+        setLogoutError(message);
+      },
+    });
+  };
 
   const handleDailyReminderToggle = async () => {
     if (settings) {
@@ -80,25 +97,45 @@ function Settings() {
   }
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto">
+    <div className="p-3 sm:p-4 lg:p-6 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-xl font-bold text-gray-900">Settings</h1>
-        <p className="text-sm text-gray-500">Manage your account preferences and settings</p>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Manage your account preferences and settings
+        </p>
       </div>
 
       <div className="space-y-6">
         {/* Appearance */}
-        <div className="bg-white rounded-lg shadow p-4 space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
-            <Clock className="w-5 h-5 text-indigo-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 space-y-2 border border-gray-200 dark:border-gray-700 transition-colors">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
             Appearance
           </h2>
 
-          {/* Time Format */}
-          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-sm transition-colors">
             <div>
-              <h3 className="font-medium text-gray-900">Time Format</h3>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Theme</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {theme === "dark" ? "Dark Mode" : "Light Mode"}
+              </p>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-indigo-500" />
+              )}
+            </button>
+          </div>
+
+          {/* Time Format */}
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition">
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Time Format</h3>
               <p className="text-sm text-gray-500">
                 {TIME_FORMATS[settings.timeFormat as keyof typeof TIME_FORMATS]}
               </p>
@@ -112,9 +149,9 @@ function Settings() {
           </div>
 
           {/* Decimal Format */}
-          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition">
             <div>
-              <h3 className="font-medium text-gray-900">Decimal Format</h3>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Decimal Format</h3>
               <p className="text-sm text-gray-500">
                 {DECIMAL_FORMATS[settings.decimalFormat as keyof typeof DECIMAL_FORMATS]}
               </p>
@@ -129,16 +166,15 @@ function Settings() {
         </div>
 
         {/* Preferences */}
-        <div className="bg-white rounded-lg shadow p-4 space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900">
-            <Globe className="w-5 h-5 text-indigo-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 space-y-2 border border-gray-200 dark:border-gray-700 transition-colors">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
             Preferences
           </h2>
 
           {/* Currency */}
-          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition">
             <div>
-              <h3 className="font-medium text-gray-900">Currency</h3>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Currency</h3>
               <p className="text-sm text-gray-500 flex items-center gap-2">
                 {getCurrentCurrency()?.flag} {getCurrentCurrency()?.country} -{' '}
                 {getCurrentCurrency()?.name} ({getCurrentCurrency()?.symbol})
@@ -153,9 +189,9 @@ function Settings() {
           </div>
 
           {/* Number Format */}
-          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition">
             <div>
-              <h3 className="font-medium text-gray-900">Number Format</h3>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Number Format</h3>
               <p className="text-sm text-gray-500">
                 {NUMBER_FORMATS[settings.numberFormat as keyof typeof NUMBER_FORMATS]}
               </p>
@@ -170,15 +206,14 @@ function Settings() {
         </div>
 
         {/* Notifications */}
-        <div className="bg-white rounded-lg shadow p-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 mb-4">
-            <Bell className="w-5 h-5 text-indigo-600" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 space-y-2 border border-gray-200 dark:border-gray-700 transition-colors">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
             Notifications
           </h2>
 
-          <div className="flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition">
             <div>
-              <h3 className="font-medium text-gray-900">Daily Reminder</h3>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Daily Reminder</h3>
               <p className="text-sm text-gray-500">
                 {settings.dailyReminder
                   ? 'Remind me daily at 7:00 PM'
@@ -188,59 +223,82 @@ function Settings() {
             <button
               onClick={handleDailyReminderToggle}
               disabled={updateDailyReminder.isPending}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-                settings.dailyReminder ? 'bg-indigo-600' : 'bg-gray-200'
-              }`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${settings.dailyReminder ? 'bg-indigo-600' : 'bg-gray-200'
+                }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                  settings.dailyReminder ? 'translate-x-6' : 'translate-x-1'
-                }`}
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.dailyReminder ? 'translate-x-6' : 'translate-x-1'
+                  }`}
               />
             </button>
           </div>
         </div>
 
         {/* Danger Zone */}
-        <div className="bg-white rounded-lg shadow p-4 border border-red-200 space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2 text-red-600">
-            <AlertTriangle className="w-5 h-5" />
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 border border-red-200 dark:border-red-700 space-y-2 transition-colors">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-red-700 dark:text-red-400">
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-500" />
             Danger Zone
           </h2>
 
           {/* Clear Data */}
-          <div className="flex justify-between items-center p-3 rounded-lg border bg-red-50">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors">
             <div>
-              <h3 className="font-medium text-red-900">Delete Data & Start Afresh</h3>
-              <p className="text-sm text-red-600">
+              <h3 className="font-medium text-red-800 dark:text-red-300">Delete Data & Start Afresh</h3>
+              <p className="text-sm text-red-600 dark:text-red-400">
                 This will permanently delete all your data but keep your account.
               </p>
             </div>
             <button
               onClick={() => setIsClearDataModalOpen(true)}
               disabled={clearAllData.isPending}
-              className="w-full sm:w-auto px-2 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm disabled:opacity-50"
+              className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-500 text-sm transition disabled:opacity-50 flex items-center gap-1"
             >
-              <Trash2 className="w-4 h-4 inline mr-1" />
+              <Trash2 className="w-4 h-4" />
               Clear Data
             </button>
           </div>
 
           {/* Delete Account */}
-          <div className="flex justify-between items-center p-3 rounded-lg border bg-red-50">
+          <div className="flex justify-between items-center p-3 rounded-lg border border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors">
             <div>
-              <h3 className="font-medium text-red-900">Delete Account</h3>
-              <p className="text-sm text-red-600">
+              <h3 className="font-medium text-red-800 dark:text-red-300">Delete Account</h3>
+              <p className="text-sm text-red-600 dark:text-red-400">
                 Permanently delete your account and all data. This action cannot be undone.
               </p>
             </div>
             <button
               onClick={() => setIsDeleteAccountModalOpen(true)}
               disabled={deleteAccount.isPending}
-              className="w-full sm:w-auto px-2 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm disabled:opacity-50"
+              className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-500 text-sm transition disabled:opacity-50 flex items-center gap-1"
             >
-              <Trash2 className="w-4 h-4 inline mr-1" />
+              <Trash2 className="w-4 h-4" />
               Delete
+            </button>
+          </div>
+        </div>
+
+        {/* Account Actions */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 border border-gray-200 dark:border-gray-700 space-y-2 transition-colors">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+            Account
+          </h2>
+
+          {/* Sign Out */}
+          <div className="flex justify-between items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-colors">
+            <div>
+              <h3 className="font-medium text-gray-900 dark:text-gray-100">Sign Out</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Sign out from your account safely
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              disabled={logout.isPending}
+              className="px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-500 text-sm transition disabled:opacity-50 flex items-center gap-1"
+            >
+              <LogOut className="w-4 h-4" />
+              {logout.isPending ? "Signing out..." : "Sign Out"}
             </button>
           </div>
         </div>

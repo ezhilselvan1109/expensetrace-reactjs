@@ -15,7 +15,7 @@ import TermsAndConditionsPage from './pages/public/TermsAndConditionsPage';
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
 const Auth = lazy(() => import('./pages/public/Auth'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Analysis = lazy(() => import('./pages/Analysis'));
+const Analysis = lazy(() => import('./pages/analysis/Analysis'));
 const About = lazy(() => import('./pages/public/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/categories/Categories'));
@@ -78,7 +78,7 @@ function App() {
                 <Route path="accounts" element={<Accounts />} />
                 <Route path="accounts/add" element={<AccountForm />} />
                 <Route path="accounts/edit/:id" element={<AccountForm />} />
-               <Route path="accounts/detail/:id" element={<AccountDetail />} />
+                <Route path="accounts/detail/:id" element={<AccountDetail />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="transactions/add" element={<TransactionForm />} />
                 <Route path="transactions/edit/:id" element={<TransactionForm />} />

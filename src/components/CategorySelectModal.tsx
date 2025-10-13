@@ -116,7 +116,7 @@ export default function CategorySelectModal({
                 )
               ) : (
                 selectedCategory?.id === category.id && (
-                  <span className="text-indigo-600 text-xs font-medium">Selected</span>
+                  <Check className="w-4 h-4 text-indigo-600" />
                 )
               )}
             </button>

@@ -88,7 +88,7 @@ export default function AboutPage() {
         <section className="py-14 sm:py-20 lg:py-24 bg-white">
           <div className="max-w-4xl mx-auto px-6 sm:px-8 text-center">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
-              About the Developer
+              Meet the Developer
             </h2>
             <div className="p-6 sm:p-8 bg-gray-50 rounded-2xl shadow-sm">
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">

@@ -206,11 +206,11 @@ export const useDeleteDebt = () => {
 };
 
 // Debt Transaction hooks (new API endpoints)
-export const useAllDebtTransactions = (page = 0, size = 10, enabled = true) => {
+export const useAllDebtTransactions = (debtId: string,page = 0, size = 10, enabled = true) => {
   return useQuery<{ content: DebtTransaction[]; totalElements: number; totalPages: number; size: number; number: number; first: boolean; last: boolean }>({
     queryKey: ['debt-transactions', 'all', page, size],
     queryFn: async () => {
-      const response = await apiClient.get(`/transactions/debt/all?page=${page}&size=${size}`);
+      const response = await apiClient.get(`/transactions/debt/${debtId}/all?page=${page}&size=${size}`);
       return response.data.data || {
         content: [],
         totalElements: 0,
@@ -225,11 +225,11 @@ export const useAllDebtTransactions = (page = 0, size = 10, enabled = true) => {
   });
 };
 
-export const usePaidDebtTransactions = (page = 0, size = 10, enabled = true) => {
+export const usePaidDebtTransactions = (debtId: string,page = 0, size = 10, enabled = true) => {
   return useQuery<{ content: DebtTransaction[]; totalElements: number; totalPages: number; size: number; number: number; first: boolean; last: boolean }>({
     queryKey: ['debt-transactions', 'paid', page, size],
     queryFn: async () => {
-      const response = await apiClient.get(`/transactions/debt/paid?page=${page}&size=${size}`);
+      const response = await apiClient.get(`/transactions/debt/${debtId}/paid?page=${page}&size=${size}`);
       return response.data.data || {
         content: [],
         totalElements: 0,
@@ -244,11 +244,11 @@ export const usePaidDebtTransactions = (page = 0, size = 10, enabled = true) => 
   });
 };
 
-export const useReceivedDebtTransactions = (page = 0, size = 10, enabled = true) => {
+export const useReceivedDebtTransactions = (debtId: string,page = 0, size = 10, enabled = true) => {
   return useQuery<{ content: DebtTransaction[]; totalElements: number; totalPages: number; size: number; number: number; first: boolean; last: boolean }>({
     queryKey: ['debt-transactions', 'received', page, size],
     queryFn: async () => {
-      const response = await apiClient.get(`/transactions/debt/received?page=${page}&size=${size}`);
+      const response = await apiClient.get(`/transactions/debt/${debtId}/received?page=${page}&size=${size}`);
       return response.data.data || {
         content: [],
         totalElements: 0,
@@ -263,11 +263,11 @@ export const useReceivedDebtTransactions = (page = 0, size = 10, enabled = true)
   });
 };
 
-export const useAdjustmentDebtTransactions = (page = 0, size = 10, enabled = true) => {
+export const useAdjustmentDebtTransactions = (debtId: string,page = 0, size = 10, enabled = true) => {
   return useQuery<{ content: DebtTransaction[]; totalElements: number; totalPages: number; size: number; number: number; first: boolean; last: boolean }>({
     queryKey: ['debt-transactions', 'adjustment', page, size],
     queryFn: async () => {
-      const response = await apiClient.get(`/transactions/debt/adjustment?page=${page}&size=${size}`);
+      const response = await apiClient.get(`/transactions/debt/${debtId}/adjustment?page=${page}&size=${size}`);
       return response.data.data || {
         content: [],
         totalElements: 0,
@@ -542,13 +542,13 @@ export const useCreateReceivedDebtTransaction = () => {
   });
 };
 
-export const useCreateAdjustmentDebtTransaction = () => {
+export const useCreateAdjustmentDebtTransaction = (debtId:string) => {
   const queryClient = useQueryClient();
   const { addToast } = useToast();
 
   return useMutation({
     mutationFn: async (data: { type: string; txnDate: string; txnTime: string; amount: number; description: string }) => {
-      const response = await apiClient.post('/transactions/debt/adjustment', data);
+      const response = await apiClient.post(`/transactions/debt/${debtId}/adjustment`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -653,7 +653,7 @@ export const useUpdateAdjustmentDebtTransaction = () => {
   const { addToast } = useToast();
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: { type: string; txnDate: string; txnTime: any; amount: number; description: string } }) => {
+    mutationFn: async ({ id, data }: { id: string; data: { type: string; txnDate: string; txnTime: string; amount: number; description: string } }) => {
       const response = await apiClient.put(`/transactions/debt/adjustment/${id}`, data);
       return response.data;
     },

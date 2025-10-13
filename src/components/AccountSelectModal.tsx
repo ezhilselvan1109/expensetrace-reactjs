@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Search, Building2, Wallet, CreditCard, Banknote, Smartphone, FileText, Globe } from 'lucide-react';
+import { X, Search, Building2, Wallet, CreditCard, Banknote, Smartphone, FileText, Globe, Check } from 'lucide-react';
 import { Account } from '../types/account';
 
 interface AccountSelectModalProps {
@@ -162,7 +162,7 @@ export default function AccountSelectModal({
                     <p className="text-sm text-gray-500">{getPaymentModeTypeName(paymentMode.type.toString())}</p>
                   </div>
                   {selectedPaymentModeId === paymentMode.id && (
-                    <span className="text-sm text-indigo-600 font-medium">Selected</span>
+                    <Check className="w-4 h-4 text-indigo-600" />
                   )}
                 </button>
               ))}
