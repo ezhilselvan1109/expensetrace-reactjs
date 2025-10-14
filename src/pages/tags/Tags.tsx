@@ -5,11 +5,12 @@ import {
   useUpdateTag,
   useMergeTag,
   useDeleteTag,
-} from '../hooks/useTags';
-import TagMergeModal from '../components/TagMergeModal';
-import TagUpdateModal from '../components/TagUpdateModal';
-import ConfirmationModal from '../components/ConfirmationModal';
-import { TagWithTransactions } from '../types/tag';
+} from './useTags';
+import TagMergeModal from './components/TagMergeModal';
+import TagUpdateModal from './components/TagUpdateModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import { TagWithTransactions } from './tag';
+import { useQueryClient } from '@tanstack/react-query';
 
 function Tags() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -21,23 +22,42 @@ function Tags() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
-  // 🕒 Debounce search input to avoid too many API calls
+  const queryClient = useQueryClient();
+
+  // 🕒 Debounce search input to avoid excessive API calls
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery);
-      setCurrentPage(0); // reset to first page when search changes
+      setCurrentPage(0);
     }, 400);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  // 🔍 Fetch tags using new /tags/search endpoint
-  const { data: tagsData, isLoading } = useTags(debouncedQuery, currentPage, pageSize);
+  // 🔍 Fetch tags (uses cached data)
+  const { data: tagsData, isLoading, isFetching } = useTags(debouncedQuery, currentPage, pageSize);
+
   const updateTag = useUpdateTag();
   const mergeTag = useMergeTag();
   const deleteTag = useDeleteTag();
 
   const tags = tagsData?.content || [];
   const totalPages = tagsData?.totalPages || 0;
+
+  // ⚡️ Prefetch next page for smooth pagination
+  useEffect(() => {
+    if (currentPage < totalPages - 1) {
+      queryClient.prefetchQuery({
+        queryKey: ['tags', { key: debouncedQuery, page: currentPage + 1, size: pageSize }],
+        queryFn: async () => {
+          const response = await fetch(
+            `/api/v1/tags/search?key=${encodeURIComponent(debouncedQuery)}&page=${currentPage + 1}&size=${pageSize}`
+          );
+          const data = await response.json();
+          return data.data;
+        },
+      });
+    }
+  }, [currentPage, debouncedQuery, pageSize, totalPages, queryClient]);
 
   // ✏️ Update
   const handleUpdateTag = async (name: string) => {
@@ -132,9 +152,7 @@ function Tags() {
               className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
             >
               <div>
-                <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                  {item.tag.name}
-                </h3>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">{item.tag.name}</h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {item.transactions > 0 && (
                     <>
@@ -189,8 +207,7 @@ function Tags() {
       )}
 
       {/* Pagination */}
-
-      <div className="mt-6 flex justify-center gap-2">
+      <div className="mt-6 flex justify-center gap-2 items-center">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
           disabled={currentPage === 0}
@@ -199,8 +216,9 @@ function Tags() {
           Prev
         </button>
 
-        <span className="px-3 py-1 border rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition">
-          {currentPage + 1} / {totalPages}
+        <span className="px-3 py-1 border rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+          {currentPage + 1} / {totalPages || 1}
+          {isFetching && <span className="ml-2 text-xs text-gray-400">(updating...)</span>}
         </span>
 
         <button

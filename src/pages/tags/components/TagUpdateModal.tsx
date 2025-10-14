@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Tag as TagIcon } from 'lucide-react';
-import { TagWithTransactions } from '../types/tag';
+import { TagWithTransactions } from '../tag';
 
 
 

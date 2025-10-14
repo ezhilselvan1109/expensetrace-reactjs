@@ -9,22 +9,22 @@ import {
   useUpdateDailyReminder,
   useClearAllData,
   useDeleteAccount,
-} from '../hooks/useSettings';
+} from '../../hooks/useSettings';
 import {
   TIME_FORMATS,
   DECIMAL_FORMATS,
   NUMBER_FORMATS,
   CURRENCIES,
   Currency,
-} from '../types/settings';
-import TimeFormatModal from '../components/TimeFormatModal';
-import DecimalFormatModal from '../components/DecimalFormatModal';
-import NumberFormatModal from '../components/NumberFormatModal';
-import CurrencyModal from '../components/CurrencyModal';
-import ConfirmationModal from '../components/ConfirmationModal';
+} from '../../types/settings';
+import TimeFormatModal from '../../components/TimeFormatModal';
+import DecimalFormatModal from '../../components/DecimalFormatModal';
+import NumberFormatModal from '../../components/NumberFormatModal';
+import CurrencyModal from '../../components/CurrencyModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
 import { Sun, Moon } from "lucide-react";
-import { useTheme } from "../hooks/useTheme";
-import { useLogout } from "../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
+import { useLogout } from "../../hooks/useAuth";
 
 function Settings() {
   const [isTimeFormatModalOpen, setIsTimeFormatModalOpen] = useState(false);

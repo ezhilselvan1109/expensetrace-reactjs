@@ -20,7 +20,7 @@ const About = lazy(() => import('./pages/public/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/categories/Categories'));
 const CategoryForm = lazy(() => import('./pages/categories/CategoryForm'));
-const Tags = lazy(() => import('./pages/Tags'));
+const Tags = lazy(() => import('./pages/tags/Tags'));
 const ScheduledTransactions = lazy(() => import('./pages/scheduledTransactions/ScheduledTransactions'));
 const ScheduledTransactionForm = lazy(() => import('./pages/scheduledTransactions/ScheduledTransactionForm'));
 const Budgets = lazy(() => import('./pages/budget/Budgets'));
@@ -35,7 +35,7 @@ const Debts = lazy(() => import('./pages/debt/Debts'));
 const DebtForm = lazy(() => import('./pages/debt/DebtForm'));
 const DebtRecords = lazy(() => import('./pages/debt/record/DebtRecords'));
 const DebtRecordForm = lazy(() => import('./pages/debt/record/DebtRecordForm'));
-const Settings = lazy(() => import('./pages/Settings'));
+const Settings = lazy(() => import('./pages/settings/Settings'));
 const CalendarView = lazy(() => import('./pages/views/CalendarView'));
 const DayView = lazy(() => import('./pages/views/DayView'));
 

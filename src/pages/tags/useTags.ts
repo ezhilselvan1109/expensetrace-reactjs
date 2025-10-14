@@ -1,23 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
-import { UpdateTagData, MergeTagData, PaginatedTags } from '../types/tag';
+import { useToast } from '../../contexts/ToastContext';
+import apiClient from '../../lib/axios';
+import { UpdateTagData, MergeTagData, PaginatedTags } from '../../pages/tags/tag';
 
 /**
- * 🔍 Search Tags
- * Calls: GET /api/v1/tags/search?key={key}&page={page}&size={size}
+ * 🔍 Fetch Tags (with caching)
+ * GET /api/v1/tags/search?key={key}&page={page}&size={size}
  */
 export const useTags = (key = '', page = 0, size = 10) => {
   return useQuery<PaginatedTags>({
-    queryKey: ['tags', key, page, size],
+    queryKey: ['tags', { key, page, size }],
     queryFn: async () => {
-      const response = await apiClient.get(
+      const { data } = await apiClient.get(
         `/tags/search?key=${encodeURIComponent(key)}&page=${page}&size=${size}`
       );
 
-      // Handle empty / unexpected API data safely
       return (
-        response.data.data || {
+        data?.data || {
           content: [],
           totalElements: 0,
           totalPages: 0,
@@ -28,13 +27,16 @@ export const useTags = (key = '', page = 0, size = 10) => {
         }
       );
     },
-    keepPreviousData: true, // smooth UI updates while searching
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 3, // 3 mins — avoid refetching same data often
+    cacheTime: 1000 * 60 * 10, // keep cache for 10 mins even if unused
+    refetchOnWindowFocus: false, // avoid unnecessary reloads
   });
 };
 
 /**
  * ✏️ Update Tag
- * Calls: PUT /api/v1/tags/{id}
+ * PUT /api/v1/tags/{id}
  */
 export const useUpdateTag = () => {
   const queryClient = useQueryClient();
@@ -45,8 +47,10 @@ export const useUpdateTag = () => {
       const response = await apiClient.put(`/tags/${id}`, data);
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (_, { id }) => {
+      // ✅ Invalidate only tag lists, not everything
       queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.removeQueries({ queryKey: ['tag', id] });
       addToast({ type: 'success', message: 'Tag updated successfully' });
     },
     onError: () => {
@@ -57,7 +61,7 @@ export const useUpdateTag = () => {
 
 /**
  * 🔗 Merge Tags
- * Calls: POST /api/v1/tags/merge?sourceTagId={id}&targetTagId={data.tagId}
+ * POST /api/v1/tags/merge?sourceTagId={id}&targetTagId={data.tagId}
  */
 export const useMergeTag = () => {
   const queryClient = useQueryClient();
@@ -82,7 +86,7 @@ export const useMergeTag = () => {
 
 /**
  * 🗑️ Delete Tag
- * Calls: DELETE /api/v1/tags/{id}
+ * DELETE /api/v1/tags/{id}
  */
 export const useDeleteTag = () => {
   const queryClient = useQueryClient();
@@ -93,6 +97,7 @@ export const useDeleteTag = () => {
       await apiClient.delete(`/tags/${id}`);
     },
     onSuccess: () => {
+      // Invalidate all tag pages
       queryClient.invalidateQueries({ queryKey: ['tags'] });
       addToast({ type: 'success', message: 'Tag deleted successfully' });
     },

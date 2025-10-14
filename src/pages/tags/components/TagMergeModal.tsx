@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Search, ArrowRight, Check } from 'lucide-react';
-import { TagWithTransactions } from '../types/tag';
+import { TagWithTransactions } from '../tag';
 
 interface TagMergeModalProps {
   isOpen: boolean;
