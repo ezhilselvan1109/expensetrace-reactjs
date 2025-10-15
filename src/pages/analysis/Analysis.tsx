@@ -273,7 +273,7 @@ function Analysis() {
 
         {/* Spending Categories */}
         {showMainLoading || showCustomLoading ? (
-          <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div>
             <SkeletonBlock height="h-6 w-1/3 mb-4" />
             <SkeletonBlock height="h-64 mb-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -282,7 +282,7 @@ function Analysis() {
           </div>
         ) : spendingChartData.length > 0 && (
           <div
-            className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+            className={`${isFetching && !showCustomLoading ? "relative" : ""}`}
           >
             {isFetching && !showCustomLoading && (
               <div className="absolute top-2 right-2">
@@ -372,7 +372,7 @@ function Analysis() {
 
         {/* Income Categories */}
         {showMainLoading || showCustomLoading ? (
-          <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div>
             <SkeletonBlock height="h-6 w-1/3 mb-4" />
             <SkeletonBlock height="h-64 mb-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -381,7 +381,7 @@ function Analysis() {
           </div>
         ) : incomeChartData.length > 0 && (
           <div
-            className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}
+            className={`${isFetching && !showCustomLoading ? "relative" : ""}`}
           >
             {isFetching && !showCustomLoading && (
               <div className="absolute top-2 right-2">
@@ -471,7 +471,7 @@ function Analysis() {
 
         {/* Payment Modes */}
         {showMainLoading || showCustomLoading ? (
-          <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div>
             <SkeletonBlock height="h-6 w-1/3 mb-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3].map(i => <SkeletonBlock key={i} height="h-24" />)}
@@ -479,7 +479,7 @@ function Analysis() {
           </div>
         ) : (
           ((analysisData?.spendingAccount?.length ?? 0) > 0 || (analysisData?.incomeAccount?.length ?? 0) > 0 || (analysisData?.transfersAccount?.length ?? 0) > 0) && (
-            <div className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""}`}>
+            <div className={`${isFetching && !showCustomLoading ? "relative" : ""}`}>
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">
                 Payment Modes
               </h3>
@@ -494,7 +494,7 @@ function Analysis() {
                       {analysisData?.spendingAccount.map((item, i) => (
                         <div
                           key={`sp-${i}`}
-                          className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
+                          className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
                         >
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
@@ -599,7 +599,7 @@ function Analysis() {
 
         {/* Statistics */}
         {showMainLoading || showCustomLoading ? (
-          <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div>
             <SkeletonBlock height="h-6 w-1/3 mb-4" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3].map(i => <SkeletonBlock key={i} height="h-24" />)}
@@ -607,7 +607,7 @@ function Analysis() {
           </div>
         ) : (
           <div
-            className={`bg-white rounded-xl shadow p-4 sm:p-6 ${isFetching && !showCustomLoading ? "relative" : ""
+            className={`${isFetching && !showCustomLoading ? "relative" : ""
               }`}
           >
 
@@ -617,7 +617,7 @@ function Analysis() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Transactions */}
-              <div className="bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <div className="p-2 rounded-full bg-indigo-100">
@@ -632,7 +632,7 @@ function Analysis() {
               </div>
 
               {/* Average Spending */}
-              <div className="bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
                 <h4 className="text-sm font-medium text-gray-700 mb-3">
                   Average Spending
                 </h4>
@@ -653,7 +653,7 @@ function Analysis() {
               </div>
 
               {/* Average Income */}
-              <div className="bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
                 <h4 className="text-sm font-medium text-gray-700 mb-3">
                   Average Income
                 </h4>

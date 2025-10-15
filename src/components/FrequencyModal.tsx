@@ -5,9 +5,10 @@ interface FrequencyModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentFrequency: string;
+  currentEndType: string;
   currentInterval: number;
   currentOccurrence: number;
-  onUpdate: (frequency: string, interval: number, occurrence: number) => void;
+  onUpdate: (frequency: string, endType: string, interval: number, occurrence: number) => void;
   isPending?: boolean;
 }
 
@@ -28,14 +29,15 @@ const CUSTOM_FREQUENCIES = [
 ];
 
 const END_OPTIONS = [
-  { value: "NEVER", label: "Never" },
-  { value: "OCCURRENCE", label: "After occurrence" },
+  { value: "NONE", label: "Never" },
+  { value: "AFTER_OCCURRENCES", label: "After occurrence" },
 ];
 
 export default function FrequencyModal({
   isOpen,
   onClose,
   currentFrequency,
+  currentEndType,
   currentInterval,
   currentOccurrence,
   onUpdate,
@@ -46,7 +48,7 @@ export default function FrequencyModal({
   const [selectedFrequency, setSelectedFrequency] = useState(currentFrequency);
   const [customFrequency, setCustomFrequency] = useState("DAILY");
   const [interval, setInterval] = useState(currentInterval || 1);
-  const [endType, setEndType] = useState("NEVER");
+  const [endType, setEndType] = useState(currentEndType || "NONE");
   const [occurrence, setOccurrence] = useState(currentOccurrence || 1);
 
   const handleUpdate = () => {
@@ -55,7 +57,7 @@ export default function FrequencyModal({
       finalFrequency = customFrequency;
     }
 
-    onUpdate(finalFrequency, interval, endType === "OCCURRENCE" ? occurrence : 0);
+    onUpdate(finalFrequency, endType, interval, endType === "AFTER_OCCURRENCES" ? occurrence : 0);
     onClose();
   };
 
@@ -198,7 +200,7 @@ export default function FrequencyModal({
               </div>
 
               {/* Occurrence */}
-              {endType === "OCCURRENCE" && (
+              {endType === "AFTER_OCCURRENCES" && (
                 <div>
                   <h3 className="text-sm font-medium text-gray-700 mb-2">
                     Number of Occurrences

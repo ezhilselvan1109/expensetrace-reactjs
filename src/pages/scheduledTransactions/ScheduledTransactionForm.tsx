@@ -15,7 +15,7 @@ import {
   useAccounts,
   useDefaultPaymentMode
 } from '../../hooks/useAccounts';
-import { CreateScheduledTransactionData, FrequencyType, EndType, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS } from '../../types/scheduledTransaction';
+import { CreateScheduledTransactionData, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS, FREQUENCY_TYPE_MAP, END_TYPE_MAP, REVERSE_FREQUENCY_MAP, REVERSE_END_TYPE_MAP } from '../../types/scheduledTransaction';
 import CalculatorModal from '../../components/CalculatorModal';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import AccountSelectModal from '../../components/AccountSelectModal';
@@ -32,9 +32,9 @@ interface FormData {
   startTime: string;
   amount: number;
   description: string;
-  frequencyType: FrequencyType;
+  frequencyType: string;
   frequencyInterval: number;
-  endType: EndType;
+  endType: string;
   occurrence: number;
   remainderDays: number;
   tags: string[];
@@ -111,9 +111,9 @@ function ScheduledTransactionForm() {
       setValue('startTime', transaction.time);
       setValue('amount', transaction.amount);
       setValue('description', transaction.description);
-      setValue('frequencyType', transaction.frequencyType);
+      setValue('frequencyType', REVERSE_FREQUENCY_MAP[transaction.frequencyType] || 'NONE');
       setValue('frequencyInterval', transaction.frequencyInterval);
-      setValue('endType', transaction.endType);
+      setValue('endType', REVERSE_END_TYPE_MAP[transaction.endType] || 'NONE');
       setValue('occurrence', transaction.occurrence);
       setValue('remainderDays', transaction.remainderDays || 0);
       setValue('tags', transaction.tags?.map(tag => tag.name) || []);
@@ -134,11 +134,15 @@ function ScheduledTransactionForm() {
         setValue('categoryId', defaultCategory.id);
       }
 
-      if (defaultPaymentMode) {
-        setValue('accountId', defaultPaymentMode.id);
+      if (accounts.length > 0) {
+        const defaultAccount = accounts.find(acc => acc.default) || accounts[0];
+        setValue('accountId', defaultAccount.id);
+        if (defaultPaymentMode && defaultAccount.linkedPaymentModes?.some(pm => pm.id === defaultPaymentMode.id)) {
+          setValue('paymentModeId', defaultPaymentMode.id);
+        }
       }
     }
-  }, [defaultCategory, defaultPaymentMode, activeTab, isEditing, setValue]);
+  }, [defaultCategory, defaultPaymentMode, accounts, activeTab, isEditing, setValue]);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -147,9 +151,9 @@ function ScheduledTransactionForm() {
         startTime: data.startTime,
         amount: data.amount,
         description: data.description,
-        frequencyType: data.frequencyType,
+        frequencyType: String(FREQUENCY_TYPE_MAP[data.frequencyType] || 1),
         frequencyInterval: data.frequencyInterval,
-        endType: data.endType,
+        endType: String(END_TYPE_MAP[data.endType] || 1),
         occurrence: data.occurrence,
         remainderDays: data.remainderDays,
         tags: data.tags,
@@ -601,8 +605,8 @@ function ScheduledTransactionForm() {
               <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
               <span className="text-sm sm:text-base font-medium text-gray-900">
                 {FREQUENCY_OPTIONS[watchedValues.frequencyType]}
-                {watchedValues.frequencyType !== 'NONE' && watchedValues.frequencyInterval > 1 && 
-                  ` (every ${watchedValues.frequencyInterval} ${watchedValues.frequencyType.toLowerCase()}s)`
+                {watchedValues.frequencyType !== 'NONE' && watchedValues.frequencyInterval > 1 &&
+                  ` (every ${watchedValues.frequencyInterval} periods)`
                 }
               </span>
             </div>
@@ -610,8 +614,8 @@ function ScheduledTransactionForm() {
             {watchedValues.endType !== 'NONE' && (
               <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-blue-50 rounded-lg">
                 <span className="text-sm text-blue-600">
-                  {END_TYPE_OPTIONS[watchedValues.endType]}
-                  {watchedValues.endType === 'OCCURRENCE' && ` (${watchedValues.occurrence} times)`}
+                  {END_TYPE_OPTIONS[END_TYPE_MAP[watchedValues.endType]] || END_TYPE_OPTIONS['1']}
+                  {watchedValues.endType === 'AFTER_OCCURRENCES' && ` (${watchedValues.occurrence} times)`}
                 </span>
               </div>
             )}

@@ -110,14 +110,14 @@ export const useUpdateScheduledTransaction = () => {
       data: UpdateScheduledTransactionData; 
       transactionType: 'expense' | 'income' | 'transfer' 
     }) => {
-      let endpoint = `/schedules/expense`;
+      let endpoint = `/schedules/expense/${id}`;
       if (transactionType === 'income') {
-        endpoint = `/schedules/incoming`;
+        endpoint = `/schedules/incoming/${id}`;
       } else if (transactionType === 'transfer') {
-        endpoint = `/schedules/transfer`;
+        endpoint = `/schedules/transfer/${id}`;
       }
       
-      const response = await apiClient.put(endpoint, { id, ...data });
+      const response = await apiClient.put(endpoint, { ...data });
       return response.data;
     },
     onSuccess: () => {

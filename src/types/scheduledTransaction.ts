@@ -5,9 +5,9 @@ export interface ScheduledTransaction {
   amount: number;
   description: string;
   type: 'EXPENSE' | 'INCOME' | 'TRANSFER';
-  frequencyType: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyType: 1 | 2 | 3 | 4 | 5 | 6;
   frequencyInterval: number;
-  endType: 'NONE' | 'DATE' | 'OCCURRENCE';
+  endType: 1 | 2;
   occurrence: number;
   remainderDays: number | null;
   status: 'UPCOMING' | 'COMPLETED' | 'PAUSED';
@@ -63,9 +63,9 @@ export interface CreateScheduledTransactionData {
   startTime: string;
   amount: number;
   description: string;
-  frequencyType: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyType: string;
   frequencyInterval: number;
-  endType: 'NONE' | 'DATE' | 'OCCURRENCE';
+  endType: string;
   occurrence: number;
   remainderDays: number;
   tags: string[];
@@ -83,9 +83,9 @@ export interface UpdateScheduledTransactionData {
   startTime?: string;
   amount?: number;
   description?: string;
-  frequencyType?: 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+  frequencyType?: string;
   frequencyInterval?: number;
-  endType?: 'NONE' | 'DATE' | 'OCCURRENCE';
+  endType?: string;
   occurrence?: number;
   remainderDays?: number;
   tags?: string[];
@@ -108,19 +108,47 @@ export interface PaginatedScheduledTransactions {
   last: boolean;
 }
 
-export const FREQUENCY_OPTIONS = {
-  'NONE': 'Does not repeat',
-  'DAILY': 'Every day',
-  'WEEKLY': 'Every week',
-  'MONTHLY': 'Every month',
-  'YEARLY': 'Every year'
-} as const;
+export const FREQUENCY_OPTIONS: Record<string, string> = {
+  '1': 'Does not repeat',
+  '2': 'Every day',
+  '3': 'Every week',
+  '4': 'Every month',
+  '5': 'Every year',
+  '6': 'Custom'
+};
 
-export const END_TYPE_OPTIONS = {
-  'NONE': 'Never ends',
-  'DATE': 'Ends on date',
-  'OCCURRENCE': 'Ends after occurrences'
-} as const;
+export const END_TYPE_OPTIONS: Record<string, string> = {
+  '1': 'Never ends',
+  '2': 'Ends after occurrences'
+};
+
+export const FREQUENCY_TYPE_MAP: Record<string, number> = {
+  'NONE': 1,
+  'DAILY': 2,
+  'WEEKLY': 3,
+  'MONTHLY': 4,
+  'YEARLY': 5,
+  'CUSTOM': 6
+};
+
+export const END_TYPE_MAP: Record<string, number> = {
+  'NONE': 1,
+  'AFTER_OCCURRENCES': 2
+};
+
+export const REVERSE_FREQUENCY_MAP: Record<number, string> = {
+  1: 'NONE',
+  2: 'DAILY',
+  3: 'WEEKLY',
+  4: 'MONTHLY',
+  5: 'YEARLY',
+  6: 'CUSTOM'
+};
+
+export const REVERSE_END_TYPE_MAP: Record<number, string> = {
+  1: 'NONE',
+  2: 'AFTER_OCCURRENCES'
+};
 
 export const EARLY_REMINDER_OPTIONS = [
   { value: 0, label: 'None' },
