@@ -2,18 +2,18 @@ import { useState } from 'react';
 import {
   TrendingUp,
   TrendingDown,
-  ChevronLeft,
-  ChevronRight,
   DollarSign,
   BarChart3
 } from 'lucide-react';
 import { useFormatters } from '../../hooks/useFormatters';
 import { useAnalysisSummary, AnalysisParams } from '../../hooks/useAnalysis';
 import DateRangeModal from '../../components/DateRangeModal';
-import CategoryIcon from '../../components/CategoryIcon';
-import { Cell, Pie, ResponsiveContainer, Tooltip } from 'recharts';
-import { PieChart } from 'recharts';
-import SkeletonBlock from '../../components/SkeletonBlock'; // ⬅️ new
+import SkeletonBlock from '../../components/SkeletonBlock';
+import SummaryCard from './components/SummaryCard';
+import CategoryCard from './components/CategoryCard';
+import AccountCard from './components/AccountCard';
+import PieChartSection from './components/PieChartSection';
+import NavigationBar from './components/NavigationBar'; // ⬅️ new
 
 const tabs = ['Week', 'Month', 'Year', 'Custom'];
 
@@ -190,33 +190,21 @@ function Analysis() {
       </div>
 
       {/* Date Navigation */}
-      <div className={`bg-white rounded-xl shadow p-2 mb-4 flex items-center justify-between ${showCustomLoading ? 'opacity-50' : ''}`}>
-        <button
-          onClick={() => {
-            if (activeTab === 0) navigateWeek('prev');
-            else if (activeTab === 1) navigateMonth('prev');
-            else if (activeTab === 2) navigateYear('prev');
-          }}
-          disabled={activeTab === 3}
-          className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft className="w-5 h-5 text-gray-600" />
-        </button>
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-gray-900">{getDisplayText()}</h2>
-        </div>
-        <button
-          onClick={() => {
-            if (activeTab === 0) navigateWeek('next');
-            else if (activeTab === 1) navigateMonth('next');
-            else if (activeTab === 2) navigateYear('next');
-          }}
-          disabled={activeTab === 3}
-          className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronRight className="w-5 h-5 text-gray-600" />
-        </button>
-      </div>
+      <NavigationBar
+        displayText={getDisplayText()}
+        onPrevious={() => {
+          if (activeTab === 0) navigateWeek('prev');
+          else if (activeTab === 1) navigateMonth('prev');
+          else if (activeTab === 2) navigateYear('prev');
+        }}
+        onNext={() => {
+          if (activeTab === 0) navigateWeek('next');
+          else if (activeTab === 1) navigateMonth('next');
+          else if (activeTab === 2) navigateYear('next');
+        }}
+        disabled={activeTab === 3}
+        isLoading={showCustomLoading}
+      />
 
       {/* Summary Cards */}
       {showMainLoading ? (
@@ -225,47 +213,25 @@ function Analysis() {
         </div>
       ) : (
         <div className={`grid gap-4 sm:grid-cols-3 transition-opacity ${showCustomLoading ? 'opacity-50' : ''}`}>
-          <div className="bg-white rounded-xl shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Spending</p>
-                <p className="text-xl font-bold text-red-600">
-                  {formatCurrency(analysisData?.spending || 0)}
-                </p>
-              </div>
-              <div className="bg-red-100 rounded-full p-3">
-                <TrendingDown className="h-5 w-5 text-red-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Income</p>
-                <p className="text-xl font-bold text-green-600">
-                  {formatCurrency(analysisData?.income || 0)}
-                </p>
-              </div>
-              <div className="bg-green-100 rounded-full p-3">
-                <TrendingUp className="h-5 w-5 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Balance</p>
-                <p className={`text-xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {balance >= 0 ? '+' : ''}{formatCurrency(Math.abs(balance))}
-                </p>
-              </div>
-              <div className={`rounded-full p-3 ${balance >= 0 ? 'bg-green-100' : 'bg-red-100'}`}>
-                <DollarSign className={`h-5 w-5 ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`} />
-              </div>
-            </div>
-          </div>
+          <SummaryCard
+            title="Total Spending"
+            amount={`${(analysisData?.spending || 0) >= 0 ? '+' : ''}${formatCurrency(analysisData?.spending || 0)}`}
+            icon={TrendingDown}
+            variant="spending"
+          />
+          <SummaryCard
+            title="Total Income"
+            amount={`${(analysisData?.income || 0) >= 0 ? '+' : ''}${formatCurrency(analysisData?.income || 0)}`}
+            icon={TrendingUp}
+            variant="income"
+          />
+          <SummaryCard
+            title="Balance"
+            amount={`${balance >= 0 ? '+' : ''}${formatCurrency(Math.abs(balance))}`}
+            icon={DollarSign}
+            variant="balance"
+            showPlus
+          />
         </div>
       )}
 
@@ -296,38 +262,12 @@ function Analysis() {
 
             <>
               {/* Chart */}
-              <div className="relative h-72 flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={spendingChartData}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      innerRadius={60}
-                      dataKey="value"
-                      label={({ percent }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
-                    >
-                      {spendingChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value, name) => [
-                        formatCurrency(Number(value)),
-                        name,
-                      ]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                {/* Total in center */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <p className="text-sm text-gray-500">Total</p>
-                  <p className="text-xl font-bold text-red-600">
-                    {formatCurrency(analysisData?.spending || 0)}
-                  </p>
-                </div>
-              </div>
+              <PieChartSection
+                data={spendingChartData}
+                total={formatCurrency(analysisData?.spending || 0)}
+                variant="spending"
+                formatCurrency={formatCurrency}
+              />
 
               {/* Category List - now 3/3 layout */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -335,34 +275,15 @@ function Analysis() {
                   const percentage =
                     ((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1);
                   return (
-                    <div
+                    <CategoryCard
                       key={index}
-                      className="rounded-xl shadow p-4 hover:shadow-md transition"
-                    >
-                      <div className="flex justify-between items-center gap-3">
-                        <div className="flex items-center gap-3 mb-2">
-                          <CategoryIcon
-                            icon={item.category.icon}
-                            color={item.category.color}
-                            size="sm"
-                          />
-                          <div>
-                            <p className="font-medium text-gray-900">{item.category.name}</p>
-                            <p className="text-xs text-gray-500">
-                              {formatCurrency(item.amount)}
-                            </p>
-                          </div>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1 text-right">{percentage}%</p>
-                      </div>
-                      {/* Progress bar */}
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div
-                          className="h-2 rounded-full bg-red-500"
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                    </div>
+                      icon={item.category.icon}
+                      color={item.category.color}
+                      name={item.category.name}
+                      amount={formatCurrency(item.amount)}
+                      percentage={percentage}
+                      variant="spending"
+                    />
                   );
                 })}
               </div>
@@ -393,39 +314,12 @@ function Analysis() {
             </h3>
             <>
               {/* Chart */}
-              <div className="relative h-72 flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={incomeChartData}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      innerRadius={60}
-                      dataKey="value"
-                      label={({ percent }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
-                    >
-                      {incomeChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value, name) => [
-                        formatCurrency(Number(value)),
-                        name,
-                      ]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-
-                {/* Total in center */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <p className="text-sm text-gray-500">Total</p>
-                  <p className="text-xl font-bold text-green-600">
-                    {formatCurrency(analysisData?.income || 0)}
-                  </p>
-                </div>
-              </div>
+              <PieChartSection
+                data={incomeChartData}
+                total={formatCurrency(analysisData?.income || 0)}
+                variant="income"
+                formatCurrency={formatCurrency}
+              />
 
               {/* Category List - now 3/3 layout */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -433,35 +327,15 @@ function Analysis() {
                   const percentage =
                     ((item.amount / (analysisData?.income || 1)) * 100).toFixed(1);
                   return (
-                    <div
+                    <CategoryCard
                       key={index}
-                      className="rounded-xl shadow p-4 hover:shadow-md transition"
-                    >
-                      <div className="flex justify-between items-center gap-3">
-                        <div className="flex items-center gap-3 mb-2">
-                          <CategoryIcon
-                            icon={item.category.icon}
-                            color={item.category.color}
-                            size="sm"
-                          />
-                          <div>
-                            <p className="font-medium text-gray-900">{item.category.name}</p>
-                            <p className="text-xs text-gray-500">
-                              {formatCurrency(item.amount)}
-                            </p>
-                          </div>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1 text-right">{percentage}%</p>
-                      </div>
-                      {/* Progress bar */}
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div
-                          className="h-2 rounded-full bg-green-500"
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-
-                    </div>
+                      icon={item.category.icon}
+                      color={item.category.color}
+                      name={item.category.name}
+                      amount={formatCurrency(item.amount)}
+                      percentage={percentage}
+                      variant="income"
+                    />
                   );
                 })}
               </div>
@@ -492,30 +366,15 @@ function Analysis() {
                     </h4>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {analysisData?.spendingAccount.map((item, i) => (
-                        <div
+                        <AccountCard
                           key={`sp-${i}`}
-                          className="bg-white rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                        >
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                            <div>
-                              <h3 className="font-medium text-gray-900 truncate">
-                                {item.accountResponseDto.name}
-                              </h3>
-                              <p className="text-xs text-gray-500">
-                                {getAccountTypeName(item.accountResponseDto.type)}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-sm font-semibold text-red-600">
-                              {formatCurrency(item.amount)}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}%
-                            </p>
-                          </div>
-                        </div>
+                          icon={getAccountIcon(item.accountResponseDto.type)}
+                          name={item.accountResponseDto.name}
+                          typeName={getAccountTypeName(item.accountResponseDto.type)}
+                          amount={formatCurrency(item.amount)}
+                          percentage={((item.amount / (analysisData?.spending || 1)) * 100).toFixed(1)}
+                          variant="spending"
+                        />
                       ))}
                     </div>
                   </div>
@@ -529,30 +388,15 @@ function Analysis() {
                     </h4>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {analysisData?.incomeAccount.map((item, i) => (
-                        <div
+                        <AccountCard
                           key={`in-${i}`}
-                          className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                        >
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                            <div>
-                              <h3 className="font-medium text-gray-900 truncate">
-                                {item.accountResponseDto.name}
-                              </h3>
-                              <p className="text-xs text-gray-500">
-                                {getAccountTypeName(item.accountResponseDto.type)}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-sm font-semibold text-green-600">
-                              {formatCurrency(item.amount)}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}%
-                            </p>
-                          </div>
-                        </div>
+                          icon={getAccountIcon(item.accountResponseDto.type)}
+                          name={item.accountResponseDto.name}
+                          typeName={getAccountTypeName(item.accountResponseDto.type)}
+                          amount={formatCurrency(item.amount)}
+                          percentage={((item.amount / (analysisData?.income || 1)) * 100).toFixed(1)}
+                          variant="income"
+                        />
                       ))}
                     </div>
                   </div>
@@ -566,28 +410,14 @@ function Analysis() {
                     </h4>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {analysisData?.transfersAccount.map((item, i) => (
-                        <div
+                        <AccountCard
                           key={`tr-${i}`}
-                          className="rounded-xl shadow p-4 flex justify-between items-center hover:shadow-md transition"
-                        >
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <span className="text-lg">{getAccountIcon(item.accountResponseDto.type)}</span>
-                            <div>
-                              <h3 className="font-medium text-gray-900 truncate">
-                                {item.accountResponseDto.name}
-                              </h3>
-                              <p className="text-xs text-gray-500">
-                                {getAccountTypeName(item.accountResponseDto.type)}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-sm font-semibold text-blue-600">
-                              {formatCurrency(item.amount)}
-                            </p>
-                            <p className="text-xs text-gray-500">Transfer</p>
-                          </div>
-                        </div>
+                          icon={getAccountIcon(item.accountResponseDto.type)}
+                          name={item.accountResponseDto.name}
+                          typeName={getAccountTypeName(item.accountResponseDto.type)}
+                          amount={formatCurrency(item.amount)}
+                          variant="transfer"
+                        />
                       ))}
                     </div>
                   </div>

@@ -23,8 +23,8 @@ import {
   useCreateAdjustmentDebtTransaction,
 } from '../../../hooks/useDebts';
 import { DEBT_TRANSACTION_TYPES } from '../../../types/debt';
-import DebtRecordTypeModal from '../../../components/DebtRecordTypeModal';
-import DebtAdjustmentModal from '../../../components/DebtAdjustmentModal';
+import DebtRecordTypeModal from '../components/DebtRecordTypeModal';
+import DebtAdjustmentModal from '../components/DebtAdjustmentModal';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import { useFormatters } from '../../../hooks/useFormatters';
 

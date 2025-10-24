@@ -224,9 +224,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-100 dark:border-gray-800">
           <Link to="/dashboard" className="flex items-center">
             <img
-              src={shouldShowCondensed ? "/logo1.png" : "/logo.png"}
+              src={"/logo1.png"}
               alt="Logo"
-              className={`transition-all duration-300 ${shouldShowCondensed ? "h-8 w-8" : "h-8 sm:h-10"} object-contain`}
+              className={`h-8 w-8 object-contain`}
             />
           </Link>
           {!shouldShowCondensed && (

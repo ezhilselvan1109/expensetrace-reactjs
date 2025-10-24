@@ -1,47 +1,21 @@
-import { Link } from "react-router-dom";
+import PublicHeader from "../../components/public/PublicHeader";
+import PublicFooter from "../../components/public/PublicFooter";
+import HeroSection from "../../components/public/HeroSection";
+import CTASection from "../../components/public/CTASection";
+import ContentSection from "../../components/public/ContentSection";
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="w-full bg-white shadow-sm">
-        <div className="flex w-full px-4 py-3 sm:px-6 sm:py-4 items-center justify-between max-w-7xl mx-auto">
-          {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
-            <img
-              src="../logo.png"
-              alt="ExpenseTrace Logo"
-              className="h-7 sm:h-10 lg:h-12 w-auto"
-            />
-          </Link>
+      <PublicHeader />
 
-          {/* Sign In */}
-          <Link
-            to="/log-in-or-create-account"
-            className="px-3 py-1.5 sm:px-5 sm:py-2 border border-gray-300 rounded-full text-sm sm:text-base font-medium text-gray-700 hover:bg-gray-100 transition"
-          >
-            Sign In
-          </Link>
-        </div>
-      </header>
-
-      {/* Main */}
       <main className="flex-grow">
-        {/* Hero */}
-        <section className="py-10 sm:py-20 lg:py-28 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
-          <div className="max-w-3xl mx-auto px-5">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-5 leading-snug">
-              Privacy Policy
-            </h1>
-            <p className="text-base sm:text-lg lg:text-xl leading-relaxed">
-              Your privacy is important to us. Learn how we collect, use, and
-              protect your information.
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="Privacy Policy"
+          description="Your privacy is important to us. Learn how we collect, use, and protect your information."
+        />
 
-        {/* Policy Content */}
-        <section className="py-12 sm:py-20 lg:py-24 bg-white">
+        <ContentSection>
           <div className="max-w-4xl mx-auto px-5 text-gray-700 space-y-10">
             {[
               {
@@ -79,44 +53,20 @@ export default function PrivacyPolicyPage() {
               </div>
             ))}
           </div>
-        </section>
+        </ContentSection>
 
-        {/* CTA */}
-        <section className="py-14 sm:py-24 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
-          <div className="max-w-2xl mx-auto px-5">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-5">
-              Have Questions?
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl mb-8 leading-relaxed">
-              If you have any concerns about your privacy, feel free to reach
-              out to our support team anytime.
-            </p>
-            <Link
-              to="/about"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-600 rounded-full text-base sm:text-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </section>
+        <CTASection
+          title="Have Questions?"
+          description="If you have any concerns about your privacy, feel free to reach out to our support team anytime."
+          buttonText="Contact Us"
+          buttonLink="/about"
+        />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300">
-        <div className="max-w-7xl mx-auto px-5 py-8 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4">
-          <div className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
-            © {new Date().getFullYear()} ExpenseTrace. All rights reserved.
-          </div>
-          <div className="flex flex-wrap justify-center gap-4 text-sm sm:text-base">
-            <Link to="/terms" className="hover:text-white">
-              Terms & Conditions
-            </Link>
-            <Link to="/about" className="hover:text-white">
-              About
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter links={[
+        { to: "/terms", label: "Terms & Conditions" },
+        { to: "/about", label: "About" }
+      ]} />
     </div>
   );
 }

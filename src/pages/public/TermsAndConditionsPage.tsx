@@ -1,47 +1,22 @@
-import { Link } from "react-router-dom";
+import PublicHeader from "../../components/public/PublicHeader";
+import PublicFooter from "../../components/public/PublicFooter";
+import HeroSection from "../../components/public/HeroSection";
+import CTASection from "../../components/public/CTASection";
+import ContentSection from "../../components/public/ContentSection";
 
 export default function TermsAndConditionsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="w-full bg-white shadow-sm">
-        <div className="flex w-full px-4 sm:px-6 py-4 items-center justify-between max-w-7xl mx-auto">
-          {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
-            <img
-              src="../logo.png"
-              alt="ExpenseTrace Logo"
-              className="h-8 sm:h-10 lg:h-12 w-auto"
-            />
-          </Link>
+      <PublicHeader />
 
-          {/* Sign In */}
-          <Link
-            to="/log-in-or-create-account"
-            className="px-4 sm:px-5 py-2 border border-gray-300 rounded-full text-sm sm:text-base font-medium text-gray-700 hover:bg-gray-100 transition"
-          >
-            Sign In
-          </Link>
-        </div>
-      </header>
-
-      {/* Main */}
       <main className="flex-grow">
-        {/* Hero */}
-        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
-          <div className="max-w-3xl mx-auto px-6 sm:px-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 leading-snug">
-              Terms & Conditions
-            </h1>
-            <p className="text-base sm:text-lg lg:text-xl leading-relaxed opacity-90">
-              Please read these terms carefully before using ExpenseTrace.
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="Terms & Conditions"
+          description="Please read these terms carefully before using ExpenseTrace."
+        />
 
-        {/* Terms Content */}
-        <section className="py-14 sm:py-20 lg:py-24 bg-white">
-          <div className="max-w-5xl mx-auto px-6 sm:px-8 text-gray-700 space-y-12">
+        <ContentSection>
+          <div className="max-w-4xl mx-auto px-5 text-gray-700 space-y-10">
             {[
               {
                 title: "1. Acceptance of Terms",
@@ -69,51 +44,29 @@ export default function TermsAndConditionsPage() {
               },
             ].map((section, idx) => (
               <div key={idx}>
-                <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">
+                <h2 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-3">
                   {section.title}
                 </h2>
-                <p className="leading-relaxed">{section.text}</p>
+                <p className="text-base sm:text-lg leading-relaxed sm:leading-loose">
+                  {section.text}
+                </p>
               </div>
             ))}
           </div>
-        </section>
+        </ContentSection>
 
-        {/* CTA */}
-        <section className="py-16 sm:py-28 lg:py-32 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center">
-          <div className="max-w-3xl mx-auto px-6 sm:px-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
-              Need Assistance?
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl mb-10 leading-relaxed opacity-90">
-              If you have questions about these Terms & Conditions, feel free to
-              reach out to our support team.
-            </p>
-            <Link
-              to="/about"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-600 rounded-full text-base sm:text-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </section>
+        <CTASection
+          title="Need Assistance?"
+          description="If you have questions about these Terms & Conditions, feel free to reach out to our support team."
+          buttonText="Contact Us"
+          buttonLink="/about"
+        />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-5 sm:gap-6">
-          <div className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
-            © {new Date().getFullYear()} ExpenseTrace. All rights reserved.
-          </div>
-          <div className="flex gap-6 text-sm sm:text-base">
-            <Link to="/privacy" className="hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link to="/about" className="hover:text-white">
-              About
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter links={[
+        { to: "/privacy", label: "Privacy Policy" },
+        { to: "/about", label: "About" }
+      ]} />
     </div>
   );
 }
