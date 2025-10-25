@@ -6,7 +6,7 @@ import {
   useCreateCategory,
   useUpdateCategory,
   useCategory,
-} from "../../hooks/useCategories";
+} from "./hooks/useCategories";
 import {
   CATEGORY_COLORS,
   CATEGORY_ICONS,

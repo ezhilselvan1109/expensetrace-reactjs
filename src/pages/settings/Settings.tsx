@@ -9,7 +9,7 @@ import {
   useUpdateDailyReminder,
   useClearAllData,
   useDeleteAccount,
-} from '../../hooks/useSettings';
+} from './hooks/useSettings';
 import {
   TIME_FORMATS,
   DECIMAL_FORMATS,

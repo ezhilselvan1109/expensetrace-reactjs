@@ -14,7 +14,7 @@ import TermsAndConditionsPage from './pages/public/TermsAndConditionsPage';
 // Lazy load components
 const LandingPage = lazy(() => import('./pages/public/LandingPage'));
 const Auth = lazy(() => import('./pages/public/Auth'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
 const Analysis = lazy(() => import('./pages/analysis/Analysis'));
 const About = lazy(() => import('./pages/public/About'));
 const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));

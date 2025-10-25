@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
-import { useDefaultCategory } from './useCategories';
-import { useDefaultPaymentMode } from './useAccounts';
+import { useDefaultCategory } from '../pages/categories/hooks/useCategories';
+import { useDefaultPaymentMode } from '../pages/account/hooks/useAccounts';
 
 interface UseFormDefaultsOptions {
   setValue: UseFormSetValue<any>;

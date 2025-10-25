@@ -5,7 +5,7 @@ import {
   useUpdateTag,
   useMergeTag,
   useDeleteTag,
-} from './useTags';
+} from './hooks/useTags';
 import TagMergeModal from './components/TagMergeModal';
 import TagUpdateModal from './components/TagUpdateModal';
 import ConfirmationModal from '../../components/ConfirmationModal';

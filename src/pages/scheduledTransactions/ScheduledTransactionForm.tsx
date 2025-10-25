@@ -9,16 +9,16 @@ import {
 } from '../../hooks/useScheduledTransactions';
 import {
   useCategoriesByType
-} from '../../hooks/useCategories';
+} from '../categories/hooks/useCategories';
 import {
   useAccounts
-} from '../../hooks/useAccounts';
+} from '../account/hooks/useAccounts';
 import { CreateScheduledTransactionData, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS, FREQUENCY_TYPE_MAP, END_TYPE_MAP, REVERSE_FREQUENCY_MAP, REVERSE_END_TYPE_MAP } from '../../types/scheduledTransaction';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import AccountSelectModal from '../../components/AccountSelectModal';
-import FrequencyModal from '../../components/FrequencyModal';
+import FrequencyModal from './components/FrequencyModal';
 import EarlyReminderModal from '../../components/EarlyReminderModal';
-import AccountDisplay from '../../components/account/AccountDisplay';
+import AccountDisplay from '../account/components/AccountDisplay';
 import PaymentModeSelector from '../../components/account/PaymentModeSelector';
 import TransferAccountSection from '../../components/account/TransferAccountSection';
 import FormHeader from '../../components/forms/FormHeader';

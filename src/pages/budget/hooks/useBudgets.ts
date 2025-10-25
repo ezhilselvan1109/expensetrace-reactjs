@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
 import {
   BudgetSummary,
   BudgetAnalysis,
@@ -9,7 +9,7 @@ import {
   CreateYearlyBudgetData,
   UpdateMonthlyBudgetData,
   UpdateYearlyBudgetData
-} from '../types/budget';
+} from '../../../types/budget';
 
 // Get budget summaries
 export const useBudgetSummary = () => {

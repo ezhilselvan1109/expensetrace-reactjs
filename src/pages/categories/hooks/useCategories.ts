@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
-import { Category, CreateCategoryData, UpdateCategoryData } from '../types/category';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
+import { Category, CreateCategoryData, UpdateCategoryData } from '../../../types/category';
 
 // Get category by ID
 export const useCategory = (id: string) => {

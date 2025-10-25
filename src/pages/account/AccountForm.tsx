@@ -10,7 +10,7 @@ import {
   useUpdateWallet,
   useUpdateCreditCard,
   useAccount
-} from '../../hooks/useAccounts';
+} from './hooks/useAccounts';
 import {
   CreateBankAccountData,
   CreateWalletData,

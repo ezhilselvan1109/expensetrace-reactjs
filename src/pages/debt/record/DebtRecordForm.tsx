@@ -8,7 +8,7 @@ import {
   useUpdateReceivedDebtTransaction,
   useDebtRecord
 } from '../../../hooks/useDebts';
-import { useAccounts } from '../../../hooks/useAccounts';
+import { useAccounts } from '../../account/hooks/useAccounts';
 import { CreateDebtRecordData } from '../../../types/debt';
 import FormHeader from '../../../components/forms/FormHeader';
 import FormDateTimeFields from '../../../components/forms/FormDateTimeFields';

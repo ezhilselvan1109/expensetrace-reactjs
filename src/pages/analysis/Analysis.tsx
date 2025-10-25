@@ -6,7 +6,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useFormatters } from '../../hooks/useFormatters';
-import { useAnalysisSummary, AnalysisParams } from '../../hooks/useAnalysis';
+import { useAnalysisSummary, AnalysisParams } from './hooks/useAnalysis';
 import DateRangeModal from '../../components/DateRangeModal';
 import SkeletonBlock from '../../components/SkeletonBlock';
 import SummaryCard from './components/SummaryCard';

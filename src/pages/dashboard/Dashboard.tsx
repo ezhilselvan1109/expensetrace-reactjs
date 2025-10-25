@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TrendingUp, TrendingDown, DollarSign, ArrowUpDown, Edit } from "lucide-react";
-import { useFormatters } from "../hooks/useFormatters";
-import { useRecentTransactions, useTransactionSummary } from "../hooks/useTransactions";
-import CategoryIcon from "../components/CategoryIcon";
-import { TRANSACTION_TYPES } from "../types/transaction";
-import RangeSelectorModal from "../components/RangeSelectorModal";
+import { useFormatters } from "../../hooks/useFormatters";
+import { useRecentTransactions, useTransactionSummary } from "../transaction/hooks/useTransactions";
+import CategoryIcon from "../../components/CategoryIcon";
+import { TRANSACTION_TYPES } from "../../types/transaction";
+import RangeSelectorModal from "./components/RangeSelectorModal";
 
 export default function Dashboard() {
   const { formatCurrency } = useFormatters();

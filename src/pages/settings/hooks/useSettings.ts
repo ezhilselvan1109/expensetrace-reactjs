@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
 import { 
   UserSettings
-} from '../types/settings';
+} from '../../../types/settings';
 
 // Get user settings
 export const useSettings = (enabled = true) => {

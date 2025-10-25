@@ -10,7 +10,7 @@ import {
   CreditCard,
   Wallet,
 } from "lucide-react";
-import { useTransactionsByDate, useDeleteTransaction } from "../../hooks/useTransactions";
+import { useTransactionsByDate, useDeleteTransaction } from "../transaction/hooks/useTransactions";
 import { useFormatters } from "../../hooks/useFormatters";
 import { TRANSACTION_TYPES } from "../../types/transaction";
 import CategoryIcon from "../../components/CategoryIcon";

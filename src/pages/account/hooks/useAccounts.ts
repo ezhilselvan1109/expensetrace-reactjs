@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
 import { 
   Account, 
   PaymentMode, 
@@ -15,7 +15,7 @@ import {
   UpdatePaymentModeData,
   AccountSummary,
   DefaultPaymentMode
-} from '../types/account';
+} from '../../../types/account';
 
 // Create account adjustment
 export const useCreateAccountAdjustment = () => {

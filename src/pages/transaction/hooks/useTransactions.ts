@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
 import { 
   Transaction, 
   CreateTransactionData, 
@@ -10,7 +10,7 @@ import {
   TransactionFilters,
   TransactionSummary,
   TransactionsByDateResponse
-} from '../types/transaction';
+} from '../../../types/transaction';
 
 // Get all transactions with pagination
 export const useTransactions = (page = 0, size = 10, filters?: TransactionFilters) => {

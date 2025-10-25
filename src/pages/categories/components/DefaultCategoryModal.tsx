@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Search, Check } from "lucide-react";
-import { Category } from "../types/category";
+import { Category } from "../../../types/category";
 import { useSetDefaultCategory } from "../hooks/useCategories";
-import CategoryIcon from "./CategoryIcon";
+import CategoryIcon from "../../../components/CategoryIcon";
 
 interface DefaultCategoryModalProps {
   isOpen: boolean;

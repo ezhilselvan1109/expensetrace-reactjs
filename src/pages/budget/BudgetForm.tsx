@@ -8,8 +8,8 @@ import {
   useUpdateMonthlyBudget,
   useUpdateYearlyBudget,
   useBudgetAnalysis
-} from '../../hooks/useBudgets';
-import { useCategoriesByType } from '../../hooks/useCategories';
+} from './hooks/useBudgets';
+import { useCategoriesByType } from '../categories/hooks/useCategories';
 import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from '../../types/budget';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import CategoryIcon from '../../components/CategoryIcon';

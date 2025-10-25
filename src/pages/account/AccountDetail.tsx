@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Edit, Trash2, TrendingUp, TrendingDown, ArrowUpDown, DollarSign, ChevronLeft, ChevronRight, Building2, Wallet, CreditCard, Banknote, Smartphone, FileText, Globe, Eye, EyeOff, Settings, Bell } from 'lucide-react';
-import { useAccount, useCreateAccountAdjustment, useDeleteAccount } from '../../hooks/useAccounts';
+import { useAccount, useCreateAccountAdjustment, useDeleteAccount } from './hooks/useAccounts';
 import {
   useAccountTransactions,
   useAccountDebitTransactions,
   useAccountCreditTransactions,
   useAccountAdjustmentTransactions,
-} from '../../hooks/useAccountTransactions';
-import { useDeleteTransaction } from '../../hooks/useTransactions';
+} from './hooks/useAccountTransactions';
+import { useDeleteTransaction } from '../transaction/hooks/useTransactions';
 import { useFormatters } from '../../hooks/useFormatters';
 import { TRANSACTION_TYPES } from '../../types/transaction';
 import { DEBT_TRANSACTION_TYPES } from '../../types/debt';

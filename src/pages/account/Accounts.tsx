@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, CreditCard, Wallet, Building2, Banknote, AlertCircle, ChevronRight } from 'lucide-react';
-import { useAccounts, useAccountSummary } from '../../hooks/useAccounts';
+import { useAccounts, useAccountSummary } from './hooks/useAccounts';
 import { useFormatters } from '../../hooks/useFormatters';
 import InfoModal from './InfoModal';
 

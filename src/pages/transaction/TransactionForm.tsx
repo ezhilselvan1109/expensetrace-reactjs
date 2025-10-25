@@ -6,17 +6,17 @@ import {
   useCreateTransaction,
   useUpdateTransaction,
   useTransaction
-} from '../../hooks/useTransactions';
+} from './hooks/useTransactions';
 import {
   useCategoriesByType
-} from '../../hooks/useCategories';
+} from '../categories/hooks/useCategories';
 import {
   useAccounts
-} from '../../hooks/useAccounts';
+} from '../account/hooks/useAccounts';
 import { CreateTransactionData } from '../../types/transaction';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import AccountSelectModal from '../../components/AccountSelectModal';
-import AccountDisplay from '../../components/account/AccountDisplay';
+import AccountDisplay from '../account/components/AccountDisplay';
 import PaymentModeSelector from '../../components/account/PaymentModeSelector';
 import TransferAccountSection from '../../components/account/TransferAccountSection';
 import FormHeader from '../../components/forms/FormHeader';

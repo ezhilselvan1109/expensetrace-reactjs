@@ -12,7 +12,7 @@ import {
   Building2,
   Banknote,
 } from 'lucide-react';
-import { useTransactions, useDeleteTransaction } from '../../hooks/useTransactions';
+import { useTransactions, useDeleteTransaction } from './hooks/useTransactions';
 import { TRANSACTION_TYPES } from '../../types/transaction';
 import { useFormatters } from '../../hooks/useFormatters';
 import CategoryIcon from '../../components/CategoryIcon';

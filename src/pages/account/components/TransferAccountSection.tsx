@@ -1,6 +1,6 @@
 import { Edit } from 'lucide-react';
 import { Account } from '../../types/account';
-import AccountDisplay from './AccountDisplay';
+import AccountDisplay from '../../pages/account/components/AccountDisplay';
 import PaymentModeSelector, { getPaymentModeIcon, getPaymentModeTypeName } from './PaymentModeSelector';
 
 interface TransferAccountSectionProps {

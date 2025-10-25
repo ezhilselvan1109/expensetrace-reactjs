@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../contexts/ToastContext';
-import apiClient from '../../lib/axios';
-import { UpdateTagData, MergeTagData, PaginatedTags } from '../../pages/tags/tag';
+import { useToast } from '../../../contexts/ToastContext';
+import apiClient from '../../../lib/axios';
+import { UpdateTagData, MergeTagData, PaginatedTags } from '../tag';
 
 /**
  * 🔍 Fetch Tags (with caching)
