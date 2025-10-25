@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Calculator } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { Account } from '../types/account';
+import { Account } from '../pages/account/types/account';
 import { useFormatters } from '../hooks/useFormatters';
 import CalculatorModal from './CalculatorModal';
 

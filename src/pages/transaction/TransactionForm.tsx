@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import {
   useCreateTransaction,
@@ -13,7 +12,7 @@ import {
 import {
   useAccounts
 } from '../account/hooks/useAccounts';
-import { CreateTransactionData } from '../../types/transaction';
+import { CreateTransactionData } from './types/transaction';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import AccountSelectModal from '../../components/AccountSelectModal';
 import AccountDisplay from '../account/components/AccountDisplay';

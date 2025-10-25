@@ -16,7 +16,7 @@ import {
   NUMBER_FORMATS,
   CURRENCIES,
   Currency,
-} from '../../types/settings';
+} from './types/settings';
 import TimeFormatModal from '../../components/TimeFormatModal';
 import DecimalFormatModal from '../../components/DecimalFormatModal';
 import NumberFormatModal from '../../components/NumberFormatModal';

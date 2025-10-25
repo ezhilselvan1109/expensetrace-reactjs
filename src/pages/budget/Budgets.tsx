@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Target, ChevronRight } from 'lucide-react';
 import { useBudgetSummary } from './hooks/useBudgets';
-import { Budget } from '../../types/budget';
-import { MONTHS } from '../../types/budget';
+import { Budget } from './types/budget';
+import { MONTHS } from './types/budget';
 import { useFormatters } from '../../hooks/useFormatters';
 
 const tabs = ['Monthly', 'Yearly'];

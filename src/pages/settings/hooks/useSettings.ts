@@ -4,7 +4,7 @@ import { useToast } from '../../../contexts/ToastContext';
 import apiClient from '../../../lib/axios';
 import { 
   UserSettings
-} from '../../../types/settings';
+} from '../types/settings';
 
 // Get user settings
 export const useSettings = (enabled = true) => {

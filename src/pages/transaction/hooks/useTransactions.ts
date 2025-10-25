@@ -10,7 +10,7 @@ import {
   TransactionFilters,
   TransactionSummary,
   TransactionsByDateResponse
-} from '../../../types/transaction';
+} from '../types/transaction';
 
 // Get all transactions with pagination
 export const useTransactions = (page = 0, size = 10, filters?: TransactionFilters) => {

@@ -17,7 +17,7 @@ import {
   CreateCreditCardData,
   CreatePaymentModeData,
   PAYMENT_MODE_TYPES
-} from '../../types/account';
+} from './types/account';
 import PaymentModeModal from '../../components/PaymentModeModal';
 
 const tabs = ['Bank Account', 'Wallet', 'Credit Card'];

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useTransactionsByDate, useDeleteTransaction } from "../transaction/hooks/useTransactions";
 import { useFormatters } from "../../hooks/useFormatters";
-import { TRANSACTION_TYPES } from "../../types/transaction";
+import { TRANSACTION_TYPES } from "../transaction/types/transaction";
 import CategoryIcon from "../../components/CategoryIcon";
 import ConfirmationModal from "../../components/ConfirmationModal";
 

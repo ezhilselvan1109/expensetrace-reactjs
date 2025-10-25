@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '../../../lib/axios';
-import { DaySummaryResponse, MonthSummaryResponse } from '../../../types/views';
+import { DaySummaryResponse, MonthSummaryResponse } from '../types/views';
 
 // Get month summary
 export const useMonthSummary = (month: number, year: number) => {

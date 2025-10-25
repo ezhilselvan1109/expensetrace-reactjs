@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Hash, Check } from 'lucide-react';
-import { DECIMAL_FORMATS } from '../types/settings';
+import { DECIMAL_FORMATS } from '../pages/settings/types/settings';
 
 interface DecimalFormatModalProps {
   isOpen: boolean;

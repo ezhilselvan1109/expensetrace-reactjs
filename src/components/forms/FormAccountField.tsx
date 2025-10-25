@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Edit } from 'lucide-react';
-import { Account } from '../../types/account';
+import { Account } from '../../pages/account/types/account';
 import AccountSelectModal from '../AccountSelectModal';
 import AccountDisplay from '../../pages/account/components/AccountDisplay';
 import PaymentModeSelector from '../account/PaymentModeSelector';

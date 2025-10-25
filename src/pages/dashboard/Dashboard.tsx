@@ -4,7 +4,7 @@ import { TrendingUp, TrendingDown, DollarSign, ArrowUpDown, Edit } from "lucide-
 import { useFormatters } from "../../hooks/useFormatters";
 import { useRecentTransactions, useTransactionSummary } from "../transaction/hooks/useTransactions";
 import CategoryIcon from "../../components/CategoryIcon";
-import { TRANSACTION_TYPES } from "../../types/transaction";
+import { TRANSACTION_TYPES } from "../transaction/types/transaction";
 import RangeSelectorModal from "./components/RangeSelectorModal";
 
 export default function Dashboard() {

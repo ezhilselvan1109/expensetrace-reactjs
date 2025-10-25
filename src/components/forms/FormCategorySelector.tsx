@@ -1,6 +1,6 @@
 import { Edit } from 'lucide-react';
 import CategoryIcon from '../CategoryIcon';
-import { Category } from '../../types/category';
+import { Category } from '../../pages/categories/types/category';
 
 interface FormCategorySelectorProps {
   selectedCategory?: Category;

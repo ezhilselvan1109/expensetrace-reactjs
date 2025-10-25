@@ -10,7 +10,7 @@ import {
   useBudgetAnalysis
 } from './hooks/useBudgets';
 import { useCategoriesByType } from '../categories/hooks/useCategories';
-import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from '../../types/budget';
+import { CreateMonthlyBudgetData, CreateYearlyBudgetData, CategoryLimit } from './types/budget';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import CategoryIcon from '../../components/CategoryIcon';
 import MonthYearPicker from '../../components/MonthYearPicker';

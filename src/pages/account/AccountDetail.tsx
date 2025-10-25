@@ -10,8 +10,8 @@ import {
 } from './hooks/useAccountTransactions';
 import { useDeleteTransaction } from '../transaction/hooks/useTransactions';
 import { useFormatters } from '../../hooks/useFormatters';
-import { TRANSACTION_TYPES } from '../../types/transaction';
-import { DEBT_TRANSACTION_TYPES } from '../../types/debt';
+import { TRANSACTION_TYPES } from '../transaction/types/transaction';
+import { DEBT_TRANSACTION_TYPES } from '../debt/types/debt';
 import CategoryIcon from '../../components/CategoryIcon';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import BalanceEditModal from '../../components/BalanceEditModal';

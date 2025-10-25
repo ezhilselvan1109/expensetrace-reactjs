@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Search, Building2, Wallet, CreditCard, Banknote, Smartphone, FileText, Globe, Check } from 'lucide-react';
-import { Account } from '../types/account';
+import { Account } from '../pages/account/types/account';
 
 interface AccountSelectModalProps {
   isOpen: boolean;

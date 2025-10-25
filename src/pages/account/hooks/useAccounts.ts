@@ -15,7 +15,7 @@ import {
   UpdatePaymentModeData,
   AccountSummary,
   DefaultPaymentMode
-} from '../../../types/account';
+} from '../types/account';
 
 // Create account adjustment
 export const useCreateAccountAdjustment = () => {

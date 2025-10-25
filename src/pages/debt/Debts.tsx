@@ -16,7 +16,7 @@ import {
   useDeleteDebt,
   useDebtSummary
 } from '../../hooks/useDebts';
-import { DEBT_TYPES } from '../../types/debt';
+import { DEBT_TYPES } from './types/debt';
 import DebtTypeModal from './components/DebtTypeModal';
 import { useFormatters } from '../../hooks/useFormatters';
 import ConfirmationModal from '../../components/ConfirmationModal';

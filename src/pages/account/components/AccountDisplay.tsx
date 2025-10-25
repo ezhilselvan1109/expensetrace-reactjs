@@ -1,5 +1,5 @@
 import { Building2, Wallet, CreditCard, Banknote } from 'lucide-react';
-import { Account } from '../../../types/account';
+import { Account } from '../types/account';
 
 interface AccountDisplayProps {
   account: Account;

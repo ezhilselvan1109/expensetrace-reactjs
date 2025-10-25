@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { CreatePaymentModeData, PAYMENT_MODE_TYPES, PaymentModeType } from '../types/account';
+import { CreatePaymentModeData, PAYMENT_MODE_TYPES, PaymentModeType } from '../pages/account/types/account';
 
 interface PaymentModeModalProps {
   isOpen: boolean;

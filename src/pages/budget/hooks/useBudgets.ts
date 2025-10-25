@@ -9,7 +9,7 @@ import {
   CreateYearlyBudgetData,
   UpdateMonthlyBudgetData,
   UpdateYearlyBudgetData
-} from '../../../types/budget';
+} from '../types/budget';
 
 // Get budget summaries
 export const useBudgetSummary = () => {

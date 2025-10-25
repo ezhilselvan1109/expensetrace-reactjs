@@ -18,7 +18,7 @@ import {
   Cell,
 } from "recharts";
 import { useBudgetAnalysis, useDeleteBudget } from "./hooks/useBudgets";
-import { MONTHS } from "../../types/budget";
+import { MONTHS } from "./types/budget";
 import { useFormatters } from "../../hooks/useFormatters";
 import CategoryIcon from "../../components/CategoryIcon";
 import { useState } from "react";

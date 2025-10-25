@@ -12,7 +12,7 @@ import {
   CATEGORY_ICONS,
   colorMap,
   iconTitle,
-} from "../../types/category";
+} from "./types/category";
 import CategoryIcon from "../../components/CategoryIcon";
 
 const tabs = ["Expense", "Income"];

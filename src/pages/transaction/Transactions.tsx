@@ -13,7 +13,7 @@ import {
   Banknote,
 } from 'lucide-react';
 import { useTransactions, useDeleteTransaction } from './hooks/useTransactions';
-import { TRANSACTION_TYPES } from '../../types/transaction';
+import { TRANSACTION_TYPES } from './types/transaction';
 import { useFormatters } from '../../hooks/useFormatters';
 import CategoryIcon from '../../components/CategoryIcon';
 import ConfirmationModal from '../../components/ConfirmationModal';
