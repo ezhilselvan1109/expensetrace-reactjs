@@ -8,16 +8,16 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 import PrivateLayout from './components/Layout/PrivateLayout';
 import LoadingSpinner from './components/LoadingSpinner';
-import PrivacyPolicyPage from './pages/public/PrivacyPolicyPage';
-import TermsAndConditionsPage from './pages/public/TermsAndConditionsPage';
+import PrivacyPolicyPage from './page/PrivacyPolicyPage';
+import TermsAndConditionsPage from './page/TermsAndConditionsPage';
 
 // Lazy load components
-const LandingPage = lazy(() => import('./pages/public/LandingPage'));
-const Auth = lazy(() => import('./pages/public/Auth'));
+const LandingPage = lazy(() => import('./page/LandingPage'));
+const Auth = lazy(() => import('./page/Auth'));
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
 const Analysis = lazy(() => import('./pages/analysis/Analysis'));
-const About = lazy(() => import('./pages/public/About'));
-const PlaceholderPage = lazy(() => import('./pages/placeholder/PlaceholderPage'));
+const About = lazy(() => import('./page/About'));
+const PlaceholderPage = lazy(() => import('./components/PlaceholderPage'));
 const Categories = lazy(() => import('./pages/categories/Categories'));
 const CategoryForm = lazy(() => import('./pages/categories/CategoryForm'));
 const Tags = lazy(() => import('./pages/tags/Tags'));

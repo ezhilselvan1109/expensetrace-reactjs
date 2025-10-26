@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Delete, Equal } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface CalculatorModalProps {
   isOpen: boolean;

@@ -15,7 +15,7 @@ import {
   useBorrowingDebts,
   useDeleteDebt,
   useDebtSummary
-} from '../../hooks/useDebts';
+} from './hooks/useDebts';
 import { DEBT_TYPES } from './types/debt';
 import DebtTypeModal from './components/DebtTypeModal';
 import { useFormatters } from '../../hooks/useFormatters';

@@ -6,21 +6,18 @@ import {
   useCreateScheduledTransaction,
   useUpdateScheduledTransaction,
   useScheduledTransaction
-} from '../../hooks/useScheduledTransactions';
+} from './hooks/useScheduledTransactions';
 import {
   useCategoriesByType
-} from '../categories/hooks/useCategories';
-import {
+} from '../categories/hooks/useCategories';import {
   useAccounts
 } from '../account/hooks/useAccounts';
 import { CreateScheduledTransactionData, FREQUENCY_OPTIONS, EARLY_REMINDER_OPTIONS, END_TYPE_OPTIONS, FREQUENCY_TYPE_MAP, END_TYPE_MAP, REVERSE_FREQUENCY_MAP, REVERSE_END_TYPE_MAP } from './types/scheduledTransaction';
 import CategorySelectModal from '../../components/CategorySelectModal';
 import AccountSelectModal from '../../components/AccountSelectModal';
 import FrequencyModal from './components/FrequencyModal';
-import EarlyReminderModal from '../../components/EarlyReminderModal';
+import EarlyReminderModal from './components/EarlyReminderModal';
 import AccountDisplay from '../account/components/AccountDisplay';
-import PaymentModeSelector from '../../components/account/PaymentModeSelector';
-import TransferAccountSection from '../../components/account/TransferAccountSection';
 import FormHeader from '../../components/forms/FormHeader';
 import FormDateTimeFields from '../../components/forms/FormDateTimeFields';
 import FormAmountField from '../../components/forms/FormAmountField';
@@ -31,9 +28,10 @@ import FormLoadingSkeleton from '../../components/forms/FormLoadingSkeleton';
 import FormTypeToggle from '../../components/forms/FormTypeToggle';
 import FormCategorySelector from '../../components/forms/FormCategorySelector';
 import FormSelectableItem from '../../components/forms/FormSelectableItem';
-import FormSection from '../../components/forms/FormSection';
 import { useFormDefaults } from '../../hooks/useFormDefaults';
-import { getTabIndexFromType, getTypeFromTabIndex } from '../../utils/formUtils';
+import { getTabIndexFromType } from '../../utils/formUtils';
+import PaymentModeSelector from '../account/components/PaymentModeSelector';
+import TransferAccountSection from '../account/components/TransferAccountSection';
 
 const tabs = ['Expense', 'Income', 'Transfer'];
 

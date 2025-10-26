@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { initiateGoogleLogin } from "../../hooks/useAuth";
+import { initiateGoogleLogin } from "../hooks/useAuth";
 
 function Auth() {
   const handleGoogleLogin = () => {

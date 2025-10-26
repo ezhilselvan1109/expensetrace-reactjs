@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../../contexts/ToastContext';
-import apiClient from '../../../lib/axios';
+import apiClient from '../../../services/axios';
 import { UpdateTagData, MergeTagData, PaginatedTags } from '../tag';
 
 /**

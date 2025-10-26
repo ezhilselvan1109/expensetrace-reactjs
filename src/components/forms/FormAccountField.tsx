@@ -3,7 +3,7 @@ import { Edit } from 'lucide-react';
 import { Account } from '../../pages/account/types/account';
 import AccountSelectModal from '../AccountSelectModal';
 import AccountDisplay from '../../pages/account/components/AccountDisplay';
-import PaymentModeSelector from '../account/PaymentModeSelector';
+import PaymentModeSelector from '../../pages/account/components/PaymentModeSelector';
 
 interface FormAccountFieldProps {
   accounts: Account[];

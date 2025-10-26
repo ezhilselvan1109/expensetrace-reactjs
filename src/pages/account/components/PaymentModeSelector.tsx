@@ -1,5 +1,5 @@
 import { CreditCard, Smartphone, FileText, Globe } from 'lucide-react';
-import { PaymentMode } from '../../types/account';
+import { PaymentMode } from '../types/account';
 
 interface PaymentModeSelectorProps {
   paymentModes: PaymentMode[];

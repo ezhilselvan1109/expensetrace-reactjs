@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../../contexts/ToastContext';
-import apiClient from '../../../lib/axios';
+import apiClient from '../../../services/axios';
 import {
   BudgetSummary,
   BudgetAnalysis,

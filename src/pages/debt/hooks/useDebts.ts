@@ -1,7 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
 import { 
   Debt, 
   DebtRecord,
@@ -15,6 +13,8 @@ import {
   DebtSummary,
   DebtTransaction
 } from '../types/debt';
+import apiClient from '../../../services/axios';
+import { useToast } from '../../../contexts/ToastContext';
 
 // Debt hooks
 export const useDebts = (page = 0, size = 10, enabled = true) => {

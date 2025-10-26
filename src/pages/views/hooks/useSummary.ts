@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import apiClient from '../../../lib/axios';
+import apiClient from '../../../services/axios';
 import { DaySummaryResponse, MonthSummaryResponse } from '../types/views';
 
 // Get month summary

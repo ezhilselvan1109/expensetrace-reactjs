@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useCreateDebt, useUpdateDebt, useDebt } from '../../hooks/useDebts';
+import { useCreateDebt, useUpdateDebt, useDebt } from './hooks/useDebts';
 import { useAccounts } from '../account/hooks/useAccounts';
 import { CreateDebtData } from './types/debt';
 import FormHeader from '../../components/forms/FormHeader';

@@ -1,8 +1,8 @@
 import React from "react";
 import { BarChart3, Wallet, PieChart, Shield, Zap } from "lucide-react";
 import Layout from "./Layout";
-import Button from "../../components/public/Button";
-import CTASection from "../../components/public/CTASection";
+import Button from "../components/public/Button";
+import CTASection from "../components/public/CTASection";
 
 type FeatureColor = "blue" | "yellow" | "green";
 

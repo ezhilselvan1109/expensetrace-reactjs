@@ -1,13 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../contexts/ToastContext';
-import apiClient from '../lib/axios';
 import { 
   ScheduledTransaction, 
   CreateScheduledTransactionData, 
   UpdateScheduledTransactionData,
   PaginatedScheduledTransactions
 } from '../types/scheduledTransaction';
+import apiClient from '../../../services/axios';
+import { useToast } from '../../../contexts/ToastContext';
 
 // Get upcoming scheduled transactions with pagination
 export const useUpcomingScheduledTransactions = (page = 0, size = 10, enabled = true) => {

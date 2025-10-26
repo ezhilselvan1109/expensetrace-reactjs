@@ -1,8 +1,8 @@
-import PublicHeader from "../../components/public/PublicHeader";
-import PublicFooter from "../../components/public/PublicFooter";
-import HeroSection from "../../components/public/HeroSection";
-import CTASection from "../../components/public/CTASection";
-import ContentSection from "../../components/public/ContentSection";
+import PublicHeader from "../components/public/PublicHeader";
+import PublicFooter from "../components/public/PublicFooter";
+import HeroSection from "../components/public/HeroSection";
+import CTASection from "../components/public/CTASection";
+import ContentSection from "../components/public/ContentSection";
 
 export default function TermsAndConditionsPage() {
   return (
