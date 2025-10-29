@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, BarChart3, Check } from 'lucide-react';
-import { NUMBER_FORMATS } from '../pages/settings/types/settings';
+import { NUMBER_FORMATS } from '../features/settings/types/settings';
 
 interface NumberFormatModalProps {
   isOpen: boolean;

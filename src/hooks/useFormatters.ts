@@ -1,4 +1,4 @@
-import { useSettings } from '../pages/settings/hooks/useSettings';
+import { useSettings } from '../features/settings/hooks/useSettings';
 import { 
   formatCurrency as formatCurrencyUtil,
   formatTime as formatTimeUtil,

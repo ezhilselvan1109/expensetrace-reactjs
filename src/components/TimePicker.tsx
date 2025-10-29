@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Clock, ChevronUp, ChevronDown } from 'lucide-react';
-import { useSettings } from '../pages/settings/hooks/useSettings';
+import { useSettings } from '../features/settings/hooks/useSettings';
 
 interface TimePickerProps {
   value: string;

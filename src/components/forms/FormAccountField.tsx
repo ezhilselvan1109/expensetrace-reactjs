@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Edit } from 'lucide-react';
-import { Account } from '../../pages/account/types/account';
+import { Account } from '../../features/account/types/account';
 import AccountSelectModal from '../AccountSelectModal';
-import AccountDisplay from '../../pages/account/components/AccountDisplay';
-import PaymentModeSelector from '../../pages/account/components/PaymentModeSelector';
+import AccountDisplay from '../../features/account/components/AccountDisplay';
+import PaymentModeSelector from '../../features/account/components/PaymentModeSelector';
 
 interface FormAccountFieldProps {
   accounts: Account[];

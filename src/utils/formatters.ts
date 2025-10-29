@@ -1,4 +1,4 @@
-import { UserSettings, CURRENCIES } from '../pages/settings/types/settings';
+import { UserSettings, CURRENCIES } from '../features/settings/types/settings';
 
 // Default settings fallback
 const DEFAULT_SETTINGS: UserSettings = {

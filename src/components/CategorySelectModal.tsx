@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Search, Check } from 'lucide-react';
-import { Category } from '../pages/categories/types/category';
+import { Category } from '../features/categories/types/category';
 import CategoryIcon from './CategoryIcon';
 
 interface CategorySelectModalProps {

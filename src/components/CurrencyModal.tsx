@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Search, Globe, Check } from 'lucide-react';
-import { CURRENCIES } from '../pages/settings/types/settings';
+import { CURRENCIES } from '../features/settings/types/settings';
 
 interface CurrencyModalProps {
   isOpen: boolean;

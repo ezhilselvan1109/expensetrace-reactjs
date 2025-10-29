@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Clock, Check } from 'lucide-react';
-import { TIME_FORMATS } from '../pages/settings/types/settings';
+import { TIME_FORMATS } from '../features/settings/types/settings';
 
 interface TimeFormatModalProps {
   isOpen: boolean;
